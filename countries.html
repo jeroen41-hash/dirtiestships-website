@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CO2-eq Emissions by Company - Dirtiest Ships</title>
+    <title>CO2-eq Emissions by Country - Dirtiest Ships</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
@@ -134,12 +134,12 @@
     <div class="container">
         <header>
             <h1>Dirtiest Ships <span style="font-size: 0.5em; font-weight: normal;">(in Europe)</span></h1>
-            <p class="subtitle">Top 15 Companies by CO2-eq Emissions (2024)</p>
+            <p class="subtitle">Top 20 Countries by CO2-eq Emissions (2024)</p>
             <nav>
                 <a href="index.html">Ship Rankings</a>
                 <a href="chart.html">By Ship Type</a>
-                <a href="companies.html" class="active">By Company</a>
-                <a href="countries.html">By Country</a>
+                <a href="companies.html">By Company</a>
+                <a href="countries.html" class="active">By Country</a>
             </nav>
         </header>
 
@@ -148,10 +148,8 @@
                 <canvas id="chart"></canvas>
             </div>
             <div class="note">
-                <strong>Note:</strong> Companies are consolidated where the same parent company reports under multiple subsidiaries.
-                For example, MSC Group includes MSC Shipmanagement Ltd, Mediterranean Shipping Co, and MSC Cruises.
-                CMA CGM Group includes CMA Ships and various regional CMA CGM entities.
-                Carnival Corporation includes Costa Crociere and Holland America Line.
+                <strong>Note:</strong> Country refers to the flag state (port of registry), not the ship's operating region or company nationality.
+                Major flag states like Liberia, Marshall Islands, and Panama are popular "flags of convenience" used by international shipping companies.
             </div>
         </div>
 
@@ -162,27 +160,27 @@
     </div>
 
     <script>
-        fetch('companies_top15.json')
+        fetch('countries_top20.json')
             .then(response => response.json())
             .then(data => {
                 const ctx = document.getElementById('chart').getContext('2d');
 
-                // Colors for bars
                 const colors = [
                     '#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3', '#f38181',
                     '#aa96da', '#fcbad3', '#a8d8ea', '#ff9a3c', '#1fab89',
-                    '#62d2a2', '#9df3c4', '#d7fbe8', '#f9ed69', '#f08a5d'
+                    '#62d2a2', '#9df3c4', '#d7fbe8', '#f9ed69', '#f08a5d',
+                    '#b83b5e', '#6a2c70', '#c9b1ff', '#5c969e', '#ffc75f'
                 ];
 
                 new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: data.map(d => d.company),
+                        labels: data.map(d => d.country),
                         datasets: [{
                             label: 'CO2-eq Emissions (million tonnes)',
                             data: data.map(d => d.co2eq / 1000000),
                             backgroundColor: colors,
-                            borderColor: colors.map(c => c),
+                            borderColor: colors,
                             borderWidth: 1
                         }]
                     },
@@ -239,7 +237,7 @@
             })
             .catch(error => {
                 document.querySelector('.chart-wrapper').innerHTML =
-                    '<p class="loading">Error loading data. Please ensure companies_top15.json is available.</p>';
+                    '<p class="loading">Error loading data. Please ensure countries_top20.json is available.</p>';
             });
     </script>
 </body>
