@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dirtiest Ships - EU MRV CO2-eq Emissions Ranking 2024</title>
+    <title>Dirtiest Ships - EU MRV CO2 Emissions Ranking</title>
     <style>
         * {
             margin: 0;
@@ -43,6 +43,25 @@
             color: #888;
         }
 
+        .year-selector {
+            margin: 15px 0;
+        }
+
+        .year-selector select {
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            border: 2px solid #4ecdc4;
+            border-radius: 25px;
+            background: rgba(0,0,0,0.3);
+            color: #4ecdc4;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .year-selector select option {
+            background: #1a1a2e;
+        }
+
         .stats {
             display: flex;
             justify-content: center;
@@ -68,6 +87,28 @@
             font-size: 0.9rem;
             color: #888;
             margin-top: 5px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #4ecdc4;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid #4ecdc4;
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            background: #4ecdc4;
+            color: #1a1a2e;
         }
 
         .controls {
@@ -270,12 +311,19 @@
     <div class="container">
         <header>
             <h1>Dirtiest Ships <span style="font-size: 0.5em; font-weight: normal;">(in Europe)</span></h1>
-            <p class="subtitle">EU MRV Annual CO2-eq Emissions Ranking 2024</p>
-            <nav style="display: flex; justify-content: center; gap: 20px; margin: 20px 0; flex-wrap: wrap;">
-                <a href="index.html" style="color: #1a1a2e; background: #4ecdc4; text-decoration: none; padding: 10px 20px; border: 1px solid #4ecdc4; border-radius: 25px;">Ship Rankings</a>
-                <a href="chart.html" style="color: #4ecdc4; text-decoration: none; padding: 10px 20px; border: 1px solid #4ecdc4; border-radius: 25px;">By Ship Type</a>
-                <a href="companies.html" style="color: #4ecdc4; text-decoration: none; padding: 10px 20px; border: 1px solid #4ecdc4; border-radius: 25px;">By Company</a>
-                <a href="countries.html" style="color: #4ecdc4; text-decoration: none; padding: 10px 20px; border: 1px solid #4ecdc4; border-radius: 25px;">By Country</a>
+            <p class="subtitle" id="subtitle">EU MRV Annual CO2 Emissions Ranking 2024</p>
+            <div class="year-selector">
+                <select id="year-select">
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                </select>
+            </div>
+            <nav>
+                <a href="index.html" class="active">Ship Rankings</a>
+                <a href="chart.html">By Ship Type</a>
+                <a href="companies.html">By Company</a>
+                <a href="countries.html">By Country</a>
             </nav>
             <div class="stats">
                 <div class="stat-box">
@@ -284,14 +332,14 @@
                 </div>
                 <div class="stat-box">
                     <div class="stat-value" id="total-co2">-</div>
-                    <div class="stat-label">Total CO2-eq (million tonnes)</div>
+                    <div class="stat-label" id="co2-label">Total CO2 (million tonnes)</div>
                 </div>
             </div>
         </header>
 
         <div class="controls">
             <div class="search-box">
-                <input type="text" id="search" placeholder="Search by ship name, company, or IMO number...">
+                <input type="text" id="search" placeholder="Search by ship name or IMO number...">
             </div>
             <div class="filter-box">
                 <select id="ship-type-filter">
@@ -307,13 +355,12 @@
                         <th data-sort="rank" class="sorted-asc">Rank</th>
                         <th data-sort="name">Ship Name</th>
                         <th data-sort="type">Type</th>
-                        <th data-sort="company">Company</th>
                         <th data-sort="registry">Registry</th>
-                        <th data-sort="co2eq">CO2-eq (m tonnes)</th>
+                        <th data-sort="co2" id="co2-header">CO2 (m tonnes)</th>
                     </tr>
                 </thead>
                 <tbody id="ships-table">
-                    <tr><td colspan="6" class="loading">Loading data...</td></tr>
+                    <tr><td colspan="5" class="loading">Loading data...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -325,8 +372,8 @@
         </div>
 
         <footer>
-            <p>Data source: <a href="https://mrv.emsa.europa.eu/" target="_blank">EU MRV Regulation</a> - 2024 Reporting Period</p>
-            <p>This data shows annual CO2-equivalent emissions from ships calling at EU/EEA ports.</p>
+            <p>Data source: <a href="https://mrv.emsa.europa.eu/" target="_blank">EU MRV Regulation</a></p>
+            <p>This data shows annual CO2 emissions from ships calling at EU/EEA ports.</p>
         </footer>
     </div>
 
@@ -337,57 +384,79 @@
         const perPage = 50;
         let sortColumn = 'rank';
         let sortDirection = 'asc';
+        let currentYear = '2024';
 
-        // Load data
-        fetch('ships_data.json')
-            .then(response => response.json())
-            .then(data => {
-                allShips = data.ships;
-                filteredShips = [...allShips];
+        function loadData(year) {
+            currentYear = year;
+            const isNew = year === '2024';
+            const co2Field = isNew ? 'co2eq' : 'co2';
+            const co2Label = isNew ? 'CO2-eq' : 'CO2';
 
-                // Update stats
-                document.getElementById('total-ships').textContent = data.total_ships.toLocaleString();
-                document.getElementById('total-co2').textContent = (data.total_co2eq / 1000000).toFixed(2);
+            // Update UI labels
+            document.getElementById('subtitle').textContent = `EU MRV Annual ${co2Label} Emissions Ranking ${year}`;
+            document.getElementById('co2-label').textContent = `Total ${co2Label} (million tonnes)`;
+            document.getElementById('co2-header').textContent = `${co2Label} (m tonnes)`;
+            document.getElementById('co2-header').dataset.sort = co2Field;
 
-                // Populate ship type filter
-                const types = [...new Set(allShips.map(s => s.type))].filter(t => t).sort();
-                const typeFilter = document.getElementById('ship-type-filter');
-                types.forEach(type => {
-                    const option = document.createElement('option');
-                    option.value = type;
-                    option.textContent = type;
-                    typeFilter.appendChild(option);
+            // Reset
+            document.getElementById('ships-table').innerHTML = '<tr><td colspan="5" class="loading">Loading data...</td></tr>';
+            document.getElementById('search').value = '';
+            document.getElementById('ship-type-filter').innerHTML = '<option value="">All Ship Types</option>';
+
+            fetch(`json/${year}_ships_data.json`)
+                .then(response => response.json())
+                .then(data => {
+                    allShips = data.ships;
+                    filteredShips = [...allShips];
+
+                    // Update stats
+                    document.getElementById('total-ships').textContent = data.total_ships.toLocaleString();
+                    const totalEmissions = isNew ? data.total_co2eq : data.total_co2;
+                    document.getElementById('total-co2').textContent = (totalEmissions / 1000000).toFixed(2);
+
+                    // Populate ship type filter
+                    const types = [...new Set(allShips.map(s => s.type))].filter(t => t).sort();
+                    const typeFilter = document.getElementById('ship-type-filter');
+                    types.forEach(type => {
+                        const option = document.createElement('option');
+                        option.value = type;
+                        option.textContent = type;
+                        typeFilter.appendChild(option);
+                    });
+
+                    currentPage = 1;
+                    sortColumn = 'rank';
+                    sortDirection = 'asc';
+                    renderTable();
+                })
+                .catch(error => {
+                    document.getElementById('ships-table').innerHTML =
+                        '<tr><td colspan="5" class="loading">Error loading data.</td></tr>';
                 });
-
-                renderTable();
-            })
-            .catch(error => {
-                document.getElementById('ships-table').innerHTML =
-                    '<tr><td colspan="6" class="loading">Error loading data. Please ensure ships_data.json is available.</td></tr>';
-            });
+        }
 
         function renderTable() {
             const tbody = document.getElementById('ships-table');
             const start = (currentPage - 1) * perPage;
             const end = start + perPage;
             const pageShips = filteredShips.slice(start, end);
+            const isNew = currentYear === '2024';
+            const co2Field = isNew ? 'co2eq' : 'co2';
 
             if (pageShips.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="loading">No ships found matching your criteria.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" class="loading">No ships found matching your criteria.</td></tr>';
             } else {
                 tbody.innerHTML = pageShips.map(ship => `
                     <tr>
                         <td class="rank ${ship.rank <= 3 ? 'rank-' + ship.rank : ''}">#${ship.rank}</td>
                         <td class="ship-name">${escapeHtml(ship.name)}</td>
                         <td class="ship-type">${escapeHtml(ship.type)}</td>
-                        <td class="company" title="${escapeHtml(ship.company)}">${escapeHtml(ship.company)}</td>
                         <td>${escapeHtml(ship.registry)}</td>
-                        <td class="co2-value">${ship.co2eq.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                        <td class="co2-value">${ship[co2Field].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                     </tr>
                 `).join('');
             }
 
-            // Update pagination
             const totalPages = Math.ceil(filteredShips.length / perPage);
             document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages} (${filteredShips.length.toLocaleString()} ships)`;
             document.getElementById('prev-btn').disabled = currentPage === 1;
@@ -408,7 +477,6 @@
             filteredShips = allShips.filter(ship => {
                 const matchesSearch = !searchTerm ||
                     ship.name.toLowerCase().includes(searchTerm) ||
-                    ship.company.toLowerCase().includes(searchTerm) ||
                     ship.imo.includes(searchTerm);
                 const matchesType = !typeFilter || ship.type === typeFilter;
                 return matchesSearch && matchesType;
@@ -420,9 +488,12 @@
         }
 
         function sortShips() {
+            const isNew = currentYear === '2024';
+            const co2Field = isNew ? 'co2eq' : 'co2';
+
             filteredShips.sort((a, b) => {
-                let aVal = a[sortColumn];
-                let bVal = b[sortColumn];
+                let aVal = sortColumn === 'co2' ? a[co2Field] : a[sortColumn];
+                let bVal = sortColumn === 'co2' ? b[co2Field] : b[sortColumn];
 
                 if (typeof aVal === 'string') {
                     aVal = aVal.toLowerCase();
@@ -436,6 +507,10 @@
         }
 
         // Event listeners
+        document.getElementById('year-select').addEventListener('change', (e) => {
+            loadData(e.target.value);
+        });
+
         document.getElementById('search').addEventListener('input', applyFilters);
         document.getElementById('ship-type-filter').addEventListener('change', applyFilters);
 
@@ -454,12 +529,10 @@
             }
         });
 
-        // Sort by clicking headers
         document.querySelectorAll('th[data-sort]').forEach(th => {
             th.addEventListener('click', () => {
                 const column = th.dataset.sort;
 
-                // Remove sorted class from all headers
                 document.querySelectorAll('th').forEach(h => {
                     h.classList.remove('sorted-asc', 'sorted-desc');
                 });
@@ -468,7 +541,7 @@
                     sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
                 } else {
                     sortColumn = column;
-                    sortDirection = column === 'co2eq' ? 'desc' : 'asc';
+                    sortDirection = (column === 'co2' || column === 'co2eq') ? 'desc' : 'asc';
                 }
 
                 th.classList.add(sortDirection === 'asc' ? 'sorted-asc' : 'sorted-desc');
@@ -478,6 +551,9 @@
                 renderTable();
             });
         });
+
+        // Initial load
+        loadData('2024');
     </script>
 </body>
 </html>

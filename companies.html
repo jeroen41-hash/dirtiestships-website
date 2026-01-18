@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CO2-eq Emissions by Company - Dirtiest Ships</title>
+    <title>CO2 Emissions by Company - Dirtiest Ships</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
@@ -42,6 +42,25 @@
         .subtitle {
             font-size: 1.2rem;
             color: #888;
+        }
+
+        .year-selector {
+            margin: 15px 0;
+        }
+
+        .year-selector select {
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            border: 2px solid #4ecdc4;
+            border-radius: 25px;
+            background: rgba(0,0,0,0.3);
+            color: #4ecdc4;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .year-selector select option {
+            background: #1a1a2e;
         }
 
         nav {
@@ -134,7 +153,14 @@
     <div class="container">
         <header>
             <h1>Dirtiest Ships <span style="font-size: 0.5em; font-weight: normal;">(in Europe)</span></h1>
-            <p class="subtitle">Top 15 Companies by CO2-eq Emissions (2024)</p>
+            <p class="subtitle" id="subtitle">Top 15 Companies by CO2-eq Emissions (2024)</p>
+            <div class="year-selector">
+                <select id="year-select">
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                </select>
+            </div>
             <nav>
                 <a href="index.html">Ship Rankings</a>
                 <a href="chart.html">By Ship Type</a>
@@ -147,7 +173,7 @@
             <div class="chart-wrapper">
                 <canvas id="chart"></canvas>
             </div>
-            <div class="note">
+            <div class="note" id="note">
                 <strong>Note:</strong> Companies are consolidated where the same parent company reports under multiple subsidiaries.
                 For example, MSC Group includes MSC Shipmanagement Ltd, Mediterranean Shipping Co, and MSC Cruises.
                 CMA CGM Group includes CMA Ships and various regional CMA CGM entities.
@@ -156,91 +182,124 @@
         </div>
 
         <footer>
-            <p>Data source: <a href="https://mrv.emsa.europa.eu/" target="_blank">EU MRV Regulation</a> - 2024 Reporting Period</p>
-            <p>This data shows annual CO2-equivalent emissions from ships calling at EU/EEA ports.</p>
+            <p>Data source: <a href="https://mrv.emsa.europa.eu/" target="_blank">EU MRV Regulation</a></p>
+            <p>This data shows annual CO2 emissions from ships calling at EU/EEA ports.</p>
         </footer>
     </div>
 
     <script>
-        fetch('companies_top15.json')
-            .then(response => response.json())
-            .then(data => {
-                const ctx = document.getElementById('chart').getContext('2d');
+        let chart = null;
 
-                // Colors for bars
-                const colors = [
-                    '#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3', '#f38181',
-                    '#aa96da', '#fcbad3', '#a8d8ea', '#ff9a3c', '#1fab89',
-                    '#62d2a2', '#9df3c4', '#d7fbe8', '#f9ed69', '#f08a5d'
-                ];
+        function loadData(year) {
+            const isNew = year === '2024';
+            const co2Label = isNew ? 'CO2-eq' : 'CO2';
 
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: data.map(d => d.company),
-                        datasets: [{
-                            label: 'CO2-eq Emissions (million tonnes)',
-                            data: data.map(d => d.co2eq / 1000000),
-                            backgroundColor: colors,
-                            borderColor: colors.map(c => c),
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        const item = data[context.dataIndex];
-                                        return [
-                                            `CO2-eq: ${(item.co2eq / 1000000).toFixed(2)} million tonnes`,
-                                            `Ships: ${item.count.toLocaleString()}`
-                                        ];
-                                    }
-                                }
-                            }
+            document.getElementById('subtitle').textContent = `Top 15 Companies by ${co2Label} Emissions (${year})`;
+
+            // Only 2024 has company data
+            if (year !== '2024') {
+                if (chart) {
+                    chart.destroy();
+                    chart = null;
+                }
+                document.querySelector('.chart-wrapper').innerHTML =
+                    '<p class="loading">Company data is only available for 2024.<br>The 2022 and 2023 datasets do not include company information.</p>';
+                document.getElementById('note').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('note').style.display = 'block';
+            document.querySelector('.chart-wrapper').innerHTML = '<canvas id="chart"></canvas>';
+
+            fetch(`json/${year}_companies_top15.json`)
+                .then(response => response.json())
+                .then(data => {
+                    const ctx = document.getElementById('chart').getContext('2d');
+
+                    if (chart) {
+                        chart.destroy();
+                    }
+
+                    const colors = [
+                        '#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3', '#f38181',
+                        '#aa96da', '#fcbad3', '#a8d8ea', '#ff9a3c', '#1fab89',
+                        '#62d2a2', '#9df3c4', '#d7fbe8', '#f9ed69', '#f08a5d'
+                    ];
+
+                    chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: data.map(d => d.company),
+                            datasets: [{
+                                label: `${co2Label} Emissions (million tonnes)`,
+                                data: data.map(d => d.co2eq / 1000000),
+                                backgroundColor: colors,
+                                borderColor: colors,
+                                borderWidth: 1
+                            }]
                         },
-                        scales: {
-                            x: {
-                                ticks: {
-                                    color: '#888',
-                                    maxRotation: 45,
-                                    minRotation: 45
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
                                 },
-                                grid: {
-                                    color: 'rgba(255,255,255,0.1)'
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const item = data[context.dataIndex];
+                                            return [
+                                                `${co2Label}: ${(item.co2eq / 1000000).toFixed(2)} million tonnes`,
+                                                `Ships: ${item.count.toLocaleString()}`
+                                            ];
+                                        }
+                                    }
                                 }
                             },
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    color: '#888',
-                                    callback: function(value) {
-                                        return value + ' M';
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        color: '#888',
+                                        maxRotation: 45,
+                                        minRotation: 45
+                                    },
+                                    grid: {
+                                        color: 'rgba(255,255,255,0.1)'
                                     }
                                 },
-                                grid: {
-                                    color: 'rgba(255,255,255,0.1)'
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'CO2-eq (million tonnes)',
-                                    color: '#888'
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        color: '#888',
+                                        callback: function(value) {
+                                            return value + ' M';
+                                        }
+                                    },
+                                    grid: {
+                                        color: 'rgba(255,255,255,0.1)'
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: `${co2Label} (million tonnes)`,
+                                        color: '#888'
+                                    }
                                 }
                             }
                         }
-                    }
+                    });
+                })
+                .catch(error => {
+                    document.querySelector('.chart-wrapper').innerHTML =
+                        '<p class="loading">Error loading data.</p>';
                 });
-            })
-            .catch(error => {
-                document.querySelector('.chart-wrapper').innerHTML =
-                    '<p class="loading">Error loading data. Please ensure companies_top15.json is available.</p>';
-            });
+        }
+
+        document.getElementById('year-select').addEventListener('change', (e) => {
+            loadData(e.target.value);
+        });
+
+        loadData('2024');
     </script>
 </body>
 </html>
