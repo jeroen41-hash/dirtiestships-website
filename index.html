@@ -258,6 +258,17 @@
             font-weight: 500;
         }
 
+        .ship-link {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .ship-link:hover {
+            color: #4ecdc4;
+            text-decoration: underline;
+        }
+
         .ship-type {
             color: #888;
             font-size: 0.9rem;
@@ -492,7 +503,7 @@
                 tbody.innerHTML = pageShips.map(ship => `
                     <tr>
                         <td class="rank ${ship.rank <= 3 ? 'rank-' + ship.rank : ''}">#${ship.rank}</td>
-                        <td class="ship-name">${escapeHtml(ship.name)}</td>
+                        <td class="ship-name"><a href="ship.html?imo=${ship.imo}" class="ship-link">${escapeHtml(ship.name)}</a></td>
                         <td class="ship-type">${escapeHtml(ship.type)}</td>
                         <td>${escapeHtml(ship.registry)}</td>
                         <td class="co2-value">${ship[co2Field].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View CO2 emissions data and historical trends for this ship. Track annual emissions from EU MRV data.">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Dirtiest Ships">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9641573711172527"
+     crossorigin="anonymous"></script>
+    <title>Ship Details - Dirtiest Ships</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-img {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 200px;
+            object-fit: cover;
+            filter: grayscale(100%) opacity(0.4);
+            pointer-events: none;
+        }
+
+        .header-img-left {
+            left: 0;
+            mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+        }
+
+        .header-img-right {
+            right: 0;
+            mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #888;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #4ecdc4;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid #4ecdc4;
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            background: #4ecdc4;
+            color: #1a1a2e;
+        }
+
+        .ship-header {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .ship-name {
+            font-size: 2rem;
+            color: #ff6b6b;
+            margin-bottom: 5px;
+        }
+
+        .ship-imo {
+            color: #888;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .ship-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .detail-box {
+            background: rgba(255,255,255,0.05);
+            padding: 15px 20px;
+            border-radius: 8px;
+            border-left: 3px solid #4ecdc4;
+        }
+
+        .detail-label {
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .rank-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .rank-badge.top-10 {
+            background: linear-gradient(135deg, #ffd700, #ffed4a);
+            color: #1a1a2e;
+        }
+
+        .rank-badge.top-100 {
+            background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+            color: #1a1a2e;
+        }
+
+        .chart-container {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .chart-title {
+            color: #4ecdc4;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        .emissions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .emissions-table th,
+        .emissions-table td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        .emissions-table th {
+            background: rgba(0,0,0,0.3);
+            color: #4ecdc4;
+            font-weight: 600;
+        }
+
+        .emissions-table tr:nth-child(even) {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .emissions-table .co2-value {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .change-positive {
+            color: #ff6b6b;
+        }
+
+        .change-negative {
+            color: #4ecdc4;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2rem;
+            color: #888;
+        }
+
+        .not-found {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .not-found h2 {
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #4ecdc4;
+        }
+
+        .comparison-note {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(78, 205, 196, 0.1);
+            border-left: 3px solid #4ecdc4;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .ship-name {
+                font-size: 1.5rem;
+            }
+
+            .ship-details {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .chart-wrapper {
+                height: 250px;
+            }
+
+            nav {
+                gap: 10px;
+            }
+
+            nav a {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="images/ship-smoke-left.jpg" alt="" class="header-img header-img-left">
+            <img src="images/ship-smoke-right.jpg" alt="" class="header-img header-img-right">
+            <h1>Dirtiest Ships <span style="font-size: 0.5em; font-weight: normal;">(in Europe)</span></h1>
+            <p class="subtitle">Ship Emissions Profile</p>
+            <nav>
+                <a href="index.html">Ship Rankings</a>
+                <a href="chart.html">By Ship Type</a>
+                <a href="companies.html">By Company</a>
+                <a href="countries.html">By Country</a>
+            </nav>
+        </header>
+
+        <div id="content">
+            <div class="loading">Loading ship data...</div>
+        </div>
+
+        <footer>
+            <p>Data source: <a href="https://mrv.emsa.europa.eu/" target="_blank">EU MRV Regulation</a></p>
+            <p>This data shows annual CO2 emissions from ships calling at EU/EEA ports.</p>
+        </footer>
+    </div>
+
+    <script>
+        const shipData = {};
+        let loadedYears = 0;
+        const years = ['2022', '2023', '2024'];
+
+        function getIMOFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('imo');
+        }
+
+        function loadAllData() {
+            const imo = getIMOFromURL();
+            if (!imo) {
+                showNotFound('No IMO number provided');
+                return;
+            }
+
+            years.forEach(year => {
+                fetch(`json/${year}_ships_data.json`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const ship = data.ships.find(s => s.imo === imo);
+                        if (ship) {
+                            shipData[year] = ship;
+                        }
+                        loadedYears++;
+                        if (loadedYears === years.length) {
+                            renderShipPage();
+                        }
+                    })
+                    .catch(error => {
+                        console.error(`Error loading ${year} data:`, error);
+                        loadedYears++;
+                        if (loadedYears === years.length) {
+                            renderShipPage();
+                        }
+                    });
+            });
+        }
+
+        function showNotFound(message) {
+            document.getElementById('content').innerHTML = `
+                <div class="not-found">
+                    <h2>Ship Not Found</h2>
+                    <p>${message}</p>
+                    <p style="margin-top: 20px;"><a href="index.html" style="color: #4ecdc4;">Back to Ship Rankings</a></p>
+                </div>
+            `;
+        }
+
+        function renderShipPage() {
+            if (Object.keys(shipData).length === 0) {
+                showNotFound('No data found for this IMO number');
+                return;
+            }
+
+            // Get most recent data for ship details
+            const latestYear = shipData['2024'] ? '2024' : (shipData['2023'] ? '2023' : '2022');
+            const ship = shipData[latestYear];
+            const imo = getIMOFromURL();
+
+            // Update page title and meta
+            document.title = `${ship.name} - CO2 Emissions - Dirtiest Ships`;
+            document.querySelector('meta[name="description"]').content =
+                `View CO2 emissions data for ${ship.name} (IMO: ${imo}). ${ship.type} registered in ${ship.country || ship.registry}.`;
+
+            // Build emissions history
+            const emissionsHistory = years.map(year => {
+                const data = shipData[year];
+                if (data) {
+                    return {
+                        year: year,
+                        co2: year === '2024' ? data.co2eq : data.co2,
+                        rank: data.rank,
+                        label: year === '2024' ? 'CO2-eq' : 'CO2'
+                    };
+                }
+                return null;
+            }).filter(d => d !== null);
+
+            // Calculate year-over-year changes
+            emissionsHistory.forEach((item, index) => {
+                if (index > 0) {
+                    const prev = emissionsHistory[index - 1];
+                    item.change = ((item.co2 - prev.co2) / prev.co2 * 100).toFixed(1);
+                }
+            });
+
+            let html = `
+                <div class="ship-header">
+                    <div class="ship-name">${escapeHtml(ship.name)}</div>
+                    <div class="ship-imo">IMO: ${imo}</div>
+                    <div class="ship-details">
+                        <div class="detail-box">
+                            <div class="detail-label">Ship Type</div>
+                            <div class="detail-value">${escapeHtml(ship.type)}</div>
+                        </div>
+                        <div class="detail-box">
+                            <div class="detail-label">Flag State</div>
+                            <div class="detail-value">${escapeHtml(ship.country || ship.registry)}</div>
+                        </div>
+                        <div class="detail-box">
+                            <div class="detail-label">Registry</div>
+                            <div class="detail-value">${escapeHtml(ship.registry)}</div>
+                        </div>
+                        ${ship.company ? `
+                        <div class="detail-box">
+                            <div class="detail-label">Company</div>
+                            <div class="detail-value">${escapeHtml(ship.company)}</div>
+                        </div>
+                        ` : ''}
+                        ${ship.efficiency ? `
+                        <div class="detail-box">
+                            <div class="detail-label">Efficiency Rating</div>
+                            <div class="detail-value">${escapeHtml(ship.efficiency)}</div>
+                        </div>
+                        ` : ''}
+                        <div class="detail-box">
+                            <div class="detail-label">${latestYear} Ranking</div>
+                            <div class="detail-value">
+                                <span class="rank-badge ${ship.rank <= 10 ? 'top-10' : (ship.rank <= 100 ? 'top-100' : '')}">#${ship.rank}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Annual Emissions History</div>
+                    ${emissionsHistory.length > 1 ? `
+                    <div class="chart-wrapper">
+                        <canvas id="emissionsChart"></canvas>
+                    </div>
+                    ` : '<p style="color: #888;">Only one year of data available for this ship.</p>'}
+
+                    <table class="emissions-table">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Emissions (tonnes)</th>
+                                <th>Metric</th>
+                                <th>Rank</th>
+                                <th>Change</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${emissionsHistory.map(item => `
+                            <tr>
+                                <td>${item.year}</td>
+                                <td class="co2-value">${item.co2.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                                <td>${item.label}</td>
+                                <td>#${item.rank}</td>
+                                <td class="${item.change ? (parseFloat(item.change) > 0 ? 'change-positive' : 'change-negative') : ''}">
+                                    ${item.change ? (parseFloat(item.change) > 0 ? '+' : '') + item.change + '%' : '-'}
+                                </td>
+                            </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+
+                    <div class="comparison-note">
+                        <strong>Note:</strong> 2024 data uses CO2-equivalent (CO2-eq) which includes methane and other greenhouse gases,
+                        while 2022-2023 data shows CO2 only. Direct year-over-year comparisons should consider this methodology change.
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('content').innerHTML = html;
+
+            // Render chart if we have multiple years
+            if (emissionsHistory.length > 1) {
+                renderChart(emissionsHistory);
+            }
+        }
+
+        function renderChart(data) {
+            const ctx = document.getElementById('emissionsChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.year),
+                    datasets: [{
+                        label: 'Emissions (tonnes)',
+                        data: data.map(d => d.co2),
+                        backgroundColor: data.map((d, i) => {
+                            if (i === 0) return '#4ecdc4';
+                            const prev = data[i-1].co2;
+                            return d.co2 > prev ? '#ff6b6b' : '#4ecdc4';
+                        }),
+                        borderColor: data.map((d, i) => {
+                            if (i === 0) return '#4ecdc4';
+                            const prev = data[i-1].co2;
+                            return d.co2 > prev ? '#ff6b6b' : '#4ecdc4';
+                        }),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const item = data[context.dataIndex];
+                                    return `${item.label}: ${item.co2.toLocaleString(undefined, {minimumFractionDigits: 2})} tonnes`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#888' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                color: '#888',
+                                callback: function(value) {
+                                    return (value / 1000).toFixed(0) + 'k';
+                                }
+                            },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            title: {
+                                display: true,
+                                text: 'Tonnes CO2/CO2-eq',
+                                color: '#888'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Load data on page load
+        loadAllData();
+    </script>
+</body>
+</html>
