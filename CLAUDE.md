@@ -10,6 +10,7 @@ A website displaying CO2 emissions rankings for ships calling at EU/EEA ports, b
 
 ## Pages
 - `index.html` - Ship Rankings: Paginated table of all ships, searchable by name/IMO, filterable by ship type
+- `ship.html` - Individual Ship Profile: Shows ship details and historical emissions chart (accessed via `?imo=XXXXXXX`)
 - `chart.html` - By Ship Type: Bar chart showing emissions by vessel category
 - `companies.html` - By Company: Top 15 companies by emissions (2024 only)
 - `countries.html` - By Country: Top 20 flag states by emissions
@@ -57,12 +58,14 @@ A website displaying CO2 emissions rankings for ships calling at EU/EEA ports, b
 - Filter by ship type
 - Sortable table columns
 - Pagination (50 ships per page)
+- Individual ship pages with historical emissions charts
 - SEO meta tags (Open Graph, Twitter Cards)
 
 ## File Structure
 ```
 /
 ├── index.html        # Ship rankings
+├── ship.html         # Individual ship profile (?imo=XXXXXXX)
 ├── chart.html        # By ship type
 ├── companies.html    # By company
 ├── countries.html    # By country
