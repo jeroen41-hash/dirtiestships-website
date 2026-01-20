@@ -474,6 +474,39 @@
                         while 2022-2023 data shows CO2 only. Direct year-over-year comparisons should consider this methodology change.
                     </div>
                 </div>
+
+                ${shipData['2024'] && shipData['2024'].efficiency ? `
+                <div class="chart-container">
+                    <div class="chart-title">Efficiency Rating</div>
+                    <div class="chart-wrapper" style="height: 200px;">
+                        <canvas id="efficiencyChart"></canvas>
+                    </div>
+                    <div class="efficiency-details" style="margin-top: 20px;">
+                        <table class="emissions-table">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Efficiency Type</th>
+                                    <th>Rating (gCO₂/t·nm)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2024</td>
+                                    <td>${getEfficiencyType(shipData['2024'].efficiency)}</td>
+                                    <td class="co2-value">${getEfficiencyValue(shipData['2024'].efficiency)}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="comparison-note">
+                        <strong>Note:</strong> Efficiency data is only available from 2024. Lower values indicate better efficiency.
+                        <br><strong>EEDI</strong> = Energy Efficiency Design Index (new ships),
+                        <strong>EEXI</strong> = Energy Efficiency Existing Ship Index,
+                        <strong>EIV</strong> = Estimated Index Value.
+                    </div>
+                </div>
+                ` : ''}
             `;
 
             document.getElementById('content').innerHTML = html;
@@ -482,6 +515,90 @@
             if (emissionsHistory.length > 1) {
                 renderChart(emissionsHistory);
             }
+
+            // Render efficiency chart if 2024 data available
+            if (shipData['2024'] && shipData['2024'].efficiency) {
+                renderEfficiencyChart(shipData['2024'].efficiency);
+            }
+        }
+
+        function getEfficiencyType(efficiencyStr) {
+            if (!efficiencyStr) return 'N/A';
+            const match = efficiencyStr.match(/^(EEDI|EEXI|EIV)/);
+            return match ? match[1] : 'Unknown';
+        }
+
+        function getEfficiencyValue(efficiencyStr) {
+            if (!efficiencyStr) return 'N/A';
+            const match = efficiencyStr.match(/\((\d+\.?\d*)/);
+            return match ? parseFloat(match[1]).toFixed(2) : 'N/A';
+        }
+
+        function renderEfficiencyChart(efficiencyStr) {
+            const ctx = document.getElementById('efficiencyChart');
+            if (!ctx) return;
+
+            const effValue = parseFloat(getEfficiencyValue(efficiencyStr));
+            const effType = getEfficiencyType(efficiencyStr);
+            if (isNaN(effValue)) return;
+
+            // Color based on efficiency (lower is better)
+            // Rough scale: <10 = good (green), 10-20 = moderate (yellow), >20 = poor (red)
+            let barColor = '#4ecdc4'; // good
+            if (effValue > 20) {
+                barColor = '#ff6b6b'; // poor
+            } else if (effValue > 10) {
+                barColor = '#ffe66d'; // moderate
+            }
+
+            new Chart(ctx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['2024'],
+                    datasets: [{
+                        label: 'Efficiency (gCO₂/t·nm)',
+                        data: [effValue],
+                        backgroundColor: barColor,
+                        borderColor: barColor,
+                        borderWidth: 1,
+                        barThickness: 60
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${effType}: ${effValue} gCO₂/t·nm`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: Math.max(effValue * 1.5, 30),
+                            ticks: { color: '#888' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            title: {
+                                display: true,
+                                text: 'gCO₂ per tonne-nautical mile (lower is better)',
+                                color: '#888'
+                            }
+                        },
+                        y: {
+                            ticks: { color: '#888' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    }
+                }
+            });
         }
 
         function renderChart(data) {
