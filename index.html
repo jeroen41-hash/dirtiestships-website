@@ -329,6 +329,19 @@
 
         footer a {
             color: #4ecdc4;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-links {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            margin: 0 10px;
         }
 
         @media (max-width: 768px) {
@@ -372,6 +385,8 @@
                         <option value="2024">2024</option>
                         <option value="2023">2023</option>
                         <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
                     </select>
                 </div>
                 <a href="index.html" class="active">Ship Rankings</a>
@@ -426,6 +441,10 @@
         </div>
 
         <footer>
+            <div class="footer-links">
+                <a href="FAQ.html">FAQ</a>
+                <a href="disclaimer.html">Disclaimer</a>
+            </div>
             <p>Data source: <a href="https://mrv.emsa.europa.eu/" target="_blank">EU MRV Regulation</a></p>
             <p>This data shows annual CO2 emissions from ships calling at EU/EEA ports.</p>
         </footer>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequently Asked Questions - Dirtiest Ships</title>
+    <meta name="description" content="Frequently asked questions about ship CO2 emissions data on DirtiestShips.com, including interpretation, limitations, and data sources.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://dirtiestships.com/FAQ.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dirtiestships.com/FAQ.html">
+    <meta property="og:title" content="FAQ - Dirtiest Ships">
+    <meta property="og:description" content="Frequently asked questions about ship CO2 emissions data.">
+    <meta property="og:site_name" content="Dirtiest Ships">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9641573711172527"
+     crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-img {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 200px;
+            object-fit: cover;
+            filter: grayscale(100%) opacity(0.4);
+            pointer-events: none;
+        }
+
+        .header-img-left {
+            left: 0;
+            mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+        }
+
+        .header-img-right {
+            right: 0;
+            mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #888;
+            position: relative;
+            z-index: 1;
+        }
+
+        nav {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        nav a {
+            color: #4ecdc4;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        nav a:hover {
+            border-color: #4ecdc4;
+            background: rgba(78, 205, 196, 0.1);
+        }
+
+        nav a.active {
+            background: #4ecdc4;
+            color: #1a1a2e;
+        }
+
+        .content {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .faq-item {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .faq-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .question {
+            font-weight: bold;
+            color: #4ecdc4;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .faq-item p {
+            margin: 10px 0;
+            line-height: 1.7;
+        }
+
+        .note {
+            background: rgba(78, 205, 196, 0.1);
+            padding: 20px;
+            border-left: 4px solid #4ecdc4;
+            margin-top: 30px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .note strong {
+            color: #ff6b6b;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #4ecdc4;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-links {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            margin: 0 10px;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            .content {
+                padding: 20px;
+            }
+            .header-img {
+                width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="images/ship-smoke-left.jpg" alt="" class="header-img header-img-left">
+            <img src="images/ship-smoke-right.jpg" alt="" class="header-img header-img-right">
+            <h1>Frequently Asked Questions</h1>
+            <p class="subtitle">Understanding ship emissions data</p>
+            <nav>
+                <a href="index.html">Ship Rankings</a>
+                <a href="chart.html">By Ship Type</a>
+                <a href="companies.html">By Company</a>
+                <a href="countries.html">By Country</a>
+            </nav>
+        </header>
+
+        <div class="content">
+            <div class="faq-item">
+                <p class="question">Does being listed here mean my ship is inefficient or badly operated?</p>
+                <p>
+                    No. Ships on this website are typically ranked by <strong>absolute CO2 emissions</strong>.
+                    High absolute emissions do not imply inefficiency, poor operation, or non-compliance.
+                </p>
+                <p>
+                    Large vessels, ships with high utilisation, and vessels operating long or frequent routes
+                    will naturally emit more CO2 than smaller or less active ships.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <p class="question">Why does this site call ships "dirtiest"?</p>
+                <p>
+                    The term "dirtiest" is used to draw attention to <strong>total CO2 contribution</strong>,
+                    not to make moral or technical judgements about individual ships, crews, or operators.
+                </p>
+                <p>
+                    It reflects climate impact in absolute terms, not performance per tonne, mile, or passenger.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <p class="question">Is this data reliable?</p>
+                <p>
+                    The data originates from the <strong>EU Monitoring, Reporting and Verification (MRV)</strong>
+                    system, which requires ship operators to submit annual emissions reports that are
+                    independently verified by accredited third parties.
+                </p>
+                <p>
+                    DirtiestShips.com republishes this data as reported and does not alter official figures.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <p class="question">Does this include all greenhouse gas emissions?</p>
+                <p>
+                    No. The data includes <strong>tank-to-wake CO2 emissions only</strong>, as defined under EU MRV.
+                </p>
+                <p>
+                    It does not include methane, nitrous oxide, or upstream emissions from fuel production
+                    (well-to-tank).
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <p class="question">Why isn't emissions data normalised per tonne-mile or passenger?</p>
+                <p>
+                    Normalised metrics require additional operational data (cargo carried, distance,
+                    passenger numbers) that is not consistently or publicly available at ship level
+                    under EU MRV.
+                </p>
+                <p>
+                    Where such metrics are shown, they are clearly labelled. Otherwise, rankings are
+                    based on absolute emissions only.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <p class="question">Can I compare different ship types directly?</p>
+                <p>
+                    No. Direct comparisons between different vessel types (e.g. ferries, tankers,
+                    bulk carriers, container ships) are not analytically meaningful.
+                </p>
+                <p>
+                    Users should always compare ships within similar vessel types and size categories.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <p class="question">Does this mean my ship is non-compliant with regulations?</p>
+                <p>
+                    No. Inclusion on this website does not indicate regulatory non-compliance.
+                    All ships listed have reported emissions as required under EU MRV regulations.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <p class="question">Are charterers or operators identified?</p>
+                <p>
+                    Where available, company names are shown as reported in EU MRV data.
+                    This does not imply responsibility, fault, or operational control for emissions outcomes.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <p class="question">What about speed, weather, or routing constraints?</p>
+                <p>
+                    Emissions figures do not adjust for weather conditions, routing limitations,
+                    port congestion, or commercial speed requirements.
+                </p>
+                <p>
+                    These factors can significantly influence fuel consumption and emissions.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <p class="question">Can I request corrections or clarifications?</p>
+                <p>
+                    Yes. If you believe vessel data has been misclassified or incorrectly displayed,
+                    please contact us with supporting information. We will review all substantiated requests.
+                </p>
+            </div>
+
+            <div class="note">
+                <p>
+                    <strong>Important:</strong> This website is intended to support transparency and informed
+                    discussion. It should not be used as a standalone performance, compliance, or investment
+                    assessment tool.
+                </p>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-links">
+                <a href="FAQ.html">FAQ</a>
+                <a href="disclaimer.html">Disclaimer</a>
+            </div>
+            <p>Data source: <a href="https://mrv.emsa.europa.eu/" target="_blank">EU MRV Regulation</a></p>
+        </footer>
+    </div>
+</body>
+</html>
