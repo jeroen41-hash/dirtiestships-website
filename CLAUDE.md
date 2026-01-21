@@ -1,7 +1,7 @@
 # Dirtiest Ships Website
 
 ## Repository
-- GitHub: `jeroen41-hash/dirtiestships` (or similar)
+- GitHub: `jeroen41-hash/dirtiestships-website`
 - Location: `/media/jeroen/work/16 Claude/dirtiestships website`
 - Live site: https://dirtiestships.com (GitHub Pages)
 
@@ -14,6 +14,8 @@ A website displaying CO2 emissions rankings for ships calling at EU/EEA ports, b
 - `chart.html` - By Ship Type: Bar chart showing emissions by vessel category
 - `companies.html` - By Company: Top 15 companies by emissions (2024 only)
 - `countries.html` - By Country: Top 20 flag states by emissions
+- `FAQ.html` - Frequently Asked Questions about the data
+- `disclaimer.html` - Disclaimer & Methodology
 
 ## Data Source
 - EU MRV Regulation: https://mrv.emsa.europa.eu/
@@ -23,22 +25,34 @@ A website displaying CO2 emissions rankings for ships calling at EU/EEA ports, b
 ### Data Files
 ```
 /data/
+  2020-v207-...-EU MRV Publication of information.xlsx
+  2021-v215-...-EU MRV Publication of information.xlsx
   2022-v240-...-EU MRV Publication of information.xlsx
   2023-v83-...-EU MRV Publication of information.xlsx
   2024-v160-...-EU MRV Publication of information.xlsx
 
 /json/
-  {year}_ships_data.json      - All ships with rankings
-  {year}_ships_by_type.json   - Aggregated by ship type
-  {year}_countries_top20.json - Top 20 flag states
+  {year}_ships_data.json      - All ships with rankings (2020-2024)
+  {year}_ships_by_type.json   - Aggregated by ship type (2020-2024)
+  {year}_countries_top20.json - Top 20 flag states (2020-2024)
   2024_companies_top15.json   - Top 15 companies (2024 only)
 ```
 
 ### Data Notes
 - 2024 uses `co2eq` (CO2 equivalent including methane etc.)
-- 2022/2023 use `co2` (CO2 only)
+- 2020-2023 use `co2` (CO2 only)
 - Company data only available in 2024 dataset
 - Country = flag state (port of registry), not operating region
+- Ships data includes `fuel_per_transport` metrics (pax, freight, mass, volume, dwt)
+
+### Processing Excel Files
+To process new Excel files into JSON:
+```python
+# Key columns in Excel (after skipping 3 header rows):
+# 0: IMO Number, 1: Name, 2: Ship type, 5: Port of Registry
+# 24: Total CO2 emissions [m tonnes]
+# 34-38: Fuel per transport work (mass, volume, dwt, pax, freight)
+```
 
 ## Tech Stack
 - Static HTML/CSS/JavaScript (no build process)
@@ -53,12 +67,13 @@ A website displaying CO2 emissions rankings for ships calling at EU/EEA ports, b
 - Responsive design with mobile breakpoints
 
 ## Features
-- Year selector (2022, 2023, 2024)
+- Year selector (2020-2024)
 - Search by ship name or IMO number
 - Filter by ship type
 - Sortable table columns
 - Pagination (50 ships per page)
 - Individual ship pages with historical emissions charts
+- Transport work efficiency charts on ship pages
 - SEO meta tags (Open Graph, Twitter Cards)
 
 ## File Structure
@@ -69,10 +84,12 @@ A website displaying CO2 emissions rankings for ships calling at EU/EEA ports, b
 ├── chart.html        # By ship type
 ├── companies.html    # By company
 ├── countries.html    # By country
-├── CNAME            # dirtiestships.com
+├── FAQ.html          # FAQ page
+├── disclaimer.html   # Disclaimer & methodology
+├── CNAME             # dirtiestships.com
 ├── .gitignore
-├── /data/           # Raw Excel files
-├── /json/           # Processed JSON data
-├── /images/         # Header images
+├── /data/            # Raw Excel files
+├── /json/            # Processed JSON data
+├── /images/          # Header images
 └── /launch instructins/  # Deployment notes
 ```
