@@ -475,38 +475,7 @@
                     </div>
                 </div>
 
-                ${shipData['2024'] && shipData['2024'].efficiency ? `
-                <div class="chart-container">
-                    <div class="chart-title">Efficiency Rating</div>
-                    <div class="chart-wrapper" style="height: 200px;">
-                        <canvas id="efficiencyChart"></canvas>
-                    </div>
-                    <div class="efficiency-details" style="margin-top: 20px;">
-                        <table class="emissions-table">
-                            <thead>
-                                <tr>
-                                    <th>Year</th>
-                                    <th>Efficiency Type</th>
-                                    <th>Rating (gCO₂/t·nm)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>2024</td>
-                                    <td>${getEfficiencyType(shipData['2024'].efficiency)}</td>
-                                    <td class="co2-value">${getEfficiencyValue(shipData['2024'].efficiency)}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="comparison-note">
-                        <strong>Note:</strong> Efficiency data is only available from 2024. Lower values indicate better efficiency.
-                        <br><strong>EEDI</strong> = Energy Efficiency Design Index (new ships),
-                        <strong>EEXI</strong> = Energy Efficiency Existing Ship Index,
-                        <strong>EIV</strong> = Estimated Index Value.
-                    </div>
-                </div>
-                ` : ''}
+                ${buildTransportWorkSection()}
             `;
 
             document.getElementById('content').innerHTML = html;
@@ -516,56 +485,162 @@
                 renderChart(emissionsHistory);
             }
 
-            // Render efficiency chart if 2024 data available
-            if (shipData['2024'] && shipData['2024'].efficiency) {
-                renderEfficiencyChart(shipData['2024'].efficiency);
+            // Render transport work chart
+            renderTransportWorkChart();
+        }
+
+        function buildTransportWorkSection() {
+            // Collect transport work data across years
+            const transportData = getTransportWorkData();
+            if (!transportData.hasData) return '';
+
+            return `
+                <div class="chart-container">
+                    <div class="chart-title">Fuel Consumption per Transport Work</div>
+                    <div class="chart-wrapper">
+                        <canvas id="transportChart"></canvas>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <table class="emissions-table">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Metric</th>
+                                    <th>Value</th>
+                                    <th>Change</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transportTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="comparison-note">
+                        <strong>Note:</strong> Lower values indicate better fuel efficiency. The metric shown depends on ship type:
+                        <br>• <strong>pax</strong>: Passenger ships (g fuel / passenger · nautical mile)
+                        <br>• <strong>freight</strong>: Freight vessels (g fuel / m tonnes · nautical mile)
+                        <br>• <strong>mass</strong>: Cargo by mass (g fuel / m tonnes · nautical mile)
+                        <br>• <strong>volume</strong>: Cargo by volume (g fuel / m³ · nautical mile)
+                        <br>• <strong>dwt</strong>: Deadweight tonnage (g fuel / dwt · nautical mile)
+                    </div>
+                </div>
+            `;
+        }
+
+        function getTransportWorkData() {
+            const result = { hasData: false, metric: null, data: [] };
+
+            // Determine best metric based on ship type
+            const shipType = (shipData['2024'] || shipData['2023'] || shipData['2022'])?.type?.toLowerCase() || '';
+
+            // Priority order based on ship type
+            let metricPriority;
+            if (shipType.includes('passenger') || shipType.includes('cruise') || shipType.includes('ro-pax')) {
+                metricPriority = ['pax', 'freight', 'mass', 'volume', 'dwt'];
+            } else if (shipType.includes('container') || shipType.includes('cargo') || shipType.includes('bulk')) {
+                metricPriority = ['freight', 'mass', 'dwt', 'volume', 'pax'];
+            } else if (shipType.includes('tanker') || shipType.includes('lng') || shipType.includes('lpg')) {
+                metricPriority = ['volume', 'mass', 'dwt', 'freight', 'pax'];
+            } else {
+                metricPriority = ['mass', 'dwt', 'volume', 'freight', 'pax'];
             }
+
+            // Find first metric with data across years
+            for (const metric of metricPriority) {
+                const yearData = [];
+                for (const year of years) {
+                    if (shipData[year]?.fuel_per_transport?.[metric]) {
+                        yearData.push({
+                            year: year,
+                            value: shipData[year].fuel_per_transport[metric]
+                        });
+                    }
+                }
+                if (yearData.length > 0) {
+                    result.hasData = true;
+                    result.metric = metric;
+                    result.data = yearData;
+                    break;
+                }
+            }
+
+            return result;
         }
 
-        function getEfficiencyType(efficiencyStr) {
-            if (!efficiencyStr) return 'N/A';
-            const match = efficiencyStr.match(/^(EEDI|EEXI|EIV)/);
-            return match ? match[1] : 'Unknown';
+        function getMetricLabel(metric) {
+            const labels = {
+                'pax': 'g / pax · n mile',
+                'freight': 'g / m tonnes · n mile',
+                'mass': 'g / m tonnes · n mile',
+                'volume': 'g / m³ · n mile',
+                'dwt': 'g / dwt · n mile'
+            };
+            return labels[metric] || metric;
         }
 
-        function getEfficiencyValue(efficiencyStr) {
-            if (!efficiencyStr) return 'N/A';
-            const match = efficiencyStr.match(/\((\d+\.?\d*)/);
-            return match ? parseFloat(match[1]).toFixed(2) : 'N/A';
+        function getMetricDescription(metric) {
+            const descriptions = {
+                'pax': 'Per Passenger',
+                'freight': 'Per Freight Tonne',
+                'mass': 'Per Mass',
+                'volume': 'Per Volume',
+                'dwt': 'Per DWT'
+            };
+            return descriptions[metric] || metric;
         }
 
-        function renderEfficiencyChart(efficiencyStr) {
-            const ctx = document.getElementById('efficiencyChart');
+        function renderTransportWorkChart() {
+            const ctx = document.getElementById('transportChart');
             if (!ctx) return;
 
-            const effValue = parseFloat(getEfficiencyValue(efficiencyStr));
-            const effType = getEfficiencyType(efficiencyStr);
-            if (isNaN(effValue)) return;
+            const transportData = getTransportWorkData();
+            if (!transportData.hasData) return;
 
-            // Color based on efficiency (lower is better)
-            // Rough scale: <10 = good (green), 10-20 = moderate (yellow), >20 = poor (red)
-            let barColor = '#4ecdc4'; // good
-            if (effValue > 20) {
-                barColor = '#ff6b6b'; // poor
-            } else if (effValue > 10) {
-                barColor = '#ffe66d'; // moderate
+            const data = transportData.data;
+            const metric = transportData.metric;
+
+            // Calculate changes and populate table
+            const tableBody = document.getElementById('transportTableBody');
+            if (tableBody) {
+                let tableHtml = '';
+                data.forEach((item, i) => {
+                    let change = '-';
+                    let changeClass = '';
+                    if (i > 0) {
+                        const pct = ((item.value - data[i-1].value) / data[i-1].value * 100).toFixed(1);
+                        change = (parseFloat(pct) > 0 ? '+' : '') + pct + '%';
+                        changeClass = parseFloat(pct) > 0 ? 'change-positive' : 'change-negative';
+                    }
+                    tableHtml += `
+                        <tr>
+                            <td>${item.year}</td>
+                            <td>${getMetricDescription(metric)}</td>
+                            <td class="co2-value">${item.value.toFixed(2)}</td>
+                            <td class="${changeClass}">${change}</td>
+                        </tr>
+                    `;
+                });
+                tableBody.innerHTML = tableHtml;
             }
+
+            // Color bars based on trend (improvement = green, worsening = red)
+            const colors = data.map((d, i) => {
+                if (i === 0) return '#4ecdc4';
+                return d.value < data[i-1].value ? '#4ecdc4' : '#ff6b6b';
+            });
 
             new Chart(ctx.getContext('2d'), {
                 type: 'bar',
                 data: {
-                    labels: ['2024'],
+                    labels: data.map(d => d.year),
                     datasets: [{
-                        label: 'Efficiency (gCO₂/t·nm)',
-                        data: [effValue],
-                        backgroundColor: barColor,
-                        borderColor: barColor,
-                        borderWidth: 1,
-                        barThickness: 60
+                        label: getMetricLabel(metric),
+                        data: data.map(d => d.value),
+                        backgroundColor: colors,
+                        borderColor: colors,
+                        borderWidth: 1
                     }]
                 },
                 options: {
-                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
@@ -575,26 +650,25 @@
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    return `${effType}: ${effValue} gCO₂/t·nm`;
+                                    return `${getMetricDescription(metric)}: ${context.raw.toFixed(2)} ${getMetricLabel(metric)}`;
                                 }
                             }
                         }
                     },
                     scales: {
                         x: {
+                            ticks: { color: '#888' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
                             beginAtZero: true,
-                            max: Math.max(effValue * 1.5, 30),
                             ticks: { color: '#888' },
                             grid: { color: 'rgba(255,255,255,0.1)' },
                             title: {
                                 display: true,
-                                text: 'gCO₂ per tonne-nautical mile (lower is better)',
+                                text: getMetricLabel(metric) + ' (lower is better)',
                                 color: '#888'
                             }
-                        },
-                        y: {
-                            ticks: { color: '#888' },
-                            grid: { color: 'rgba(255,255,255,0.1)' }
                         }
                     }
                 }
