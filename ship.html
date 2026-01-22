@@ -257,6 +257,91 @@
             color: #aaa;
         }
 
+        .extremes-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .extreme-box {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .extreme-box.best {
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .extreme-box.worst {
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .extreme-title {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .extreme-ship-name {
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .extreme-ship-name a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .extreme-ship-name a:hover {
+            color: #4ecdc4;
+        }
+
+        .extreme-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .extreme-box.best .extreme-value {
+            color: #4ecdc4;
+        }
+
+        .extreme-box.worst .extreme-value {
+            color: #ff6b6b;
+        }
+
+        .peer-chart-wrapper {
+            position: relative;
+            height: 400px;
+        }
+
+        .efficiency-summary {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .efficiency-box {
+            background: rgba(255,255,255,0.05);
+            padding: 15px 25px;
+            border-radius: 8px;
+        }
+
+        .efficiency-label {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .efficiency-value {
+            color: #4ecdc4;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 1.8rem;
@@ -272,6 +357,14 @@
 
             .chart-wrapper {
                 height: 250px;
+            }
+
+            .extremes-section {
+                grid-template-columns: 1fr;
+            }
+
+            .peer-chart-wrapper {
+                height: 300px;
             }
 
             nav {
@@ -315,6 +408,18 @@
         const shipData = {};
         let loadedYears = 0;
         const years = ['2020', '2021', '2022', '2023', '2024'];
+        let allShips2024 = [];
+        let peerComparisonChart = null;
+
+        // Parse efficiency value from string like "EEDI (5.41 gCO₂/t·nm)"
+        function parseEfficiency(efficiencyStr) {
+            if (!efficiencyStr) return null;
+            const match = efficiencyStr.match(/\((\d+\.?\d*)\s*gCO/);
+            if (match) {
+                return parseFloat(match[1]);
+            }
+            return null;
+        }
 
         function getIMOFromURL() {
             const params = new URLSearchParams(window.location.search);
@@ -332,6 +437,10 @@
                 fetch(`json/${year}_ships_data.json`)
                     .then(response => response.json())
                     .then(data => {
+                        // Store all 2024 ships for peer comparison
+                        if (year === '2024') {
+                            allShips2024 = data.ships;
+                        }
                         const ship = data.ships.find(s => s.imo === imo);
                         if (ship) {
                             shipData[year] = ship;
@@ -477,6 +586,8 @@
                 </div>
 
                 ${buildTransportWorkSection()}
+
+                ${buildPeerComparisonSection()}
             `;
 
             document.getElementById('content').innerHTML = html;
@@ -488,6 +599,9 @@
 
             // Render transport work chart
             renderTransportWorkChart();
+
+            // Render peer comparison chart
+            renderPeerComparisonChart();
         }
 
         function buildTransportWorkSection() {
@@ -565,6 +679,176 @@
             }
 
             return result;
+        }
+
+        function buildPeerComparisonSection() {
+            // Get the current ship from 2024 data (efficiency data only available in 2024)
+            const ship = shipData['2024'];
+            if (!ship || !ship.efficiency) return '';
+
+            const efficiency = parseEfficiency(ship.efficiency);
+            if (!efficiency) return '';
+
+            // Get all ships of the same type with efficiency data
+            const sameTypeShips = allShips2024
+                .filter(s => s.type === ship.type && parseEfficiency(s.efficiency) !== null)
+                .map(s => ({
+                    ...s,
+                    efficiencyValue: parseEfficiency(s.efficiency)
+                }))
+                .sort((a, b) => a.efficiencyValue - b.efficiencyValue); // Lower is better
+
+            if (sameTypeShips.length < 3) return '';
+
+            // Find selected ship's position and add type rank
+            sameTypeShips.forEach((s, idx) => {
+                s.typeRank = idx + 1;
+            });
+
+            const selectedIndex = sameTypeShips.findIndex(s => s.imo === ship.imo);
+            const selectedShipData = sameTypeShips[selectedIndex];
+            const totalInType = sameTypeShips.length;
+
+            // Best and worst performers
+            const bestShip = sameTypeShips[0];
+            const worstShip = sameTypeShips[sameTypeShips.length - 1];
+
+            // Build peer list: 7 above, selected, 7 below
+            let peerShips = [];
+            const startIdx = Math.max(0, selectedIndex - 7);
+            const endIdx = Math.min(sameTypeShips.length, selectedIndex + 8);
+
+            for (let i = startIdx; i < endIdx; i++) {
+                peerShips.push(sameTypeShips[i]);
+            }
+
+            // Ensure we have up to 15 ships if possible
+            if (peerShips.length < 15) {
+                if (startIdx === 0 && endIdx < sameTypeShips.length) {
+                    const need = Math.min(15 - peerShips.length, sameTypeShips.length - endIdx);
+                    for (let i = 0; i < need; i++) {
+                        peerShips.push(sameTypeShips[endIdx + i]);
+                    }
+                } else if (endIdx === sameTypeShips.length && startIdx > 0) {
+                    const need = Math.min(15 - peerShips.length, startIdx);
+                    for (let i = need; i > 0; i--) {
+                        peerShips.unshift(sameTypeShips[startIdx - i]);
+                    }
+                }
+            }
+
+            // Store peer ships for chart rendering
+            window.peerShipsData = { ships: peerShips, selectedImo: ship.imo, selectedEfficiency: efficiency };
+
+            return `
+                <div class="chart-container">
+                    <div class="chart-title">Peer Efficiency Comparison</div>
+                    <div class="efficiency-summary">
+                        <div class="efficiency-box">
+                            <div class="efficiency-label">Energy Efficiency</div>
+                            <div class="efficiency-value">${efficiency.toFixed(2)} gCO₂/t·nm</div>
+                        </div>
+                        <div class="efficiency-box">
+                            <div class="efficiency-label">Rank in ${escapeHtml(ship.type)}</div>
+                            <div class="efficiency-value">#${selectedShipData.typeRank} of ${totalInType}</div>
+                        </div>
+                        <div class="efficiency-box">
+                            <div class="efficiency-label">Percentile</div>
+                            <div class="efficiency-value">${((selectedShipData.typeRank / totalInType) * 100).toFixed(1)}%</div>
+                        </div>
+                    </div>
+
+                    <div class="extremes-section">
+                        <div class="extreme-box best">
+                            <div class="extreme-title">Most Efficient ${escapeHtml(ship.type)}</div>
+                            <div class="extreme-ship-name"><a href="ship.html?imo=${bestShip.imo}">${escapeHtml(bestShip.name)}</a></div>
+                            <div class="extreme-value">${bestShip.efficiencyValue.toFixed(2)} gCO₂/t·nm</div>
+                        </div>
+                        <div class="extreme-box worst">
+                            <div class="extreme-title">Least Efficient ${escapeHtml(ship.type)}</div>
+                            <div class="extreme-ship-name"><a href="ship.html?imo=${worstShip.imo}">${escapeHtml(worstShip.name)}</a></div>
+                            <div class="extreme-value">${worstShip.efficiencyValue.toFixed(2)} gCO₂/t·nm</div>
+                        </div>
+                    </div>
+
+                    <div class="peer-chart-wrapper">
+                        <canvas id="peerComparisonChart"></canvas>
+                    </div>
+
+                    <div class="comparison-note">
+                        <strong>Note:</strong> Ships are ranked by their energy efficiency rating (gCO₂/t·nm) - lower values indicate better fuel efficiency.
+                        The chart shows this ship compared to similar ${escapeHtml(ship.type)} vessels.
+                        <a href="compare.html?imo=${ship.imo}" style="color: #4ecdc4;">View full peer comparison →</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderPeerComparisonChart() {
+            const ctx = document.getElementById('peerComparisonChart');
+            if (!ctx || !window.peerShipsData) return;
+
+            const { ships, selectedImo, selectedEfficiency } = window.peerShipsData;
+
+            if (peerComparisonChart) {
+                peerComparisonChart.destroy();
+            }
+
+            const labels = ships.map(s => s.name.length > 20 ? s.name.substring(0, 20) + '...' : s.name);
+            const data = ships.map(s => s.efficiencyValue);
+            const colors = ships.map(s => s.imo === selectedImo ? '#4ecdc4' : 'rgba(255, 107, 107, 0.7)');
+            const borderColors = ships.map(s => s.imo === selectedImo ? '#4ecdc4' : '#ff6b6b');
+
+            peerComparisonChart = new Chart(ctx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Efficiency (gCO₂/t·nm)',
+                        data: data,
+                        backgroundColor: colors,
+                        borderColor: borderColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const ship = ships[context.dataIndex];
+                                    return `${ship.efficiencyValue.toFixed(2)} gCO₂/t·nm (Rank #${ship.typeRank})`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: { color: '#888' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            title: {
+                                display: true,
+                                text: 'Energy Efficiency (gCO₂/t·nm) - Lower is Better',
+                                color: '#888'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#888',
+                                font: { size: 11 }
+                            },
+                            grid: { color: 'rgba(255,255,255,0.05)' }
+                        }
+                    }
+                }
+            });
         }
 
         function getMetricLabel(metric) {
