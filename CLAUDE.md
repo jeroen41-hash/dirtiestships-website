@@ -14,6 +14,7 @@ A website displaying CO2 emissions rankings for ships calling at EU/EEA ports, b
 - `chart.html` - By Ship Type: Bar chart showing emissions by vessel category
 - `companies.html` - By Company: Top 15 companies by emissions (2024 only)
 - `countries.html` - By Country: Top 20 flag states by emissions
+- `compare.html` - Peer Compare: Compare a ship's energy efficiency against peers of the same type (accessed via `?imo=XXXXXXX` or search)
 - `FAQ.html` - Frequently Asked Questions about the data
 - `disclaimer.html` - Disclaimer & Methodology
 
@@ -84,6 +85,7 @@ To process new Excel files into JSON:
 ├── chart.html        # By ship type
 ├── companies.html    # By company
 ├── countries.html    # By country
+├── compare.html      # Peer efficiency comparison (?imo=XXXXXXX)
 ├── FAQ.html          # FAQ page
 ├── disclaimer.html   # Disclaimer & methodology
 ├── CNAME             # dirtiestships.com

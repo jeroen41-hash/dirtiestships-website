@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Compare ship energy efficiency with peer vessels of the same type. See how ships rank against similar vessels in CO2 efficiency.">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Dirtiest Ships">
+    <meta property="og:title" content="Ship Efficiency Comparison - Dirtiest Ships">
+    <meta property="og:description" content="Compare ship energy efficiency with peer vessels of the same type.">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9641573711172527"
+     crossorigin="anonymous"></script>
+    <title>Peer Comparison - Dirtiest Ships</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-img {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 200px;
+            object-fit: cover;
+            filter: grayscale(100%) opacity(0.4);
+            pointer-events: none;
+        }
+
+        .header-img-left {
+            left: 0;
+            mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+        }
+
+        .header-img-right {
+            right: 0;
+            mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #888;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #4ecdc4;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid #4ecdc4;
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            background: #4ecdc4;
+            color: #1a1a2e;
+        }
+
+        .search-section {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .search-section h2 {
+            color: #4ecdc4;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            border: 2px solid rgba(78, 205, 196, 0.3);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #4ecdc4;
+        }
+
+        .search-input::placeholder {
+            color: #666;
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #1a1a2e;
+            border: 1px solid rgba(78, 205, 196, 0.3);
+            border-radius: 10px;
+            margin-top: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .search-result-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: background 0.2s;
+        }
+
+        .search-result-item:hover {
+            background: rgba(78, 205, 196, 0.1);
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-name {
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .search-result-meta {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 3px;
+        }
+
+        .comparison-section {
+            display: none;
+        }
+
+        .comparison-section.active {
+            display: block;
+        }
+
+        .selected-ship {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .selected-ship h2 {
+            color: #ff6b6b;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .selected-ship-meta {
+            color: #888;
+            font-size: 0.95rem;
+        }
+
+        .selected-ship-efficiency {
+            margin-top: 15px;
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .efficiency-box {
+            background: rgba(255,255,255,0.05);
+            padding: 15px 25px;
+            border-radius: 8px;
+        }
+
+        .efficiency-label {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .efficiency-value {
+            color: #4ecdc4;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .extremes-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .extreme-box {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .extreme-box.best {
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .extreme-box.worst {
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .extreme-title {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .extreme-ship-name {
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .extreme-ship-name a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .extreme-ship-name a:hover {
+            color: #4ecdc4;
+        }
+
+        .extreme-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .extreme-box.best .extreme-value {
+            color: #4ecdc4;
+        }
+
+        .extreme-box.worst .extreme-value {
+            color: #ff6b6b;
+        }
+
+        .ranking-section {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .ranking-section h3 {
+            color: #4ecdc4;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .ranking-table th,
+        .ranking-table td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        .ranking-table th {
+            background: rgba(0,0,0,0.3);
+            color: #4ecdc4;
+            font-weight: 600;
+        }
+
+        .ranking-table tr:nth-child(even) {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .ranking-table tr:hover {
+            background: rgba(78, 205, 196, 0.1);
+        }
+
+        .ranking-table tr.selected-row {
+            background: rgba(78, 205, 196, 0.2);
+            border-left: 3px solid #4ecdc4;
+        }
+
+        .ranking-table tr.selected-row td:first-child {
+            padding-left: 12px;
+        }
+
+        .ranking-table .rank-cell {
+            font-weight: bold;
+            color: #888;
+            width: 80px;
+        }
+
+        .ranking-table .ship-name-cell a {
+            color: #e0e0e0;
+            text-decoration: none;
+        }
+
+        .ranking-table .ship-name-cell a:hover {
+            color: #4ecdc4;
+        }
+
+        .ranking-table .efficiency-cell {
+            font-weight: bold;
+            color: #ff6b6b;
+            text-align: right;
+        }
+
+        .ranking-table tr.better .efficiency-cell {
+            color: #4ecdc4;
+        }
+
+        .ranking-table tr.worse .efficiency-cell {
+            color: #ff6b6b;
+        }
+
+        .chart-container {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .chart-container h3 {
+            color: #4ecdc4;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+        }
+
+        .no-data-message {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .no-data-message h3 {
+            color: #ff6b6b;
+            margin-bottom: 10px;
+        }
+
+        .methodology-note {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(78, 205, 196, 0.1);
+            border-left: 3px solid #4ecdc4;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #4ecdc4;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2rem;
+            color: #888;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .extremes-section {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                gap: 10px;
+            }
+
+            nav a {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .ranking-table th,
+            .ranking-table td {
+                padding: 10px 8px;
+                font-size: 0.85rem;
+            }
+
+            .chart-wrapper {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="images/ship-smoke-left.jpg" alt="" class="header-img header-img-left">
+            <img src="images/ship-smoke-right.jpg" alt="" class="header-img header-img-right">
+            <h1>Dirtiest Ships <span style="font-size: 0.5em; font-weight: normal;">(in Europe)</span></h1>
+            <p class="subtitle">Peer Efficiency Comparison</p>
+            <nav>
+                <a href="index.html">Ship Rankings</a>
+                <a href="chart.html">By Ship Type</a>
+                <a href="companies.html">By Company</a>
+                <a href="countries.html">By Country</a>
+                <a href="compare.html" class="active">Peer Compare</a>
+            </nav>
+        </header>
+
+        <div class="search-section">
+            <h2>Select a Ship to Compare</h2>
+            <div class="search-container">
+                <input type="text" class="search-input" id="shipSearch" placeholder="Search by ship name or IMO number...">
+                <div class="search-results" id="searchResults"></div>
+            </div>
+        </div>
+
+        <div class="comparison-section" id="comparisonSection">
+            <div class="selected-ship" id="selectedShipInfo">
+                <!-- Selected ship info populated by JS -->
+            </div>
+
+            <div class="extremes-section" id="extremesSection">
+                <!-- Best and worst performers populated by JS -->
+            </div>
+
+            <div class="chart-container">
+                <h3>Efficiency Comparison Chart</h3>
+                <div class="chart-wrapper">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
+            </div>
+
+            <div class="ranking-section">
+                <h3 id="rankingTitle">Peer Ranking by Energy Efficiency</h3>
+                <table class="ranking-table">
+                    <thead>
+                        <tr>
+                            <th>Type Rank</th>
+                            <th>Ship Name</th>
+                            <th>Registry</th>
+                            <th style="text-align: right;">Efficiency (gCO2/t-nm)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankingTableBody">
+                        <!-- Rankings populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="methodology-note">
+                <strong>Note:</strong> Ships are ranked by their energy efficiency rating (gCO2/t-nm) - lower values indicate better fuel efficiency.
+                Only ships with reported efficiency ratings are included in this comparison. The efficiency metric shown is the ship's
+                design efficiency indicator (EEDI, EEXI, or EIV) as reported in EU MRV data.
+            </div>
+        </div>
+
+        <div class="no-data-message" id="noDataMessage" style="display: none;">
+            <h3>No Efficiency Data Available</h3>
+            <p>This ship does not have efficiency rating data, or there are not enough peers of the same type with efficiency data for comparison.</p>
+            <p style="margin-top: 15px;"><a href="index.html" style="color: #4ecdc4;">Back to Ship Rankings</a></p>
+        </div>
+
+        <footer>
+            <p>Data source: <a href="https://mrv.emsa.europa.eu/" target="_blank">EU MRV Regulation</a> (2024)</p>
+            <p>This data shows energy efficiency ratings for ships calling at EU/EEA ports.</p>
+        </footer>
+    </div>
+
+    <script>
+        let allShips = [];
+        let selectedShip = null;
+        let comparisonChart = null;
+
+        // Parse efficiency value from string like "EEDI (5.41 gCO₂/t·nm)"
+        function parseEfficiency(efficiencyStr) {
+            if (!efficiencyStr) return null;
+            const match = efficiencyStr.match(/\((\d+\.?\d*)\s*gCO/);
+            if (match) {
+                return parseFloat(match[1]);
+            }
+            return null;
+        }
+
+        // Load ship data
+        function loadData() {
+            fetch('json/2024_ships_data.json')
+                .then(response => response.json())
+                .then(data => {
+                    allShips = data.ships;
+                    checkURLForShip();
+                })
+                .catch(error => {
+                    console.error('Error loading data:', error);
+                });
+        }
+
+        // Check if IMO is in URL
+        function checkURLForShip() {
+            const params = new URLSearchParams(window.location.search);
+            const imo = params.get('imo');
+            if (imo) {
+                const ship = allShips.find(s => s.imo === imo);
+                if (ship) {
+                    selectShip(ship);
+                }
+            }
+        }
+
+        // Search functionality
+        const searchInput = document.getElementById('shipSearch');
+        const searchResults = document.getElementById('searchResults');
+
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+
+            if (query.length < 2) {
+                searchResults.classList.remove('active');
+                return;
+            }
+
+            const matches = allShips.filter(ship =>
+                ship.name.toLowerCase().includes(query) ||
+                ship.imo.includes(query)
+            ).slice(0, 10);
+
+            if (matches.length === 0) {
+                searchResults.innerHTML = '<div class="search-result-item"><span class="search-result-name">No ships found</span></div>';
+            } else {
+                searchResults.innerHTML = matches.map(ship => `
+                    <div class="search-result-item" data-imo="${ship.imo}">
+                        <div class="search-result-name">${escapeHtml(ship.name)}</div>
+                        <div class="search-result-meta">IMO: ${ship.imo} | ${escapeHtml(ship.type)} | ${ship.efficiency || 'No efficiency data'}</div>
+                    </div>
+                `).join('');
+            }
+
+            searchResults.classList.add('active');
+        });
+
+        searchResults.addEventListener('click', function(e) {
+            const item = e.target.closest('.search-result-item');
+            if (item && item.dataset.imo) {
+                const ship = allShips.find(s => s.imo === item.dataset.imo);
+                if (ship) {
+                    selectShip(ship);
+                    searchInput.value = '';
+                    searchResults.classList.remove('active');
+                    // Update URL
+                    history.pushState(null, '', `?imo=${ship.imo}`);
+                }
+            }
+        });
+
+        // Close search results when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.search-container')) {
+                searchResults.classList.remove('active');
+            }
+        });
+
+        // Select a ship and show comparison
+        function selectShip(ship) {
+            selectedShip = ship;
+            const efficiency = parseEfficiency(ship.efficiency);
+
+            if (!efficiency) {
+                document.getElementById('comparisonSection').classList.remove('active');
+                document.getElementById('noDataMessage').style.display = 'block';
+                return;
+            }
+
+            // Get all ships of the same type with efficiency data
+            const sameTypeShips = allShips
+                .filter(s => s.type === ship.type && parseEfficiency(s.efficiency) !== null)
+                .map(s => ({
+                    ...s,
+                    efficiencyValue: parseEfficiency(s.efficiency)
+                }))
+                .sort((a, b) => a.efficiencyValue - b.efficiencyValue); // Lower is better
+
+            if (sameTypeShips.length < 3) {
+                document.getElementById('comparisonSection').classList.remove('active');
+                document.getElementById('noDataMessage').style.display = 'block';
+                return;
+            }
+
+            // Find selected ship's position
+            const selectedIndex = sameTypeShips.findIndex(s => s.imo === ship.imo);
+
+            // Add type rank to all ships
+            sameTypeShips.forEach((s, idx) => {
+                s.typeRank = idx + 1;
+            });
+
+            const totalInType = sameTypeShips.length;
+            const selectedShipData = sameTypeShips[selectedIndex];
+
+            // Show comparison section
+            document.getElementById('noDataMessage').style.display = 'none';
+            document.getElementById('comparisonSection').classList.add('active');
+
+            // Update selected ship info
+            document.getElementById('selectedShipInfo').innerHTML = `
+                <h2>${escapeHtml(ship.name)}</h2>
+                <div class="selected-ship-meta">IMO: ${ship.imo} | ${escapeHtml(ship.type)} | Registry: ${escapeHtml(ship.registry)}</div>
+                <div class="selected-ship-efficiency">
+                    <div class="efficiency-box">
+                        <div class="efficiency-label">Energy Efficiency</div>
+                        <div class="efficiency-value">${efficiency.toFixed(2)} gCO2/t-nm</div>
+                    </div>
+                    <div class="efficiency-box">
+                        <div class="efficiency-label">Rank in ${escapeHtml(ship.type)}</div>
+                        <div class="efficiency-value">#${selectedShipData.typeRank} of ${totalInType}</div>
+                    </div>
+                    <div class="efficiency-box">
+                        <div class="efficiency-label">Percentile</div>
+                        <div class="efficiency-value">${((selectedShipData.typeRank / totalInType) * 100).toFixed(1)}%</div>
+                    </div>
+                </div>
+            `;
+
+            // Best and worst performers
+            const bestShip = sameTypeShips[0];
+            const worstShip = sameTypeShips[sameTypeShips.length - 1];
+
+            document.getElementById('extremesSection').innerHTML = `
+                <div class="extreme-box best">
+                    <div class="extreme-title">Most Efficient ${escapeHtml(ship.type)}</div>
+                    <div class="extreme-ship-name"><a href="ship.html?imo=${bestShip.imo}">${escapeHtml(bestShip.name)}</a></div>
+                    <div class="extreme-value">${bestShip.efficiencyValue.toFixed(2)} gCO2/t-nm</div>
+                </div>
+                <div class="extreme-box worst">
+                    <div class="extreme-title">Least Efficient ${escapeHtml(ship.type)}</div>
+                    <div class="extreme-ship-name"><a href="ship.html?imo=${worstShip.imo}">${escapeHtml(worstShip.name)}</a></div>
+                    <div class="extreme-value">${worstShip.efficiencyValue.toFixed(2)} gCO2/t-nm</div>
+                </div>
+            `;
+
+            // Build peer list: 7 above, selected, 7 below
+            let peerShips = [];
+            const startIdx = Math.max(0, selectedIndex - 7);
+            const endIdx = Math.min(sameTypeShips.length, selectedIndex + 8);
+
+            // Get the window of ships
+            for (let i = startIdx; i < endIdx; i++) {
+                peerShips.push(sameTypeShips[i]);
+            }
+
+            // Ensure we have up to 15 ships if possible
+            if (peerShips.length < 15) {
+                if (startIdx === 0 && endIdx < sameTypeShips.length) {
+                    // Add more from below
+                    const need = Math.min(15 - peerShips.length, sameTypeShips.length - endIdx);
+                    for (let i = 0; i < need; i++) {
+                        peerShips.push(sameTypeShips[endIdx + i]);
+                    }
+                } else if (endIdx === sameTypeShips.length && startIdx > 0) {
+                    // Add more from above
+                    const need = Math.min(15 - peerShips.length, startIdx);
+                    for (let i = need; i > 0; i--) {
+                        peerShips.unshift(sameTypeShips[startIdx - i]);
+                    }
+                }
+            }
+
+            // Update ranking title
+            document.getElementById('rankingTitle').textContent = `Peer Ranking - ${escapeHtml(ship.type)} (${totalInType} ships)`;
+
+            // Render ranking table
+            const tableBody = document.getElementById('rankingTableBody');
+            tableBody.innerHTML = peerShips.map(s => {
+                const isSelected = s.imo === ship.imo;
+                const isBetter = s.efficiencyValue < efficiency;
+                const rowClass = isSelected ? 'selected-row' : (isBetter ? 'better' : 'worse');
+
+                return `
+                    <tr class="${rowClass}">
+                        <td class="rank-cell">#${s.typeRank}</td>
+                        <td class="ship-name-cell"><a href="ship.html?imo=${s.imo}">${escapeHtml(s.name)}</a></td>
+                        <td>${escapeHtml(s.registry)}</td>
+                        <td class="efficiency-cell">${s.efficiencyValue.toFixed(2)}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Render chart
+            renderComparisonChart(peerShips, ship.imo);
+        }
+
+        function renderComparisonChart(ships, selectedImo) {
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+
+            if (comparisonChart) {
+                comparisonChart.destroy();
+            }
+
+            const labels = ships.map(s => s.name.length > 20 ? s.name.substring(0, 20) + '...' : s.name);
+            const data = ships.map(s => s.efficiencyValue);
+            const colors = ships.map(s => s.imo === selectedImo ? '#4ecdc4' : 'rgba(255, 107, 107, 0.7)');
+            const borderColors = ships.map(s => s.imo === selectedImo ? '#4ecdc4' : '#ff6b6b');
+
+            comparisonChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Efficiency (gCO2/t-nm)',
+                        data: data,
+                        backgroundColor: colors,
+                        borderColor: borderColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const ship = ships[context.dataIndex];
+                                    return `${ship.efficiencyValue.toFixed(2)} gCO2/t-nm (Rank #${ship.typeRank})`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: { color: '#888' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            title: {
+                                display: true,
+                                text: 'Energy Efficiency (gCO2/t-nm) - Lower is Better',
+                                color: '#888'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#888',
+                                font: { size: 11 }
+                            },
+                            grid: { color: 'rgba(255,255,255,0.05)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Initialize
+        loadData();
+    </script>
+</body>
+</html>
