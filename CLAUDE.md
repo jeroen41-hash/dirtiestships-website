@@ -45,6 +45,10 @@ A website displaying CO2 emissions rankings for ships calling at EU/EEA ports, b
 - Company data only available in 2024 dataset
 - Country = flag state (port of registry), not operating region
 - Ships data includes `fuel_per_transport` metrics (pax, freight, mass, volume, dwt)
+- Ships data includes `efficiency` field with design efficiency rating (e.g., "EEDI (5.41 gCO₂/t·nm)")
+  - Format: `{type} ({value} gCO₂/t·nm)` where type is EEDI, EEXI, or EIV
+  - Lower values = better efficiency
+  - Used by compare.html to rank ships within same type
 
 ### Processing Excel Files
 To process new Excel files into JSON:
@@ -75,6 +79,7 @@ To process new Excel files into JSON:
 - Pagination (50 ships per page)
 - Individual ship pages with historical emissions charts
 - Transport work efficiency charts on ship pages
+- Peer efficiency comparison (compare ship against same type vessels)
 - SEO meta tags (Open Graph, Twitter Cards)
 
 ## File Structure
