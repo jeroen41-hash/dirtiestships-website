@@ -71,7 +71,7 @@
                 </div>
                 <div class="stat-box">
                     <div class="stat-value" id="total-ets">-</div>
-                    <div class="stat-label">EU ETS (€ millions)</div>
+                    <div class="stat-label">EU ETS (€ billions)</div>
                 </div>
             </div>
         </header>
@@ -157,9 +157,13 @@
                     const totalEmissions = isNew ? data.total_co2eq : data.total_co2;
                     document.getElementById('total-co2').textContent = (totalEmissions / 1000000).toFixed(2);
 
-                    // Calculate EU ETS: 40% * total CO2 * €65 per tonne, display in millions (2024 only)
-                    const euEts = year === '2024' ? 0.4 * totalEmissions * 65 : 0;
-                    document.getElementById('total-ets').textContent = (euEts / 1000000).toFixed(0);
+                    // Calculate EU ETS: 40% * total CO2 * €65 per tonne, display in billions (2024 only)
+                    if (year === '2024') {
+                        const euEts = 0.4 * totalEmissions * 65;
+                        document.getElementById('total-ets').textContent = (euEts / 1000000000).toFixed(1);
+                    } else {
+                        document.getElementById('total-ets').textContent = 'N/A';
+                    }
 
                     // Populate ship type filter
                     const types = [...new Set(allShips.map(s => s.type))].filter(t => t).sort();
