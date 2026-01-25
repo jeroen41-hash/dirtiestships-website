@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VWX5EMQSLM"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-VWX5EMQSLM');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regulations - Dirtiest Ships</title>
+    <meta name="description" content="Timeline of EU ETS rules for maritime shipping, including ship types, greenhouse gases, and phase-in percentages.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://dirtiestships.com/rules.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dirtiestships.com/rules.html">
+    <meta property="og:title" content="EU ETS Maritime Rules - Dirtiest Ships">
+    <meta property="og:description" content="Timeline of EU ETS rules for maritime shipping.">
+    <meta property="og:site_name" content="Dirtiest Ships">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9641573711172527"
+     crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .timeline-container {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .timeline-chart {
+            min-width: 800px;
+        }
+
+        .timeline-header {
+            display: grid;
+            grid-template-columns: 280px repeat(6, 1fr);
+            gap: 5px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .timeline-header span {
+            text-align: center;
+            color: #4ecdc4;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        .timeline-header span:first-child {
+            text-align: left;
+        }
+
+        .section-title {
+            color: #4ecdc4;
+            font-style: italic;
+            font-weight: bold;
+            margin: 25px 0 15px 0;
+            font-size: 1rem;
+        }
+
+        .timeline-row {
+            display: grid;
+            grid-template-columns: 280px repeat(6, 1fr);
+            gap: 5px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+
+        .row-label {
+            color: #e0e0e0;
+            font-size: 0.9rem;
+            padding-right: 15px;
+        }
+
+        .row-label sub {
+            font-size: 0.7rem;
+        }
+
+        .bar-cell {
+            height: 28px;
+            display: flex;
+            align-items: center;
+        }
+
+        .bar-mrv {
+            background: #87CEEB;
+            height: 100%;
+            border-radius: 3px;
+            width: 100%;
+        }
+
+        .bar-ets {
+            background: #1a3a5c;
+            height: 100%;
+            border-radius: 3px;
+            width: 100%;
+        }
+
+        .bar-tbd {
+            background: #1a3a5c;
+            height: 100%;
+            border-radius: 3px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: #fff;
+        }
+
+        .phase-row {
+            display: grid;
+            grid-template-columns: 280px repeat(6, 1fr);
+            gap: 5px;
+            margin-top: 15px;
+            align-items: center;
+        }
+
+        .phase-circle {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #fff;
+            margin: 0 auto;
+        }
+
+        .phase-40 {
+            background: conic-gradient(#1a3a5c 0% 40%, #555 40% 100%);
+        }
+
+        .phase-70 {
+            background: conic-gradient(#1a3a5c 0% 70%, #555 70% 100%);
+        }
+
+        .phase-100 {
+            background: #1a3a5c;
+        }
+
+        .phase-na {
+            background: transparent;
+            border: 2px dashed #555;
+            color: #555;
+        }
+
+        .legend {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .legend-box {
+            width: 30px;
+            height: 16px;
+            border-radius: 3px;
+        }
+
+        .legend-mrv {
+            background: #87CEEB;
+        }
+
+        .legend-ets {
+            background: #1a3a5c;
+        }
+
+        .info-box {
+            background: rgba(78, 205, 196, 0.1);
+            border-left: 4px solid #4ecdc4;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .info-box h3 {
+            color: #4ecdc4;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .info-box p:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="images/ship-smoke-left.jpg" alt="" class="header-img header-img-left">
+            <img src="images/ship-smoke-right.jpg" alt="" class="header-img header-img-right">
+            <h1>Regulations</h1>
+            <p class="subtitle">EU ETS timeline for maritime shipping</p>
+            <nav>
+                <a href="index.html">Ship Rankings</a>
+                <a href="chart.html">By Ship Type</a>
+                <a href="companies.html">By Company</a>
+                <a href="countries.html">By Country</a>
+                <a href="compare.html">Peer Compare</a>
+                <a href="rules.html" class="active">Regulations</a>
+                <a href="FAQ.html">Why?</a>
+            </nav>
+        </header>
+
+        <div class="timeline-container">
+            <div class="timeline-chart">
+                <div class="timeline-header">
+                    <span></span>
+                    <span>2023</span>
+                    <span>2024</span>
+                    <span>2025</span>
+                    <span>2026</span>
+                    <span>2027</span>
+                    <span>2028+</span>
+                </div>
+
+                <div class="section-title">Ship sizes and type</div>
+
+                <div class="timeline-row">
+                    <div class="row-label">Cargo/passenger ships (5000+ GT)</div>
+                    <div class="bar-cell"><div class="bar-mrv"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                </div>
+
+                <div class="timeline-row">
+                    <div class="row-label">Offshore ships (5000+ GT)</div>
+                    <div class="bar-cell"><div class="bar-mrv"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                </div>
+
+                <div class="timeline-row">
+                    <div class="row-label">Offshore and general cargo ships (400-5000 GT)</div>
+                    <div class="bar-cell"><div class="bar-mrv"></div></div>
+                    <div class="bar-cell"><div class="bar-mrv"></div></div>
+                    <div class="bar-cell"><div class="bar-mrv"></div></div>
+                    <div class="bar-cell"><div class="bar-mrv"></div></div>
+                    <div class="bar-cell"><div class="bar-tbd">To be decided</div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                </div>
+
+                <div class="section-title">Greenhouse gases</div>
+
+                <div class="timeline-row">
+                    <div class="row-label">Carbon dioxide (CO<sub>2</sub>)</div>
+                    <div class="bar-cell"><div class="bar-mrv"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                </div>
+
+                <div class="timeline-row">
+                    <div class="row-label">Methane (CH<sub>4</sub>) and Nitrous oxide (N<sub>2</sub>O)</div>
+                    <div class="bar-cell"><div class="bar-mrv"></div></div>
+                    <div class="bar-cell"><div class="bar-mrv"></div></div>
+                    <div class="bar-cell"><div class="bar-mrv"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                    <div class="bar-cell"><div class="bar-ets"></div></div>
+                </div>
+
+                <div class="section-title">Phase-in</div>
+
+                <div class="phase-row">
+                    <div class="row-label">% of emissions included in ETS scope</div>
+                    <div class="bar-cell"><div class="phase-circle phase-na">—</div></div>
+                    <div class="bar-cell"><div class="phase-circle phase-40">40%</div></div>
+                    <div class="bar-cell"><div class="phase-circle phase-70">70%</div></div>
+                    <div class="bar-cell"><div class="phase-circle phase-100">100%</div></div>
+                    <div class="bar-cell"><div class="phase-circle phase-100">100%</div></div>
+                    <div class="bar-cell"><div class="phase-circle phase-100">100%</div></div>
+                </div>
+
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-box legend-mrv"></div>
+                        <span>Reporting only (MRV)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box legend-ets"></div>
+                        <span>Included in ETS scope</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h3>About EU ETS for Maritime</h3>
+            <p>
+                The EU Emissions Trading System (ETS) was extended to cover maritime transport starting in 2024.
+                Ship operators must surrender emission allowances for their verified CO<sub>2</sub> emissions.
+            </p>
+            <p>
+                The system phases in gradually: 40% of emissions in 2024, 70% in 2025, and 100% from 2026 onwards.
+                This applies to 100% of emissions from voyages within the EU/EEA, and 50% of emissions from
+                voyages into or out of the EU/EEA.
+            </p>
+            <p>
+                From 2026, methane (CH<sub>4</sub>) and nitrous oxide (N<sub>2</sub>O) emissions will also be included,
+                converted to CO<sub>2</sub>-equivalent using global warming potentials.
+            </p>
+        </div>
+
+        <footer>
+            <div class="footer-links">
+                <a href="FAQ.html">FAQ</a>
+                <a href="disclaimer.html">Disclaimer</a>
+            </div>
+            <p>Data source: <a href="https://mrv.emsa.europa.eu/" target="_blank">EU MRV Regulation</a></p>
+            <p>This data shows annual CO2 emissions from ships calling at EU/EEA ports.</p>
+        </footer>
+    </div>
+</body>
+</html>
