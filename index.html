@@ -69,6 +69,10 @@
                     <div class="stat-value" id="total-co2">-</div>
                     <div class="stat-label" id="co2-label">Total CO2 (million tonnes)</div>
                 </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="total-ets">-</div>
+                    <div class="stat-label">EU ETS (€ millions)</div>
+                </div>
             </div>
         </header>
 
@@ -152,6 +156,10 @@
                     document.getElementById('total-ships').textContent = data.total_ships.toLocaleString();
                     const totalEmissions = isNew ? data.total_co2eq : data.total_co2;
                     document.getElementById('total-co2').textContent = (totalEmissions / 1000000).toFixed(2);
+
+                    // Calculate EU ETS: 40% * total CO2 * €65 per tonne, display in millions
+                    const euEts = 0.4 * totalEmissions * 65;
+                    document.getElementById('total-ets').textContent = (euEts / 1000000).toFixed(0);
 
                     // Populate ship type filter
                     const types = [...new Set(allShips.map(s => s.type))].filter(t => t).sort();
