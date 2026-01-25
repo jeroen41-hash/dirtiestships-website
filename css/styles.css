@@ -188,7 +188,7 @@ nav a:hover, nav a.active {
 }
 
 .search-box input::placeholder {
-    color: #666;
+    color: rgba(255,255,255,0.7);
 }
 
 .filter-box select {
@@ -592,7 +592,7 @@ tr:hover {
 }
 
 .search-input::placeholder {
-    color: #666;
+    color: rgba(255,255,255,0.7);
 }
 
 .search-results {
