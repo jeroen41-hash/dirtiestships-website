@@ -157,8 +157,8 @@
                     const totalEmissions = isNew ? data.total_co2eq : data.total_co2;
                     document.getElementById('total-co2').textContent = (totalEmissions / 1000000).toFixed(2);
 
-                    // Calculate EU ETS: 40% * total CO2 * €65 per tonne, display in millions
-                    const euEts = 0.4 * totalEmissions * 65;
+                    // Calculate EU ETS: 40% * total CO2 * €65 per tonne, display in millions (2024 only)
+                    const euEts = year === '2024' ? 0.4 * totalEmissions * 65 : 0;
                     document.getElementById('total-ets').textContent = (euEts / 1000000).toFixed(0);
 
                     // Populate ship type filter
