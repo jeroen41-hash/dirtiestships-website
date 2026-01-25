@@ -1,0 +1,23 @@
+# Dirtiest Ships (dirtiestships.com)
+
+> An independent watchdog and real-time intelligence platform tracking high-emission maritime vessels and 2026 regulatory compliance risks.
+
+## Purpose
+
+This site provides structured data on vessel greenhouse gas (GHG) intensity, specifically focusing on Carbon Intensity Indicator (CII) ratings and financial risks under EU ETS and FuelEU Maritime regulations.
+
+## Key Resources
+
+- [Daily News](/news): Breaking news on vessel fines and regulatory shifts in the last 24 hours.
+- [Vessel Rankings](/rankings): A searchable database of ships rated D or E by carbon intensity.
+- [Compliance Tracker](/deadlines): Real-time countdowns and technical guides for the Jan 31 FuelEU deadline.
+- [Methane Watch](/methane): Intelligence on methane slip and penalties for LNG-powered vessels.
+
+## Data Schema
+
+Each vessel profile includes:
+
+- `IMO_Number`: Unique identifier.
+- `CII_Rating`: Current operational carbon intensity grade (A-E).
+- `FuelEU_Status`: Compliance estimate based on 2025 reporting data.
+- `Last_Known_Port`: The most recent location of high-emission activity.
