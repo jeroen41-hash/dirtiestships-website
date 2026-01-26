@@ -62,6 +62,14 @@
         const years = ['2020', '2021', '2022', '2023', '2024'];
         let allShips2024 = [];
         let peerComparisonChart = null;
+        let vesselSpecs = null;
+        let vesselSpecsLoaded = false;
+
+        function loadVesselSpecs(imo) {
+            return fetch(`json/ship/${imo}.json`)
+                .then(response => response.ok ? response.json() : null)
+                .catch(() => null);
+        }
 
         // Parse efficiency value from string like "EEDI (5.41 gCO₂/t·nm)"
         function parseEfficiency(efficiencyStr) {
@@ -85,6 +93,15 @@
                 return;
             }
 
+            // Load vessel specs alongside yearly data
+            loadVesselSpecs(imo).then(specs => {
+                vesselSpecs = specs;
+                vesselSpecsLoaded = true;
+                if (loadedYears === years.length) {
+                    renderShipPage();
+                }
+            });
+
             years.forEach(year => {
                 fetch(`json/${year}_ships_data.json`)
                     .then(response => response.json())
@@ -98,14 +115,14 @@
                             shipData[year] = ship;
                         }
                         loadedYears++;
-                        if (loadedYears === years.length) {
+                        if (loadedYears === years.length && vesselSpecsLoaded) {
                             renderShipPage();
                         }
                     })
                     .catch(error => {
                         console.error(`Error loading ${year} data:`, error);
                         loadedYears++;
-                        if (loadedYears === years.length) {
+                        if (loadedYears === years.length && vesselSpecsLoaded) {
                             renderShipPage();
                         }
                     });
@@ -118,6 +135,24 @@
                     <h2>Ship Not Found</h2>
                     <p>${message}</p>
                     <p style="margin-top: 20px;"><a href="index.html" style="color: #4ecdc4;">Back to Ship Rankings</a></p>
+                </div>
+            `;
+        }
+
+        function buildVesselSpecsSection() {
+            if (!vesselSpecs) return '';
+
+            return `
+                <div class="vessel-specs">
+                    <div class="specs-title">Vessel Specifications</div>
+                    <div class="specs-grid">
+                        ${vesselSpecs.mmsi ? `<div class="spec-item"><span class="spec-label">MMSI</span><span class="spec-value">${vesselSpecs.mmsi}</span></div>` : ''}
+                        ${vesselSpecs.year_of_build ? `<div class="spec-item"><span class="spec-label">Year Built</span><span class="spec-value">${vesselSpecs.year_of_build}</span></div>` : ''}
+                        ${vesselSpecs.length_overall ? `<div class="spec-item"><span class="spec-label">Length</span><span class="spec-value">${vesselSpecs.length_overall} m</span></div>` : ''}
+                        ${vesselSpecs.beam ? `<div class="spec-item"><span class="spec-label">Beam</span><span class="spec-value">${vesselSpecs.beam} m</span></div>` : ''}
+                        ${vesselSpecs.gross_tonnage ? `<div class="spec-item"><span class="spec-label">Gross Tonnage</span><span class="spec-value">${parseInt(vesselSpecs.gross_tonnage).toLocaleString()}</span></div>` : ''}
+                        ${vesselSpecs.deadweight ? `<div class="spec-item"><span class="spec-label">Deadweight</span><span class="spec-value">${parseInt(vesselSpecs.deadweight).toLocaleString()} t</span></div>` : ''}
+                    </div>
                 </div>
             `;
         }
@@ -197,6 +232,8 @@
                         </div>
                     </div>
                 </div>
+
+                ${buildVesselSpecsSection()}
 
                 <div class="chart-container">
                     <div class="chart-title">Annual Emissions History</div>

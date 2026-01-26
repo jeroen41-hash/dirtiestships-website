@@ -380,6 +380,51 @@ tr:hover {
 }
 
 /* ============================================
+   VESSEL SPECIFICATIONS
+   ============================================ */
+.vessel-specs {
+    background: rgba(0,0,0,0.4);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.specs-title {
+    font-size: 1.2rem;
+    color: #4ecdc4;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+}
+
+.spec-item {
+    background: rgba(255,255,255,0.05);
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.spec-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.spec-value {
+    display: block;
+    font-size: 1.1rem;
+    color: #e0e0e0;
+    font-weight: 600;
+}
+
+/* ============================================
    CHARTS
    ============================================ */
 .chart-container {
