@@ -115,6 +115,7 @@
             <div class="footer-links">
                 <a href="FAQ.html">FAQ</a>
                 <a href="disclaimer.html">Disclaimer</a>
+                <a href="mailto:hello@dirtiestships.com">hello@dirtiestships.com</a>
             </div>
             <p>Data source: <a href="https://mrv.emsa.europa.eu/" target="_blank">EU MRV Regulation</a></p>
             <p>This data shows annual CO2 emissions from ships calling at EU/EEA ports.</p>
@@ -129,6 +130,11 @@
         let sortColumn = 'rank';
         let sortDirection = 'asc';
         let currentYear = '2024';
+
+        // Unpadded Base64 encoding (removes trailing =)
+        function encodeId(imo) {
+            return btoa(imo).replace(/=+$/, '');
+        }
 
         function loadData(year) {
             currentYear = year;
@@ -201,7 +207,7 @@
                 tbody.innerHTML = pageShips.map(ship => `
                     <tr>
                         <td class="rank ${ship.rank <= 3 ? 'rank-' + ship.rank : ''}">#${ship.rank}</td>
-                        <td class="ship-name"><a href="ship.html?imo=${ship.imo}" class="ship-link">${escapeHtml(ship.name)}</a></td>
+                        <td class="ship-name"><a href="ship.html?id=${encodeId(ship.imo)}" class="ship-link">${escapeHtml(ship.name)}</a></td>
                         <td class="ship-type">${escapeHtml(ship.type)}</td>
                         <td>${escapeHtml(ship.registry)}</td>
                         <td class="co2-value">${ship[co2Field].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>

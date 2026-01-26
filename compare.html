@@ -103,6 +103,11 @@
         </div>
 
         <footer>
+            <div class="footer-links">
+                <a href="FAQ.html">FAQ</a>
+                <a href="disclaimer.html">Disclaimer</a>
+                <a href="mailto:hello@dirtiestships.com">hello@dirtiestships.com</a>
+            </div>
             <p>Data source: <a href="https://mrv.emsa.europa.eu/" target="_blank">EU MRV Regulation</a> (2024)</p>
             <p>This data shows energy efficiency ratings for ships calling at EU/EEA ports.</p>
         </footer>
@@ -112,6 +117,22 @@
         let allShips = [];
         let selectedShip = null;
         let comparisonChart = null;
+
+        // Unpadded Base64 encoding (removes trailing =)
+        function encodeId(imo) {
+            return btoa(imo).replace(/=+$/, '');
+        }
+
+        // Decode unpadded Base64
+        function decodeId(encoded) {
+            // Add padding back if needed
+            const padded = encoded + '==='.slice(0, (4 - encoded.length % 4) % 4);
+            try {
+                return atob(padded);
+            } catch (e) {
+                return null;
+            }
+        }
 
         // Parse efficiency value from string like "EEDI (5.41 gCO₂/t·nm)"
         function parseEfficiency(efficiencyStr) {
@@ -139,7 +160,8 @@
         // Check if IMO is in URL
         function checkURLForShip() {
             const params = new URLSearchParams(window.location.search);
-            const imo = params.get('imo');
+            const encoded = params.get('id');
+            const imo = encoded ? decodeId(encoded) : null;
             if (imo) {
                 const ship = allShips.find(s => s.imo === imo);
                 if (ship) {
@@ -188,7 +210,7 @@
                     searchInput.value = '';
                     searchResults.classList.remove('active');
                     // Update URL
-                    history.pushState(null, '', `?imo=${ship.imo}`);
+                    history.pushState(null, '', `?id=${encodeId(ship.imo)}`);
                 }
             }
         });
@@ -268,12 +290,12 @@
             document.getElementById('extremesSection').innerHTML = `
                 <div class="extreme-box best">
                     <div class="extreme-title">Most Efficient ${escapeHtml(ship.type)}</div>
-                    <div class="extreme-ship-name"><a href="ship.html?imo=${bestShip.imo}">${escapeHtml(bestShip.name)}</a></div>
+                    <div class="extreme-ship-name"><a href="ship.html?id=${encodeId(bestShip.imo)}">${escapeHtml(bestShip.name)}</a></div>
                     <div class="extreme-value">${bestShip.efficiencyValue.toFixed(2)} gCO2/t-nm</div>
                 </div>
                 <div class="extreme-box worst">
                     <div class="extreme-title">Least Efficient ${escapeHtml(ship.type)}</div>
-                    <div class="extreme-ship-name"><a href="ship.html?imo=${worstShip.imo}">${escapeHtml(worstShip.name)}</a></div>
+                    <div class="extreme-ship-name"><a href="ship.html?id=${encodeId(worstShip.imo)}">${escapeHtml(worstShip.name)}</a></div>
                     <div class="extreme-value">${worstShip.efficiencyValue.toFixed(2)} gCO2/t-nm</div>
                 </div>
             `;
@@ -318,7 +340,7 @@
                 return `
                     <tr class="${rowClass}">
                         <td class="rank-cell">#${s.typeRank}</td>
-                        <td class="ship-name-cell"><a href="ship.html?imo=${s.imo}">${escapeHtml(s.name)}</a></td>
+                        <td class="ship-name-cell"><a href="ship.html?id=${encodeId(s.imo)}">${escapeHtml(s.name)}</a></td>
                         <td>${escapeHtml(s.registry)}</td>
                         <td class="efficiency-cell">${s.efficiencyValue.toFixed(2)}</td>
                     </tr>
