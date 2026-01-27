@@ -924,7 +924,7 @@ footer a:hover {
     display: inline-block;
     background: linear-gradient(135deg, #2ecc71, #27ae60);
     color: #fff;
-    font-size: 0.55rem;
+    font-size: 9px;
     font-weight: 600;
     padding: 1px 4px;
     border-radius: 2px;
