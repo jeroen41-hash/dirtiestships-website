@@ -117,6 +117,15 @@
         let allShips = [];
         let selectedShip = null;
         let comparisonChart = null;
+        let meohVessels = new Set();
+
+        // Load MeOH-capable vessels list
+        fetch('json/meoh_vessels.json')
+            .then(response => response.json())
+            .then(data => {
+                meohVessels = new Set(data.vessels.map(v => v.imo));
+            })
+            .catch(() => {});
 
         // Unpadded Base64 encoding (removes trailing =)
         function encodeId(imo) {
@@ -264,8 +273,9 @@
             document.getElementById('comparisonSection').classList.add('active');
 
             // Update selected ship info
+            const selectedMeohTag = meohVessels.has(ship.imo) ? ' <span class="meoh-tag">&lt;MeOH&gt;</span>' : '';
             document.getElementById('selectedShipInfo').innerHTML = `
-                <h2>${escapeHtml(ship.name)}</h2>
+                <h2>${escapeHtml(ship.name)}${selectedMeohTag}</h2>
                 <div class="selected-ship-meta">IMO: ${ship.imo} | ${escapeHtml(ship.type)} | Registry: ${escapeHtml(ship.registry)}</div>
                 <div class="selected-ship-efficiency">
                     <div class="efficiency-box">
@@ -336,11 +346,12 @@
                 const isSelected = s.imo === ship.imo;
                 const isBetter = s.efficiencyValue < efficiency;
                 const rowClass = isSelected ? 'selected-row' : (isBetter ? 'better' : 'worse');
+                const meohTag = meohVessels.has(s.imo) ? ' <span class="meoh-tag">&lt;MeOH&gt;</span>' : '';
 
                 return `
                     <tr class="${rowClass}">
                         <td class="rank-cell">#${s.typeRank}</td>
-                        <td class="ship-name-cell"><a href="ship.html?id=${encodeId(s.imo)}">${escapeHtml(s.name)}</a></td>
+                        <td class="ship-name-cell"><a href="ship.html?id=${encodeId(s.imo)}">${escapeHtml(s.name)}</a>${meohTag}</td>
                         <td>${escapeHtml(s.registry)}</td>
                         <td class="efficiency-cell">${s.efficiencyValue.toFixed(2)}</td>
                     </tr>

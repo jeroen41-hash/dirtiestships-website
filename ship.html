@@ -69,6 +69,15 @@
         let peerComparisonChart = null;
         let vesselSpecs = null;
         let vesselSpecsLoaded = false;
+        let meohVessels = new Set();
+
+        // Load MeOH-capable vessels list
+        fetch('json/meoh_vessels.json')
+            .then(response => response.json())
+            .then(data => {
+                meohVessels = new Set(data.vessels.map(v => v.imo));
+            })
+            .catch(() => {});
 
         // Unpadded Base64 encoding (removes trailing =)
         function encodeId(imo) {
@@ -218,9 +227,11 @@
                 }
             });
 
+            const meohTag = meohVessels.has(imo) ? ' <span class="meoh-tag">&lt;MeOH&gt;</span>' : '';
+
             let html = `
                 <div class="ship-header">
-                    <div class="ship-name">${escapeHtml(ship.name)}</div>
+                    <div class="ship-name">${escapeHtml(ship.name)}${meohTag}</div>
                     <div class="ship-imo">IMO: ${imo}</div>
                     <div class="ship-details">
                         <div class="detail-box">

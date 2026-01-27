@@ -918,6 +918,22 @@ footer a:hover {
 }
 
 /* ============================================
+   FUEL TYPE TAGS
+   ============================================ */
+.meoh-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: #fff;
+    font-size: 0.55rem;
+    font-weight: 600;
+    padding: 1px 4px;
+    border-radius: 2px;
+    margin-left: 4px;
+    vertical-align: middle;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+}
+
+/* ============================================
    RESPONSIVE STYLES
    ============================================ */
 @media (max-width: 768px) {
