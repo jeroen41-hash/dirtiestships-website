@@ -66,10 +66,26 @@
             </div>
 
             <div class="chart-container">
-                <h3>Efficiency Comparison Chart</h3>
+                <h3>Theoretical Efficiency Comparison Chart</h3>
+                <div class="filter-controls" style="margin-bottom: 15px;">
+                    <label class="checkbox-label" style="display: inline-flex; align-items: center; cursor: pointer; color: #ccc;">
+                        <input type="checkbox" id="deadweightFilter" style="margin-right: 8px; cursor: pointer;">
+                        <span>Deadweight filter</span>
+                        <span id="dwtFilterInfo" style="margin-left: 8px; font-size: 0.85em; color: #888;"></span>
+                    </label>
+                </div>
                 <div class="chart-wrapper">
                     <canvas id="comparisonChart"></canvas>
                 </div>
+                <p style="font-size: 0.85em; color: #888; margin-top: 10px;">Based on design efficiency indicator (EEDI/EEXI/EIV)</p>
+            </div>
+
+            <div class="chart-container">
+                <h3>Actual Efficiency Comparison Chart</h3>
+                <div class="chart-wrapper">
+                    <canvas id="transportWorkChart"></canvas>
+                </div>
+                <p id="transportWorkNote" style="font-size: 0.85em; color: #888; margin-top: 10px;"></p>
             </div>
 
             <div class="ranking-section">
@@ -117,7 +133,50 @@
         let allShips = [];
         let selectedShip = null;
         let comparisonChart = null;
+        let transportWorkChart = null;
         let meohVessels = new Set();
+        let shipSpecs = {};  // Cache for ship specifications
+        let currentSameTypeShips = [];  // Store for re-filtering
+        let selectedShipDwt = null;
+
+        // Get appropriate transport metric based on ship type
+        function getTransportMetric(shipType) {
+            const type = (shipType || '').toLowerCase();
+            if (type.includes('passenger') || type.includes('cruise') || type.includes('ro-pax')) {
+                return { key: 'pax', label: 'g CO₂ / passenger · n mile', desc: 'Per Passenger' };
+            } else if (type.includes('container') || type.includes('cargo') || type.includes('bulk')) {
+                return { key: 'freight', label: 'g CO₂ / m tonnes · n mile', desc: 'Per Freight Tonne', fallback: 'mass' };
+            } else if (type.includes('tanker') || type.includes('lng') || type.includes('lpg')) {
+                return { key: 'volume', label: 'g CO₂ / m³ · n mile', desc: 'Per Volume', fallback: 'mass' };
+            } else {
+                return { key: 'mass', label: 'g CO₂ / m tonnes · n mile', desc: 'Per Mass', fallback: 'dwt' };
+            }
+        }
+
+        // Get transport work value for a ship
+        function getTransportWork(ship, metric) {
+            if (!ship.fuel_per_transport) return null;
+            let value = ship.fuel_per_transport[metric.key];
+            if (value == null && metric.fallback) {
+                value = ship.fuel_per_transport[metric.fallback];
+            }
+            return value != null ? parseFloat(value) : null;
+        }
+
+        // Load ship specs from JSON
+        async function loadShipSpecs(imo) {
+            if (shipSpecs[imo]) return shipSpecs[imo];
+            try {
+                const encoded = encodeId(imo);
+                const response = await fetch(`json/ship/${encoded}.json`);
+                if (response.ok) {
+                    const data = await response.json();
+                    shipSpecs[imo] = data;
+                    return data;
+                }
+            } catch (e) {}
+            return null;
+        }
 
         // Load MeOH-capable vessels list
         fetch('json/meoh_vessels.json')
@@ -232,7 +291,7 @@
         });
 
         // Select a ship and show comparison
-        function selectShip(ship) {
+        async function selectShip(ship) {
             selectedShip = ship;
             const efficiency = parseEfficiency(ship.efficiency);
 
@@ -267,6 +326,35 @@
 
             const totalInType = sameTypeShips.length;
             const selectedShipData = sameTypeShips[selectedIndex];
+
+            // Store for re-filtering
+            currentSameTypeShips = sameTypeShips;
+
+            // Load specs for selected ship to get deadweight
+            const selectedSpecs = await loadShipSpecs(ship.imo);
+            selectedShipDwt = selectedSpecs?.deadweight ? parseFloat(selectedSpecs.deadweight) : null;
+
+            // Update filter info and reset checkbox
+            const dwtFilterInfo = document.getElementById('dwtFilterInfo');
+            const dwtCheckbox = document.getElementById('deadweightFilter');
+            dwtCheckbox.checked = false;  // Reset on new ship selection
+            if (selectedShipDwt) {
+                const range = selectedShipDwt >= 50000 ? '±20%' : '±50%';
+                dwtFilterInfo.textContent = `(${Math.round(selectedShipDwt).toLocaleString()} DWT, ${range} range)`;
+                dwtCheckbox.disabled = false;
+            } else {
+                dwtFilterInfo.textContent = '(no DWT data)';
+                dwtCheckbox.disabled = true;
+                dwtCheckbox.checked = false;
+            }
+
+            // Load specs for all same-type ships in background
+            Promise.all(sameTypeShips.map(s => loadShipSpecs(s.imo))).then(() => {
+                // Re-apply filter if checkbox is checked
+                if (dwtCheckbox.checked) {
+                    applyDeadweightFilter();
+                }
+            });
 
             // Show comparison section
             document.getElementById('noDataMessage').style.display = 'none';
@@ -310,56 +398,8 @@
                 </div>
             `;
 
-            // Build peer list: 7 above, selected, 7 below
-            let peerShips = [];
-            const startIdx = Math.max(0, selectedIndex - 7);
-            const endIdx = Math.min(sameTypeShips.length, selectedIndex + 8);
-
-            // Get the window of ships
-            for (let i = startIdx; i < endIdx; i++) {
-                peerShips.push(sameTypeShips[i]);
-            }
-
-            // Ensure we have up to 15 ships if possible
-            if (peerShips.length < 15) {
-                if (startIdx === 0 && endIdx < sameTypeShips.length) {
-                    // Add more from below
-                    const need = Math.min(15 - peerShips.length, sameTypeShips.length - endIdx);
-                    for (let i = 0; i < need; i++) {
-                        peerShips.push(sameTypeShips[endIdx + i]);
-                    }
-                } else if (endIdx === sameTypeShips.length && startIdx > 0) {
-                    // Add more from above
-                    const need = Math.min(15 - peerShips.length, startIdx);
-                    for (let i = need; i > 0; i--) {
-                        peerShips.unshift(sameTypeShips[startIdx - i]);
-                    }
-                }
-            }
-
-            // Update ranking title
-            document.getElementById('rankingTitle').textContent = `Peer Ranking - ${escapeHtml(ship.type)} (${totalInType} ships)`;
-
-            // Render ranking table
-            const tableBody = document.getElementById('rankingTableBody');
-            tableBody.innerHTML = peerShips.map(s => {
-                const isSelected = s.imo === ship.imo;
-                const isBetter = s.efficiencyValue < efficiency;
-                const rowClass = isSelected ? 'selected-row' : (isBetter ? 'better' : 'worse');
-                const meohTag = meohVessels.has(s.imo) ? ' <span class="meoh-tag">&lt;MeOH&gt;</span>' : '';
-
-                return `
-                    <tr class="${rowClass}">
-                        <td class="rank-cell">#${s.typeRank}</td>
-                        <td class="ship-name-cell"><a href="ship.html?id=${encodeId(s.imo)}">${escapeHtml(s.name)}</a>${meohTag}</td>
-                        <td>${escapeHtml(s.registry)}</td>
-                        <td class="efficiency-cell">${s.efficiencyValue.toFixed(2)}</td>
-                    </tr>
-                `;
-            }).join('');
-
-            // Render chart
-            renderComparisonChart(peerShips, ship.imo);
+            // Initial render (uses applyDeadweightFilter with checkbox unchecked)
+            applyDeadweightFilter();
         }
 
         function renderComparisonChart(ships, selectedImo) {
@@ -426,12 +466,181 @@
             });
         }
 
+        function renderTransportWorkChart(ships, selectedImo, shipType) {
+            const ctx = document.getElementById('transportWorkChart').getContext('2d');
+            const metric = getTransportMetric(shipType);
+
+            if (transportWorkChart) {
+                transportWorkChart.destroy();
+            }
+
+            // Filter ships that have transport work data
+            const shipsWithData = ships.filter(s => getTransportWork(s, metric) !== null);
+
+            if (shipsWithData.length < 2) {
+                document.getElementById('transportWorkNote').textContent = 'Insufficient transport work data available for comparison.';
+                ctx.canvas.parentElement.style.display = 'none';
+                return;
+            }
+
+            ctx.canvas.parentElement.style.display = 'block';
+            document.getElementById('transportWorkNote').textContent = `Based on actual CO₂ emissions per transport work (${metric.desc.toLowerCase()}) - Lower is better`;
+
+            const labels = shipsWithData.map(s => s.name.length > 20 ? s.name.substring(0, 20) + '...' : s.name);
+            const data = shipsWithData.map(s => getTransportWork(s, metric));
+            const colors = shipsWithData.map(s => s.imo === selectedImo ? '#4ecdc4' : 'rgba(255, 107, 107, 0.7)');
+            const borderColors = shipsWithData.map(s => s.imo === selectedImo ? '#4ecdc4' : '#ff6b6b');
+
+            transportWorkChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: metric.label,
+                        data: data,
+                        backgroundColor: colors,
+                        borderColor: borderColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const ship = shipsWithData[context.dataIndex];
+                                    return `${context.raw.toFixed(2)} ${metric.label}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: { color: '#888' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            title: {
+                                display: true,
+                                text: metric.label + ' - Lower is Better',
+                                color: '#888'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#888',
+                                font: { size: 11 }
+                            },
+                            grid: { color: 'rgba(255,255,255,0.05)' }
+                        }
+                    }
+                }
+            });
+        }
+
         function escapeHtml(text) {
             if (!text) return '';
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
+
+        // Apply deadweight filter and re-render
+        function applyDeadweightFilter() {
+            if (!selectedShip || !currentSameTypeShips.length) return;
+
+            const dwtCheckbox = document.getElementById('deadweightFilter');
+            const efficiency = parseEfficiency(selectedShip.efficiency);
+            let filteredShips = [...currentSameTypeShips];
+
+            if (dwtCheckbox.checked && selectedShipDwt) {
+                // Determine range: ±50% for <50k DWT, ±20% for >=50k DWT
+                const rangePct = selectedShipDwt >= 50000 ? 0.20 : 0.50;
+                const minDwt = selectedShipDwt * (1 - rangePct);
+                const maxDwt = selectedShipDwt * (1 + rangePct);
+
+                filteredShips = currentSameTypeShips.filter(s => {
+                    const specs = shipSpecs[s.imo];
+                    if (!specs?.deadweight) return false;
+                    const dwt = parseFloat(specs.deadweight);
+                    return dwt >= minDwt && dwt <= maxDwt;
+                });
+
+                // Ensure selected ship is included
+                if (!filteredShips.find(s => s.imo === selectedShip.imo)) {
+                    const selectedShipData = currentSameTypeShips.find(s => s.imo === selectedShip.imo);
+                    if (selectedShipData) filteredShips.push(selectedShipData);
+                    filteredShips.sort((a, b) => a.efficiencyValue - b.efficiencyValue);
+                }
+            }
+
+            // Re-assign type ranks within filtered set
+            filteredShips.forEach((s, idx) => {
+                s.filteredRank = idx + 1;
+            });
+
+            const selectedIndex = filteredShips.findIndex(s => s.imo === selectedShip.imo);
+
+            // Build peer list: 7 above, selected, 7 below
+            let peerShips = [];
+            const startIdx = Math.max(0, selectedIndex - 7);
+            const endIdx = Math.min(filteredShips.length, selectedIndex + 8);
+
+            for (let i = startIdx; i < endIdx; i++) {
+                peerShips.push(filteredShips[i]);
+            }
+
+            // Ensure we have up to 15 ships if possible
+            if (peerShips.length < 15) {
+                if (startIdx === 0 && endIdx < filteredShips.length) {
+                    const need = Math.min(15 - peerShips.length, filteredShips.length - endIdx);
+                    for (let i = 0; i < need; i++) {
+                        peerShips.push(filteredShips[endIdx + i]);
+                    }
+                } else if (endIdx === filteredShips.length && startIdx > 0) {
+                    const need = Math.min(15 - peerShips.length, startIdx);
+                    for (let i = need; i > 0; i--) {
+                        peerShips.unshift(filteredShips[startIdx - i]);
+                    }
+                }
+            }
+
+            // Update ranking title
+            const filterLabel = dwtCheckbox.checked ? ' - DWT filtered' : '';
+            document.getElementById('rankingTitle').textContent =
+                `Peer Ranking - ${escapeHtml(selectedShip.type)} (${filteredShips.length} ships${filterLabel})`;
+
+            // Render ranking table
+            const tableBody = document.getElementById('rankingTableBody');
+            const displayRank = dwtCheckbox.checked ? 'filteredRank' : 'typeRank';
+            tableBody.innerHTML = peerShips.map(s => {
+                const isSelected = s.imo === selectedShip.imo;
+                const isBetter = s.efficiencyValue < efficiency;
+                const rowClass = isSelected ? 'selected-row' : (isBetter ? 'better' : 'worse');
+                const meohTag = meohVessels.has(s.imo) ? ' <span class="meoh-tag">&lt;MeOH&gt;</span>' : '';
+
+                return `
+                    <tr class="${rowClass}">
+                        <td class="rank-cell">#${s[displayRank]}</td>
+                        <td class="ship-name-cell"><a href="ship.html?id=${encodeId(s.imo)}">${escapeHtml(s.name)}</a>${meohTag}</td>
+                        <td>${escapeHtml(s.registry)}</td>
+                        <td class="efficiency-cell">${s.efficiencyValue.toFixed(2)}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Render charts
+            renderComparisonChart(peerShips, selectedShip.imo);
+            renderTransportWorkChart(peerShips, selectedShip.imo, selectedShip.type);
+        }
+
+        // Checkbox event listener
+        document.getElementById('deadweightFilter').addEventListener('change', applyDeadweightFilter);
 
         // Initialize
         loadData();
