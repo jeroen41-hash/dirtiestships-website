@@ -404,6 +404,30 @@
             return result;
         }
 
+        // Get appropriate transport metric based on ship type
+        function getTransportMetric(shipType) {
+            const type = (shipType || '').toLowerCase();
+            if (type.includes('passenger') || type.includes('cruise') || type.includes('ro-pax')) {
+                return { key: 'pax', label: 'g CO₂ / passenger · n mile', desc: 'Per Passenger' };
+            } else if (type.includes('container') || type.includes('cargo') || type.includes('bulk')) {
+                return { key: 'freight', label: 'g CO₂ / m tonnes · n mile', desc: 'Per Freight Tonne', fallback: 'mass' };
+            } else if (type.includes('tanker') || type.includes('lng') || type.includes('lpg')) {
+                return { key: 'volume', label: 'g CO₂ / m³ · n mile', desc: 'Per Volume', fallback: 'mass' };
+            } else {
+                return { key: 'mass', label: 'g CO₂ / m tonnes · n mile', desc: 'Per Mass', fallback: 'dwt' };
+            }
+        }
+
+        // Get transport work value for a ship
+        function getTransportWorkValue(ship, metric) {
+            if (!ship.fuel_per_transport) return null;
+            let value = ship.fuel_per_transport[metric.key];
+            if (value == null && metric.fallback) {
+                value = ship.fuel_per_transport[metric.fallback];
+            }
+            return value != null ? parseFloat(value) : null;
+        }
+
         function buildPeerComparisonSection() {
             // Get the current ship from 2024 data (efficiency data only available in 2024)
             const ship = shipData['2024'];
@@ -412,14 +436,27 @@
             const efficiency = parseEfficiency(ship.efficiency);
             if (!efficiency) return '';
 
+            const metric = getTransportMetric(ship.type);
+            const selectedActualEff = getTransportWorkValue(ship, metric);
+
             // Get all ships of the same type with efficiency data
             const sameTypeShips = allShips2024
                 .filter(s => s.type === ship.type && parseEfficiency(s.efficiency) !== null)
                 .map(s => ({
                     ...s,
-                    efficiencyValue: parseEfficiency(s.efficiency)
+                    efficiencyValue: parseEfficiency(s.efficiency),
+                    actualEfficiency: getTransportWorkValue(s, metric)
                 }))
-                .sort((a, b) => a.efficiencyValue - b.efficiencyValue); // Lower is better
+                .sort((a, b) => {
+                    // Sort by actual efficiency (transport work) if available, otherwise by theoretical
+                    const aVal = a.actualEfficiency ?? Infinity;
+                    const bVal = b.actualEfficiency ?? Infinity;
+                    if (aVal !== Infinity && bVal !== Infinity) {
+                        return aVal - bVal; // Lower is better
+                    }
+                    // Fall back to theoretical efficiency
+                    return a.efficiencyValue - b.efficiencyValue;
+                });
 
             if (sameTypeShips.length < 3) return '';
 
@@ -461,15 +498,23 @@
             }
 
             // Store peer ships for chart rendering
-            window.peerShipsData = { ships: peerShips, selectedImo: ship.imo, selectedEfficiency: efficiency };
+            window.peerShipsData = { ships: peerShips, selectedImo: ship.imo, selectedEfficiency: efficiency, metric: metric, selectedActualEff: selectedActualEff };
+
+            // Display values - prefer actual efficiency
+            const displayEff = selectedActualEff != null ? selectedActualEff.toFixed(2) : efficiency.toFixed(2);
+            const displayLabel = selectedActualEff != null ? 'Actual Efficiency' : 'Design Efficiency';
+            const displayUnit = selectedActualEff != null ? metric.label : 'gCO₂/t·nm';
+
+            const bestEff = bestShip.actualEfficiency != null ? bestShip.actualEfficiency.toFixed(2) : bestShip.efficiencyValue.toFixed(2);
+            const worstEff = worstShip.actualEfficiency != null ? worstShip.actualEfficiency.toFixed(2) : worstShip.efficiencyValue.toFixed(2);
 
             return `
                 <div class="chart-container">
-                    <div class="chart-title">Peer Efficiency Comparison</div>
+                    <div class="chart-title">Peer Efficiency Comparison (Actual)</div>
                     <div class="efficiency-summary">
                         <div class="efficiency-box">
-                            <div class="efficiency-label">Energy Efficiency</div>
-                            <div class="efficiency-value">${efficiency.toFixed(2)} gCO₂/t·nm</div>
+                            <div class="efficiency-label">${displayLabel}</div>
+                            <div class="efficiency-value">${displayEff}</div>
                         </div>
                         <div class="efficiency-box">
                             <div class="efficiency-label">Rank in ${escapeHtml(ship.type)}</div>
@@ -485,12 +530,12 @@
                         <div class="extreme-box best">
                             <div class="extreme-title">Most Efficient ${escapeHtml(ship.type)}</div>
                             <div class="extreme-ship-name"><a href="ship.html?id=${encodeId(bestShip.imo)}">${escapeHtml(bestShip.name)}</a></div>
-                            <div class="extreme-value">${bestShip.efficiencyValue.toFixed(2)} gCO₂/t·nm</div>
+                            <div class="extreme-value">${bestEff}</div>
                         </div>
                         <div class="extreme-box worst">
                             <div class="extreme-title">Least Efficient ${escapeHtml(ship.type)}</div>
                             <div class="extreme-ship-name"><a href="ship.html?id=${encodeId(worstShip.imo)}">${escapeHtml(worstShip.name)}</a></div>
-                            <div class="extreme-value">${worstShip.efficiencyValue.toFixed(2)} gCO₂/t·nm</div>
+                            <div class="extreme-value">${worstEff}</div>
                         </div>
                     </div>
 
@@ -499,8 +544,8 @@
                     </div>
 
                     <div class="comparison-note">
-                        <strong>Note:</strong> Ships are ranked by their energy efficiency rating (gCO₂/t·nm) - lower values indicate better fuel efficiency.
-                        The chart shows this ship compared to similar ${escapeHtml(ship.type)} vessels.
+                        <strong>Note:</strong> Ships are ranked by actual efficiency (CO₂ per transport work) when available - lower values indicate better fuel efficiency.
+                        Ships without actual data use design efficiency (EEDI/EEXI).
                         <a href="compare.html?id=${encodeId(ship.imo)}" style="color: #4ecdc4;">View full peer comparison →</a>
                     </div>
                 </div>
@@ -511,23 +556,28 @@
             const ctx = document.getElementById('peerComparisonChart');
             if (!ctx || !window.peerShipsData) return;
 
-            const { ships, selectedImo, selectedEfficiency } = window.peerShipsData;
+            const { ships, selectedImo, selectedEfficiency, metric, selectedActualEff } = window.peerShipsData;
 
             if (peerComparisonChart) {
                 peerComparisonChart.destroy();
             }
 
             const labels = ships.map(s => s.name.length > 20 ? s.name.substring(0, 20) + '...' : s.name);
-            const data = ships.map(s => s.efficiencyValue);
+            // Use actual efficiency when available, fall back to theoretical
+            const data = ships.map(s => s.actualEfficiency ?? s.efficiencyValue);
             const colors = ships.map(s => s.imo === selectedImo ? '#4ecdc4' : 'rgba(255, 107, 107, 0.7)');
             const borderColors = ships.map(s => s.imo === selectedImo ? '#4ecdc4' : '#ff6b6b');
+
+            // Determine axis label based on whether we have actual data
+            const hasActualData = ships.some(s => s.actualEfficiency != null);
+            const axisLabel = hasActualData ? 'Actual Efficiency - Lower is Better' : 'Design Efficiency (gCO₂/t·nm) - Lower is Better';
 
             peerComparisonChart = new Chart(ctx.getContext('2d'), {
                 type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Efficiency (gCO₂/t·nm)',
+                        label: 'Efficiency',
                         data: data,
                         backgroundColor: colors,
                         borderColor: borderColors,
@@ -546,7 +596,9 @@
                             callbacks: {
                                 label: function(context) {
                                     const ship = ships[context.dataIndex];
-                                    return `${ship.efficiencyValue.toFixed(2)} gCO₂/t·nm (Rank #${ship.typeRank})`;
+                                    const eff = ship.actualEfficiency ?? ship.efficiencyValue;
+                                    const type = ship.actualEfficiency != null ? 'actual' : 'design';
+                                    return `${eff.toFixed(2)} (${type}) - Rank #${ship.typeRank}`;
                                 }
                             }
                         }
@@ -558,7 +610,7 @@
                             grid: { color: 'rgba(255,255,255,0.1)' },
                             title: {
                                 display: true,
-                                text: 'Energy Efficiency (gCO₂/t·nm) - Lower is Better',
+                                text: axisLabel,
                                 color: '#888'
                             }
                         },
