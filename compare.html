@@ -65,19 +65,13 @@
                 <!-- Best and worst performers populated by JS -->
             </div>
 
-            <div class="chart-container">
-                <h3>Theoretical Efficiency Comparison Chart</h3>
-                <div class="filter-controls" style="margin-bottom: 15px;">
-                    <label class="checkbox-label" style="display: inline-flex; align-items: center; cursor: pointer; color: #ccc;">
-                        <input type="checkbox" id="deadweightFilter" style="margin-right: 8px; cursor: pointer;">
-                        <span>Deadweight filter</span>
-                        <span id="dwtFilterInfo" style="margin-left: 8px; font-size: 0.85em; color: #888;"></span>
-                    </label>
-                </div>
-                <div class="chart-wrapper">
-                    <canvas id="comparisonChart"></canvas>
-                </div>
-                <p style="font-size: 0.85em; color: #888; margin-top: 10px;">Based on design efficiency indicator (EEDI/EEXI/EIV)</p>
+            <div class="filter-controls" style="margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                <label class="checkbox-label" style="display: inline-flex; align-items: center; cursor: pointer; color: #ccc;">
+                    <input type="checkbox" id="deadweightFilter" style="margin-right: 8px; cursor: pointer;">
+                    <span>Deadweight filter</span>
+                    <span id="dwtFilterInfo" style="margin-left: 8px; font-size: 0.85em; color: #888;"></span>
+                </label>
+                <span style="margin-left: 15px; font-size: 0.85em; color: #666;">(applies to both charts)</span>
             </div>
 
             <div class="chart-container">
@@ -88,15 +82,23 @@
                 <p id="transportWorkNote" style="font-size: 0.85em; color: #888; margin-top: 10px;"></p>
             </div>
 
+            <div class="chart-container">
+                <h3>Theoretical Efficiency Comparison Chart</h3>
+                <div class="chart-wrapper">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
+                <p style="font-size: 0.85em; color: #888; margin-top: 10px;">Based on design efficiency indicator (EEDI/EEXI/EIV)</p>
+            </div>
+
             <div class="ranking-section">
-                <h3 id="rankingTitle">Peer Ranking by Energy Efficiency</h3>
+                <h3 id="rankingTitle">Peer Ranking by Actual Efficiency</h3>
                 <table class="ranking-table">
                     <thead>
                         <tr>
                             <th>Type Rank</th>
                             <th>Ship Name</th>
                             <th>Registry</th>
-                            <th style="text-align: right;">Efficiency (gCO2/t-nm)</th>
+                            <th style="text-align: right;">Actual Efficiency</th>
                         </tr>
                     </thead>
                     <tbody id="rankingTableBody">
@@ -106,9 +108,9 @@
             </div>
 
             <div class="methodology-note">
-                <strong>Note:</strong> Ships are ranked by their energy efficiency rating (gCO2/t-nm) - lower values indicate better fuel efficiency.
-                Only ships with reported efficiency ratings are included in this comparison. The efficiency metric shown is the ship's
-                design efficiency indicator (EEDI, EEXI, or EIV) as reported in EU MRV data.
+                <strong>Note:</strong> Ships are ranked by their actual efficiency (CO₂ per transport work) when available - lower values indicate better fuel efficiency.
+                Ships without actual efficiency data are ranked by design efficiency indicator (EEDI, EEXI, or EIV).
+                Only ships with reported efficiency ratings are included in this comparison.
             </div>
         </div>
 
@@ -294,6 +296,7 @@
         async function selectShip(ship) {
             selectedShip = ship;
             const efficiency = parseEfficiency(ship.efficiency);
+            const metric = getTransportMetric(ship.type);
 
             if (!efficiency) {
                 document.getElementById('comparisonSection').classList.remove('active');
@@ -306,9 +309,19 @@
                 .filter(s => s.type === ship.type && parseEfficiency(s.efficiency) !== null)
                 .map(s => ({
                     ...s,
-                    efficiencyValue: parseEfficiency(s.efficiency)
+                    efficiencyValue: parseEfficiency(s.efficiency),
+                    actualEfficiency: getTransportWork(s, metric)
                 }))
-                .sort((a, b) => a.efficiencyValue - b.efficiencyValue); // Lower is better
+                .sort((a, b) => {
+                    // Sort by actual efficiency (transport work) if available, otherwise by theoretical
+                    const aVal = a.actualEfficiency ?? Infinity;
+                    const bVal = b.actualEfficiency ?? Infinity;
+                    if (aVal !== Infinity && bVal !== Infinity) {
+                        return aVal - bVal; // Lower is better
+                    }
+                    // Fall back to theoretical efficiency
+                    return a.efficiencyValue - b.efficiencyValue;
+                });
 
             if (sameTypeShips.length < 3) {
                 document.getElementById('comparisonSection').classList.remove('active');
@@ -556,7 +569,18 @@
 
             const dwtCheckbox = document.getElementById('deadweightFilter');
             const efficiency = parseEfficiency(selectedShip.efficiency);
+            const metric = getTransportMetric(selectedShip.type);
             let filteredShips = [...currentSameTypeShips];
+
+            // Sort by actual efficiency (transport work) for peer selection
+            filteredShips.sort((a, b) => {
+                const aVal = a.actualEfficiency ?? Infinity;
+                const bVal = b.actualEfficiency ?? Infinity;
+                if (aVal !== Infinity && bVal !== Infinity) {
+                    return aVal - bVal;
+                }
+                return a.efficiencyValue - b.efficiencyValue;
+            });
 
             if (dwtCheckbox.checked && selectedShipDwt) {
                 // Determine range: ±50% for <50k DWT, ±20% for >=50k DWT
@@ -564,7 +588,7 @@
                 const minDwt = selectedShipDwt * (1 - rangePct);
                 const maxDwt = selectedShipDwt * (1 + rangePct);
 
-                filteredShips = currentSameTypeShips.filter(s => {
+                filteredShips = filteredShips.filter(s => {
                     const specs = shipSpecs[s.imo];
                     if (!specs?.deadweight) return false;
                     const dwt = parseFloat(specs.deadweight);
@@ -575,11 +599,18 @@
                 if (!filteredShips.find(s => s.imo === selectedShip.imo)) {
                     const selectedShipData = currentSameTypeShips.find(s => s.imo === selectedShip.imo);
                     if (selectedShipData) filteredShips.push(selectedShipData);
-                    filteredShips.sort((a, b) => a.efficiencyValue - b.efficiencyValue);
+                    filteredShips.sort((a, b) => {
+                        const aVal = a.actualEfficiency ?? Infinity;
+                        const bVal = b.actualEfficiency ?? Infinity;
+                        if (aVal !== Infinity && bVal !== Infinity) {
+                            return aVal - bVal;
+                        }
+                        return a.efficiencyValue - b.efficiencyValue;
+                    });
                 }
             }
 
-            // Re-assign type ranks within filtered set
+            // Re-assign type ranks within filtered set (based on actual efficiency order)
             filteredShips.forEach((s, idx) => {
                 s.filteredRank = idx + 1;
             });
@@ -618,18 +649,23 @@
             // Render ranking table
             const tableBody = document.getElementById('rankingTableBody');
             const displayRank = dwtCheckbox.checked ? 'filteredRank' : 'typeRank';
+            const selectedActualEff = getTransportWork(selectedShip, metric);
             tableBody.innerHTML = peerShips.map(s => {
                 const isSelected = s.imo === selectedShip.imo;
-                const isBetter = s.efficiencyValue < efficiency;
+                const actualEff = s.actualEfficiency;
+                const isBetter = actualEff != null && selectedActualEff != null
+                    ? actualEff < selectedActualEff
+                    : s.efficiencyValue < efficiency;
                 const rowClass = isSelected ? 'selected-row' : (isBetter ? 'better' : 'worse');
                 const meohTag = meohVessels.has(s.imo) ? ' <span class="meoh-tag">&lt;MeOH&gt;</span>' : '';
+                const effDisplay = actualEff != null ? actualEff.toFixed(2) : `(${s.efficiencyValue.toFixed(2)})*`;
 
                 return `
                     <tr class="${rowClass}">
                         <td class="rank-cell">#${s[displayRank]}</td>
                         <td class="ship-name-cell"><a href="ship.html?id=${encodeId(s.imo)}">${escapeHtml(s.name)}</a>${meohTag}</td>
                         <td>${escapeHtml(s.registry)}</td>
-                        <td class="efficiency-cell">${s.efficiencyValue.toFixed(2)}</td>
+                        <td class="efficiency-cell">${effDisplay}</td>
                     </tr>
                 `;
             }).join('');
