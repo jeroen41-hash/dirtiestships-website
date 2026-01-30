@@ -41,7 +41,11 @@ GENERAL RULES:
 # Initialize Gemini client
 gemini_client = None
 if GEMINI_AVAILABLE:
-    gemini_client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY", "AIzaSyALehmbBg6uz8X5fAL1n7VSSO3DHYGSlD4"))
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if api_key:
+        gemini_client = genai.Client(api_key=api_key)
+    else:
+        print("Warning: GEMINI_API_KEY not set. AI summaries disabled.")
 
 def get_smart_summary(title, full_text):
     """Generate an AI-powered summary using Gemini."""
