@@ -251,26 +251,27 @@ def scrape_and_update():
 def push_to_github():
     """Commit and push news updates to GitHub."""
     try:
-        os.chdir(BASE_DIR)
-
         # Ensure SSH key is used (for cron environments)
-        os.environ['GIT_SSH_COMMAND'] = 'ssh -i /home/jeroen/.ssh/id_ed25519 -o StrictHostKeyChecking=no'
+        env = os.environ.copy()
+        env['GIT_SSH_COMMAND'] = 'ssh -i /home/jeroen/.ssh/id_ed25519 -o StrictHostKeyChecking=no'
+
+        print(f"Git working directory: {BASE_DIR}")
 
         # Add news files
-        subprocess.run(["git", "add", "json/news.json", "news_emissions/"], check=True)
+        subprocess.run(["git", "add", "json/news.json", "news_emissions/"], check=True, cwd=BASE_DIR, env=env)
 
         # Check if there are changes to commit
-        result = subprocess.run(["git", "diff", "--cached", "--quiet"], capture_output=True)
+        result = subprocess.run(["git", "diff", "--cached", "--quiet"], capture_output=True, cwd=BASE_DIR, env=env)
         if result.returncode == 0:
             print("No changes to commit.")
             return False
 
         # Commit with timestamp
         commit_msg = f"Auto-update news: {datetime.now().strftime('%Y-%m-%d %H:%M')}"
-        subprocess.run(["git", "commit", "-m", commit_msg], check=True)
+        subprocess.run(["git", "commit", "-m", commit_msg], check=True, cwd=BASE_DIR, env=env)
 
         # Push to remote
-        subprocess.run(["git", "push"], check=True)
+        subprocess.run(["git", "push"], check=True, cwd=BASE_DIR, env=env)
         print("Successfully pushed to GitHub.")
         return True
 
