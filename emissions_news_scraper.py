@@ -16,11 +16,11 @@ from newspaper import Article
 
 # --- AI SUMMARY CONFIGURATION ---
 try:
-    import google.generativeai as genai
+    from google import genai
     GEMINI_AVAILABLE = True
 except ImportError:
     GEMINI_AVAILABLE = False
-    print("Warning: google-generativeai not installed. Run: pip install google-generativeai")
+    print("Warning: google-genai not installed. Run: pip install google-genai")
 
 SYSTEM_INSTRUCTION = """
 You are a specialized maritime news editor for dirtiestships.com.
@@ -38,23 +38,27 @@ GENERAL RULES:
 - Do not use corporate fluff. If a news item is boring, make it sharp.
 """
 
-# Initialize Gemini model
+# Initialize Gemini client
+gemini_client = None
 if GEMINI_AVAILABLE:
-    genai.configure(api_key=os.environ.get("GEMINI_API_KEY", "AIzaSyALehmbBg6uz8X5fAL1n7VSSO3DHYGSlD4"))
-    gemini_model = genai.GenerativeModel(
-        model_name='gemini-2.0-flash',
-        system_instruction=SYSTEM_INSTRUCTION
-    )
+    gemini_client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY", "AIzaSyALehmbBg6uz8X5fAL1n7VSSO3DHYGSlD4"))
 
 def get_smart_summary(title, full_text):
     """Generate an AI-powered summary using Gemini."""
-    if not GEMINI_AVAILABLE:
+    if not GEMINI_AVAILABLE or not gemini_client:
         return (full_text[:200] + "...") if full_text else ""
 
     prompt = f"Summarize this maritime emissions news for dirtiestships.com:\n\nTITLE: {title}\nTEXT: {full_text[:2000]}"
 
     try:
-        response = gemini_model.generate_content(prompt)
+        response = gemini_client.models.generate_content(
+            model='gemini-2.0-flash',
+            contents=prompt,
+            config={
+                'system_instruction': SYSTEM_INSTRUCTION,
+                'temperature': 0.7
+            }
+        )
         return response.text.strip()
     except Exception as e:
         print(f"AI summary error: {e}")
