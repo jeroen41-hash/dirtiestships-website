@@ -14,6 +14,52 @@ import subprocess
 from datetime import datetime
 from newspaper import Article
 
+# --- AI SUMMARY CONFIGURATION ---
+try:
+    import google.generativeai as genai
+    GEMINI_AVAILABLE = True
+except ImportError:
+    GEMINI_AVAILABLE = False
+    print("Warning: google-generativeai not installed. Run: pip install google-generativeai")
+
+SYSTEM_INSTRUCTION = """
+You are a specialized maritime news editor for dirtiestships.com.
+Your tone is "scherp" (sharp), professional, and technically accurate.
+
+For dirtiestships.com:
+   - Act as a 'Watchdog Critic'.
+   - Be skeptical of "greenwashing" from big shipping lines.
+   - Focus on carbon intensity, FuelEU Maritime fines, and excessive HFO usage.
+   - Highlight when a ship's emissions exceed its CII rating.
+
+GENERAL RULES:
+- Output exactly 3 concise sentences.
+- Use metric units (e.g., tonnes, m3).
+- Do not use corporate fluff. If a news item is boring, make it sharp.
+"""
+
+# Initialize Gemini model
+if GEMINI_AVAILABLE:
+    genai.configure(api_key=os.environ.get("GEMINI_API_KEY", "AIzaSyALehmbBg6uz8X5fAL1n7VSSO3DHYGSlD4"))
+    gemini_model = genai.GenerativeModel(
+        model_name='gemini-2.0-flash',
+        system_instruction=SYSTEM_INSTRUCTION
+    )
+
+def get_smart_summary(title, full_text):
+    """Generate an AI-powered summary using Gemini."""
+    if not GEMINI_AVAILABLE:
+        return (full_text[:200] + "...") if full_text else ""
+
+    prompt = f"Summarize this maritime emissions news for dirtiestships.com:\n\nTITLE: {title}\nTEXT: {full_text[:2000]}"
+
+    try:
+        response = gemini_model.generate_content(prompt)
+        return response.text.strip()
+    except Exception as e:
+        print(f"AI summary error: {e}")
+        return (full_text[:200] + "...") if full_text else ""
+
 # --- CONFIGURATION ---
 FEEDS = [
     "https://www.offshore-energy.biz/feed/",
@@ -150,12 +196,15 @@ def scrape_and_update():
                             print(f"Skipped (low score {score}): {article.title[:50]}")
                             continue
 
+                        # Generate AI-powered summary
+                        ai_summary = get_smart_summary(article.title, article.text)
+
                         # Data Object
                         news_item = {
                             "id": int(time.time()),
                             "date": datetime.now().strftime("%Y-%m-%d"),
                             "title": article.title,
-                            "summary": (article.text[:200] + "...") if article.text else "",
+                            "summary": ai_summary,
                             "content": article.text,
                             "source_url": entry.link,
                             "source": feed_url.split('/')[2].replace('www.', ''),
