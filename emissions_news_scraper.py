@@ -20,9 +20,82 @@ FEEDS = [
     "https://www.hellenicshippingnews.com/feed/",
     "https://www.rivieramm.com/rss/news-content-hub",
     "https://shipandbunker.com/news/feed",
+    "https://splash247.com/feed/",
     "https://www.google.nl/alerts/feeds/11361701321732954749/806710994395188837"
 ]
-KEYWORDS = ["EU-ETS", "CO2", "greenhouse gas", "CO2", "emissions", "fueleu", "MRV", "thesis"]
+
+# Keywords for initial filtering (article must contain at least one)
+KEYWORDS = ["EU-ETS", "CO2", "greenhouse gas", "emissions", "fueleu", "MRV", "CII", "EEDI", "decarbonization", "decarbonisation"]
+
+# Scoring weights - higher weight = more important
+SCORE_WEIGHTS = {
+    # Regulatory terms (high importance)
+    "EU-ETS": 15,
+    "ETS": 10,
+    "fueleu": 15,
+    "MRV": 12,
+    "IMO": 10,
+    "CII": 12,
+    "EEDI": 12,
+    "EEXI": 12,
+
+    # Emissions terms
+    "CO2": 5,
+    "emissions": 5,
+    "greenhouse gas": 8,
+    "carbon": 5,
+    "decarbonization": 10,
+    "decarbonisation": 10,
+    "net-zero": 10,
+    "net zero": 10,
+
+    # Alternative fuels (medium-high importance)
+    "methanol": 12,
+    "ammonia": 12,
+    "hydrogen": 10,
+    "LNG": 8,
+    "biofuel": 8,
+
+    # Shipping specific
+    "shipping": 3,
+    "maritime": 3,
+    "vessel": 2,
+    "ship": 2,
+    "fleet": 3,
+
+    # Companies/organizations
+    "Maersk": 5,
+    "MSC": 5,
+    "CMA CGM": 5,
+    "EMSA": 8,
+
+    # Title bonus (if keyword appears in title, extra points)
+    "_title_multiplier": 2
+}
+
+def calculate_score(title, content):
+    """Calculate importance score based on keyword weights."""
+    score = 0
+    title_lower = (title or '').lower()
+    content_lower = (content or '').lower()
+    full_text = title_lower + ' ' + content_lower
+
+    for keyword, weight in SCORE_WEIGHTS.items():
+        if keyword.startswith('_'):
+            continue
+        keyword_lower = keyword.lower()
+
+        # Count occurrences in content
+        count = full_text.count(keyword_lower)
+        if count > 0:
+            # Cap at 3 occurrences to avoid spam
+            score += weight * min(count, 3)
+
+            # Title bonus
+            if keyword_lower in title_lower:
+                score += weight * SCORE_WEIGHTS.get('_title_multiplier', 2)
+
+    return score
 
 # LOCAL DIRECTORIES
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -64,6 +137,19 @@ def scrape_and_update():
                         article.download()
                         article.parse()
 
+                        # Skip empty articles
+                        if not article.title or not article.text or len(article.text) < 100:
+                            print(f"Skipped (empty/short): {entry.link}")
+                            continue
+
+                        # Calculate importance score
+                        score = calculate_score(article.title, article.text)
+
+                        # Skip low-scoring articles
+                        if score < 10:
+                            print(f"Skipped (low score {score}): {article.title[:50]}")
+                            continue
+
                         # Data Object
                         news_item = {
                             "id": int(time.time()),
@@ -72,7 +158,8 @@ def scrape_and_update():
                             "summary": (article.text[:200] + "...") if article.text else "",
                             "content": article.text,
                             "source_url": entry.link,
-                            "source": feed_url.split('/')[2].replace('www.', '')
+                            "source": feed_url.split('/')[2].replace('www.', ''),
+                            "score": score
                         }
 
                         # 1. SAVE INDIVIDUAL FILE TO /news/ (Local Archiving)
@@ -85,14 +172,16 @@ def scrape_and_update():
                         news_index.insert(0, news_item)
                         existing_urls.add(entry.link)
                         new_count += 1
-                        
-                        print(f"Archived: {filename}")
+
+                        print(f"Archived (score {score}): {filename}")
                         time.sleep(1) # Be kind to servers
                     except Exception as e:
                         print(f"Error processing {entry.link}: {e}")
 
     # Save updated index (Keep latest 50 for the website)
     if new_count > 0:
+        # Sort by date first (newest), then by score (highest)
+        news_index.sort(key=lambda x: (x.get('date', ''), x.get('score', 0)), reverse=True)
         news_index = news_index[:50]
         with open(NEWS_INDEX_FILE, "w") as f:
             json.dump(news_index, f, indent=2)
