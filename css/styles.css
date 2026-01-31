@@ -1,5 +1,5 @@
-/* v2 */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+/* v3 - Typography & Animation Upgrade */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap');
 
 /* ============================================
    RESET & BASE STYLES
@@ -11,10 +11,15 @@
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: url('../images/flat-lay-metal-surface.jpg') center center / cover no-repeat fixed;
     min-height: 100vh;
     color: #e0e0e0;
+}
+
+/* Monospace for data/numbers */
+.mono, .co2-value, .stat-value, .rank, .spec-value, .cii-metric-value, .efficiency-value {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
 }
 
 
@@ -213,6 +218,8 @@ nav a:hover, nav a.active {
     background: rgba(0,0,0,0.3);
     border-radius: 10px;
     overflow: hidden;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 table {
@@ -225,13 +232,22 @@ th, td {
     text-align: left;
 }
 
+/* Sticky table headers */
+thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
 th {
-    background: rgba(0,0,0,0.5);
+    background: rgba(20, 20, 35, 0.98);
     color: #4ecdc4;
     font-weight: 600;
     cursor: pointer;
     user-select: none;
     white-space: nowrap;
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid rgba(78, 205, 196, 0.3);
 }
 
 th:hover {
@@ -252,6 +268,147 @@ tr:nth-child(even) {
 
 tr:hover {
     background: rgba(78, 205, 196, 0.1);
+}
+
+/* ============================================
+   STAGGERED ROW ANIMATIONS
+   ============================================ */
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+tbody tr {
+    animation: fadeSlideIn 0.3s ease-out forwards;
+    opacity: 0;
+}
+
+/* Stagger delays for first 20 rows */
+tbody tr:nth-child(1) { animation-delay: 0.02s; }
+tbody tr:nth-child(2) { animation-delay: 0.04s; }
+tbody tr:nth-child(3) { animation-delay: 0.06s; }
+tbody tr:nth-child(4) { animation-delay: 0.08s; }
+tbody tr:nth-child(5) { animation-delay: 0.10s; }
+tbody tr:nth-child(6) { animation-delay: 0.12s; }
+tbody tr:nth-child(7) { animation-delay: 0.14s; }
+tbody tr:nth-child(8) { animation-delay: 0.16s; }
+tbody tr:nth-child(9) { animation-delay: 0.18s; }
+tbody tr:nth-child(10) { animation-delay: 0.20s; }
+tbody tr:nth-child(11) { animation-delay: 0.22s; }
+tbody tr:nth-child(12) { animation-delay: 0.24s; }
+tbody tr:nth-child(13) { animation-delay: 0.26s; }
+tbody tr:nth-child(14) { animation-delay: 0.28s; }
+tbody tr:nth-child(15) { animation-delay: 0.30s; }
+tbody tr:nth-child(16) { animation-delay: 0.32s; }
+tbody tr:nth-child(17) { animation-delay: 0.34s; }
+tbody tr:nth-child(18) { animation-delay: 0.36s; }
+tbody tr:nth-child(19) { animation-delay: 0.38s; }
+tbody tr:nth-child(20) { animation-delay: 0.40s; }
+tbody tr:nth-child(n+21) { animation-delay: 0.42s; }
+
+/* ============================================
+   EMISSION SEVERITY COLOR CODING
+   ============================================ */
+tr.emission-extreme {
+    border-left: 3px solid #C62828;
+    background: rgba(198, 40, 40, 0.1);
+}
+tr.emission-extreme:hover {
+    background: rgba(198, 40, 40, 0.2);
+}
+
+tr.emission-high {
+    border-left: 3px solid #E65100;
+    background: rgba(230, 81, 0, 0.08);
+}
+tr.emission-high:hover {
+    background: rgba(230, 81, 0, 0.15);
+}
+
+tr.emission-medium {
+    border-left: 3px solid #FFA500;
+    background: rgba(255, 165, 0, 0.05);
+}
+tr.emission-medium:hover {
+    background: rgba(255, 165, 0, 0.1);
+}
+
+tr.emission-low {
+    border-left: 3px solid #9ACD32;
+}
+
+tr.emission-minimal {
+    border-left: 3px solid #32CD32;
+}
+
+/* ============================================
+   LOADING SKELETONS
+   ============================================ */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.05) 25%,
+        rgba(255,255,255,0.1) 50%,
+        rgba(255,255,255,0.05) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+.skeleton-row {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.skeleton-cell {
+    height: 20px;
+    border-radius: 4px;
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.05) 25%,
+        rgba(255,255,255,0.1) 50%,
+        rgba(255,255,255,0.05) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.skeleton-cell.rank { width: 60px; }
+.skeleton-cell.name { flex: 2; }
+.skeleton-cell.type { flex: 1; }
+.skeleton-cell.registry { width: 100px; }
+.skeleton-cell.co2 { width: 120px; }
+
+.skeleton-stat {
+    height: 48px;
+    width: 100%;
+    border-radius: 8px;
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.05) 25%,
+        rgba(255,255,255,0.1) 50%,
+        rgba(255,255,255,0.05) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
 }
 
 /* ============================================

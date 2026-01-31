@@ -101,7 +101,15 @@
                     </tr>
                 </thead>
                 <tbody id="ships-table">
-                    <tr><td colspan="5" class="loading">Loading data...</td></tr>
+                    <!-- Loading skeletons -->
+                    <tr class="skeleton-row-tr"><td colspan="5"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
+                    <tr class="skeleton-row-tr"><td colspan="5"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
+                    <tr class="skeleton-row-tr"><td colspan="5"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
+                    <tr class="skeleton-row-tr"><td colspan="5"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
+                    <tr class="skeleton-row-tr"><td colspan="5"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
+                    <tr class="skeleton-row-tr"><td colspan="5"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
+                    <tr class="skeleton-row-tr"><td colspan="5"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
+                    <tr class="skeleton-row-tr"><td colspan="5"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
                 </tbody>
             </table>
         </div>
@@ -203,6 +211,15 @@
                 });
         }
 
+        // Get emission severity class based on rank
+        function getEmissionSeverity(rank) {
+            if (rank <= 100) return 'emission-extreme';
+            if (rank <= 500) return 'emission-high';
+            if (rank <= 2000) return 'emission-medium';
+            if (rank <= 5000) return 'emission-low';
+            return 'emission-minimal';
+        }
+
         function renderTable() {
             const tbody = document.getElementById('ships-table');
             const start = (currentPage - 1) * perPage;
@@ -214,10 +231,12 @@
             if (pageShips.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" class="loading">No ships found matching your criteria.</td></tr>';
             } else {
-                tbody.innerHTML = pageShips.map(ship => {
+                tbody.innerHTML = pageShips.map((ship, index) => {
                     const meohTag = meohVessels.has(ship.imo) ? ' <span class="meoh-tag">&lt;MeOH&gt;</span>' : '';
+                    const severityClass = getEmissionSeverity(ship.rank);
+                    const animDelay = `style="animation-delay: ${index * 0.02}s"`;
                     return `
-                    <tr>
+                    <tr class="${severityClass}" ${animDelay}>
                         <td class="rank ${ship.rank <= 3 ? 'rank-' + ship.rank : ''}">#${ship.rank}</td>
                         <td class="ship-name"><a href="ship.html?id=${encodeId(ship.imo)}" class="ship-link">${escapeHtml(ship.name)}</a>${meohTag}</td>
                         <td class="ship-type">${escapeHtml(ship.type)}</td>

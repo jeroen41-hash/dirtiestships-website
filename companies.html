@@ -242,6 +242,15 @@
                 });
         }
 
+        // Get emission severity class based on rank
+        function getEmissionSeverity(rank) {
+            if (rank <= 15) return 'emission-extreme';
+            if (rank <= 50) return 'emission-high';
+            if (rank <= 200) return 'emission-medium';
+            if (rank <= 500) return 'emission-low';
+            return 'emission-minimal';
+        }
+
         function renderCompanyTable() {
             const tbody = document.getElementById('company-tbody');
             const start = (currentPage - 1) * ROWS_PER_PAGE;
@@ -250,8 +259,10 @@
 
             tbody.innerHTML = pageData.map((company, index) => {
                 const rank = start + index + 1;
+                const severityClass = getEmissionSeverity(rank);
+                const animDelay = `style="animation-delay: ${index * 0.02}s"`;
                 return `
-                    <tr>
+                    <tr class="${severityClass}" ${animDelay}>
                         <td class="rank">${rank}</td>
                         <td>${escapeHtml(company.company)}</td>
                         <td class="co2-value">${company.co2eq.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
