@@ -75,6 +75,30 @@
             </div>
         </div>
 
+        <div class="chart-container" id="company-list-container" style="display: none;">
+            <h3 style="color: #4ecdc4; margin-bottom: 20px;">All Companies by CO2-eq Emissions</h3>
+            <div class="controls">
+                <div class="search-box">
+                    <input type="text" id="company-search" placeholder="Search companies...">
+                </div>
+            </div>
+            <div class="table-container">
+                <table id="company-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Company</th>
+                            <th>CO2-eq (tonnes)</th>
+                            <th>Ships</th>
+                        </tr>
+                    </thead>
+                    <tbody id="company-tbody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination" id="pagination"></div>
+        </div>
+
         <footer>
             <div class="footer-links">
                 <a href="FAQ.html">FAQ</a>
@@ -88,6 +112,10 @@
 
     <script>
         let chart = null;
+        let allCompanies = [];
+        let filteredCompanies = [];
+        const ROWS_PER_PAGE = 50;
+        let currentPage = 1;
 
         function loadData(year) {
             const isNew = year === '2024';
@@ -104,10 +132,12 @@
                 document.querySelector('.chart-wrapper').innerHTML =
                     '<p class="loading">Company data is only available for 2024.<br>The 2022 and 2023 datasets do not include company information.</p>';
                 document.getElementById('note').style.display = 'none';
+                document.getElementById('company-list-container').style.display = 'none';
                 return;
             }
 
             document.getElementById('note').style.display = 'block';
+            document.getElementById('company-list-container').style.display = 'block';
             document.querySelector('.chart-wrapper').innerHTML = '<canvas id="chart"></canvas>';
 
             fetch(`json/${year}_companies_top15.json`)
@@ -192,7 +222,91 @@
                     document.querySelector('.chart-wrapper').innerHTML =
                         '<p class="loading">Error loading data.</p>';
                 });
+
+            // Load full company list
+            loadCompanyList();
         }
+
+        function loadCompanyList() {
+            fetch('json/2024_companies_all.json')
+                .then(response => response.json())
+                .then(data => {
+                    allCompanies = data;
+                    filteredCompanies = data;
+                    currentPage = 1;
+                    renderCompanyTable();
+                })
+                .catch(error => {
+                    document.getElementById('company-tbody').innerHTML =
+                        '<tr><td colspan="4">Error loading company data.</td></tr>';
+                });
+        }
+
+        function renderCompanyTable() {
+            const tbody = document.getElementById('company-tbody');
+            const start = (currentPage - 1) * ROWS_PER_PAGE;
+            const end = start + ROWS_PER_PAGE;
+            const pageData = filteredCompanies.slice(start, end);
+
+            tbody.innerHTML = pageData.map((company, index) => {
+                const rank = start + index + 1;
+                return `
+                    <tr>
+                        <td class="rank">${rank}</td>
+                        <td>${escapeHtml(company.company)}</td>
+                        <td class="co2-value">${company.co2eq.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                        <td>${company.count}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredCompanies.length / ROWS_PER_PAGE);
+            const pagination = document.getElementById('pagination');
+
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+
+            pagination.innerHTML = `
+                <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>
+                <span class="page-info">Page ${currentPage} of ${totalPages} (${filteredCompanies.length} companies)</span>
+                <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>
+            `;
+        }
+
+        function goToPage(page) {
+            const totalPages = Math.ceil(filteredCompanies.length / ROWS_PER_PAGE);
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                renderCompanyTable();
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Search functionality
+        document.getElementById('company-search').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            if (query === '') {
+                filteredCompanies = allCompanies;
+            } else {
+                filteredCompanies = allCompanies.filter(c =>
+                    c.company.toLowerCase().includes(query)
+                );
+            }
+            currentPage = 1;
+            renderCompanyTable();
+        });
 
         document.getElementById('year-select').addEventListener('change', (e) => {
             loadData(e.target.value);
