@@ -1017,11 +1017,11 @@ footer a:hover {
 /* ============================================
    CII RATING STYLES
    ============================================ */
-.cii-rating-a { color: #2ecc71; font-weight: bold; }
-.cii-rating-b { color: #82e0aa; font-weight: bold; }
-.cii-rating-c { color: #f1c40f; font-weight: bold; }
-.cii-rating-d { color: #e67e22; font-weight: bold; }
-.cii-rating-e { color: #e74c3c; font-weight: bold; }
+.cii-rating-a { color: #32CD32; font-weight: bold; }
+.cii-rating-b { color: #9ACD32; font-weight: bold; }
+.cii-rating-c { color: #FFA500; font-weight: bold; }
+.cii-rating-d { color: #E65100; font-weight: bold; }
+.cii-rating-e { color: #C62828; font-weight: bold; }
 
 .cii-over { color: #e74c3c; }
 .cii-under { color: #2ecc71; }
