@@ -1013,3 +1013,94 @@ footer a:hover {
         display: none;
     }
 }
+
+/* ============================================
+   CII RATING STYLES
+   ============================================ */
+.cii-rating-a { color: #2ecc71; font-weight: bold; }
+.cii-rating-b { color: #82e0aa; font-weight: bold; }
+.cii-rating-c { color: #f1c40f; font-weight: bold; }
+.cii-rating-d { color: #e67e22; font-weight: bold; }
+.cii-rating-e { color: #e74c3c; font-weight: bold; }
+
+.cii-rating-box {
+    border: 2px solid rgba(78, 205, 196, 0.3);
+}
+
+.cii-details {
+    background: rgba(0,0,0,0.4);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.cii-details-title {
+    font-size: 1.2rem;
+    color: #4ecdc4;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.cii-details-content {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.cii-rating-large {
+    font-size: 3rem;
+    font-weight: bold;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+}
+
+.cii-rating-large.cii-rating-a { background: rgba(46, 204, 113, 0.2); border: 3px solid #2ecc71; }
+.cii-rating-large.cii-rating-b { background: rgba(130, 224, 170, 0.2); border: 3px solid #82e0aa; }
+.cii-rating-large.cii-rating-c { background: rgba(241, 196, 15, 0.2); border: 3px solid #f1c40f; }
+.cii-rating-large.cii-rating-d { background: rgba(230, 126, 34, 0.2); border: 3px solid #e67e22; }
+.cii-rating-large.cii-rating-e { background: rgba(231, 76, 60, 0.2); border: 3px solid #e74c3c; }
+
+.cii-metrics {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.cii-metric {
+    background: rgba(255,255,255,0.05);
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.cii-metric-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.cii-metric-value {
+    display: block;
+    font-size: 1.2rem;
+    color: #e0e0e0;
+    font-weight: 600;
+}
+
+.cii-over { color: #e74c3c; }
+.cii-under { color: #2ecc71; }
+
+.cii-description {
+    flex-basis: 100%;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #888;
+    font-style: italic;
+}

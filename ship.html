@@ -185,6 +185,41 @@
                         ${vesselSpecs.beam ? `<div class="spec-item"><span class="spec-label">Beam</span><span class="spec-value">${vesselSpecs.beam} m</span></div>` : ''}
                         ${vesselSpecs.gross_tonnage ? `<div class="spec-item"><span class="spec-label">Gross Tonnage</span><span class="spec-value">${parseInt(vesselSpecs.gross_tonnage).toLocaleString()}</span></div>` : ''}
                         ${vesselSpecs.deadweight ? `<div class="spec-item"><span class="spec-label">Deadweight</span><span class="spec-value">${parseInt(vesselSpecs.deadweight).toLocaleString()} t</span></div>` : ''}
+                        ${vesselSpecs.cii_rating ? `<div class="spec-item cii-rating-box"><span class="spec-label">CII Rating (${vesselSpecs.cii_year || 2024})</span><span class="spec-value cii-rating-${vesselSpecs.cii_rating.toLowerCase()}">${vesselSpecs.cii_rating}</span></div>` : ''}
+                    </div>
+                </div>
+                ${vesselSpecs.cii_rating ? buildCiiDetailsSection() : ''}
+            `;
+        }
+
+        function buildCiiDetailsSection() {
+            if (!vesselSpecs || !vesselSpecs.cii_rating) return '';
+
+            const rating = vesselSpecs.cii_rating;
+            const attained = vesselSpecs.cii_attained;
+            const required = vesselSpecs.cii_required;
+            const ratio = attained && required ? (attained / required * 100).toFixed(1) : null;
+
+            let ratingDescription = '';
+            switch(rating) {
+                case 'A': ratingDescription = 'Superior performance - well below required CII'; break;
+                case 'B': ratingDescription = 'Minor exceedance - below required CII'; break;
+                case 'C': ratingDescription = 'Moderate - meeting required CII'; break;
+                case 'D': ratingDescription = 'Needs improvement - exceeds required CII'; break;
+                case 'E': ratingDescription = 'Poor performance - significantly exceeds required CII'; break;
+            }
+
+            return `
+                <div class="cii-details">
+                    <div class="cii-details-title">Carbon Intensity Indicator (CII)</div>
+                    <div class="cii-details-content">
+                        <div class="cii-rating-large cii-rating-${rating.toLowerCase()}">${rating}</div>
+                        <div class="cii-metrics">
+                            ${attained ? `<div class="cii-metric"><span class="cii-metric-label">Attained CII</span><span class="cii-metric-value">${attained.toFixed(2)}</span></div>` : ''}
+                            ${required ? `<div class="cii-metric"><span class="cii-metric-label">Required CII</span><span class="cii-metric-value">${required.toFixed(2)}</span></div>` : ''}
+                            ${ratio ? `<div class="cii-metric"><span class="cii-metric-label">Ratio</span><span class="cii-metric-value ${ratio > 100 ? 'cii-over' : 'cii-under'}">${ratio}%</span></div>` : ''}
+                        </div>
+                        <div class="cii-description">${ratingDescription}</div>
                     </div>
                 </div>
             `;

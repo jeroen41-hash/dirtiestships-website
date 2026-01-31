@@ -6,5 +6,9 @@
     "length_overall": "227.90",
     "beam": "32.33",
     "gross_tonnage": "67378",
-    "deadweight": "28388"
+    "deadweight": "28388",
+    "cii_rating": "B",
+    "cii_attained": 4.752,
+    "cii_required": 5.137,
+    "cii_year": 2024
 }
