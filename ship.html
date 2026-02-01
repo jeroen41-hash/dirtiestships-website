@@ -544,6 +544,10 @@
             });
 
             const selectedIndex = sameTypeShips.findIndex(s => s.imo === ship.imo);
+
+            // If selected ship doesn't have efficiency data, skip peer comparison
+            if (selectedIndex === -1) return '';
+
             const selectedShipData = sameTypeShips[selectedIndex];
             const totalInType = sameTypeShips.length;
 
