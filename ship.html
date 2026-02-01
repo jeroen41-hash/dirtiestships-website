@@ -337,8 +337,8 @@
                                     <div class="quick-stat-label">Tonnes ${latestYear === '2024' ? 'CO2-eq' : 'CO2'}</div>
                                 </div>
                                 ${ship.company ? `
-                                <div class="quick-stat">
-                                    <div class="quick-stat-value" style="font-size: 0.9rem;">${escapeHtml(ship.company.length > 15 ? ship.company.substring(0, 15) + '...' : ship.company)}</div>
+                                <div class="quick-stat quick-stat-wide">
+                                    <div class="quick-stat-value quick-stat-company">${escapeHtml(ship.company)}</div>
                                     <div class="quick-stat-label">Company</div>
                                 </div>
                                 ` : ''}

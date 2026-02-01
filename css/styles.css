@@ -843,6 +843,19 @@ tr.emission-minimal {
     margin-top: 4px;
 }
 
+.quick-stat-wide {
+    min-width: auto;
+    max-width: 280px;
+}
+
+.quick-stat-company {
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 260px;
+}
+
 .cii-badge {
     display: flex;
     flex-direction: column;
