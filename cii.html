@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CII (Carbon Intensity Indicator) ratings visualization for ships operating in European waters.">
+    <meta name="robots" content="noindex">
+    <title>CII Ratings Scatter Plot | DirtiestShips</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .cii-chart-container {
+            position: relative;
+            height: 70vh;
+            min-height: 500px;
+            margin-bottom: 30px;
+        }
+
+        .cii-filters {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .cii-filters label {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .cii-filters select {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .cii-legend {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .cii-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .cii-legend-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+        }
+
+        .cii-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .cii-stat-box {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .cii-stat-rating {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .cii-stat-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        .cii-stat-label {
+            font-size: 0.8rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rating-A { color: #22c55e; }
+        .rating-B { color: #84cc16; }
+        .rating-C { color: #eab308; }
+        .rating-D { color: #f97316; }
+        .rating-E { color: #ef4444; }
+
+        .bg-A { background-color: #22c55e; }
+        .bg-B { background-color: #84cc16; }
+        .bg-C { background-color: #eab308; }
+        .bg-D { background-color: #f97316; }
+        .bg-E { background-color: #ef4444; }
+
+        .threshold-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            border-top: 2px dashed rgba(255,255,255,0.3);
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(78, 205, 196, 0.2);
+            border-top-color: #4ecdc4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="images/ship-smoke-left.jpg" alt="" class="header-img header-img-left">
+            <img src="images/ship-smoke-right.jpg" alt="" class="header-img header-img-right">
+            <h1>Dirtiest Ships <span style="font-size: 0.5em; font-weight: normal;">(in Europe)</span></h1>
+            <p class="subtitle">CII Ratings vs Deadweight (2024)</p>
+            <nav>
+                <a href="index.html">Ship Rankings</a>
+                <a href="chart.html">By Ship Type</a>
+                <a href="companies.html">By Company</a>
+                <a href="countries.html">By Country</a>
+                <a href="compare.html">Peer Compare</a>
+                <a href="rules.html">Regulations</a>
+                <a href="news.html">News</a>
+                <a href="FAQ.html">Why?</a>
+            </nav>
+        </header>
+
+        <div class="chart-container">
+            <h3 style="color: #4ecdc4; margin-bottom: 10px;">Carbon Intensity Indicator (CII) Distribution</h3>
+            <p style="color: #888; font-size: 0.9rem; margin-bottom: 20px;">
+                Each dot represents a ship. Lower CII values indicate better carbon efficiency.
+                Ships above the reference line (CII ratio > 1) exceed their required emissions intensity.
+            </p>
+
+            <div class="cii-stats" id="cii-stats">
+                <!-- Populated by JavaScript -->
+            </div>
+
+            <div class="cii-legend">
+                <div class="cii-legend-item"><div class="cii-legend-dot bg-A"></div> A - Superior</div>
+                <div class="cii-legend-item"><div class="cii-legend-dot bg-B"></div> B - Lower</div>
+                <div class="cii-legend-item"><div class="cii-legend-dot bg-C"></div> C - Moderate</div>
+                <div class="cii-legend-item"><div class="cii-legend-dot bg-D"></div> D - Upper</div>
+                <div class="cii-legend-item"><div class="cii-legend-dot bg-E"></div> E - Inferior</div>
+            </div>
+
+            <div class="cii-filters">
+                <div>
+                    <label for="type-filter">Ship Type:</label>
+                    <select id="type-filter">
+                        <option value="all">All Types</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="rating-filter">Rating:</label>
+                    <select id="rating-filter">
+                        <option value="all">All Ratings</option>
+                        <option value="A">A only</option>
+                        <option value="B">B only</option>
+                        <option value="C">C only</option>
+                        <option value="D">D only</option>
+                        <option value="E">E only</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="y-axis-mode">Y-Axis:</label>
+                    <select id="y-axis-mode">
+                        <option value="attained">CII Attained</option>
+                        <option value="ratio">CII Ratio (Attained/Required)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="cii-chart-container">
+                <div class="loading-overlay" id="loading">
+                    <div class="loading-spinner"></div>
+                </div>
+                <canvas id="cii-chart"></canvas>
+            </div>
+
+            <div class="note">
+                <strong>About CII:</strong> The Carbon Intensity Indicator measures grams of CO₂ emitted per cargo-carrying capacity and nautical mile traveled.
+                IMO requires ships rated D for 3 consecutive years or E for 1 year to submit a corrective action plan.
+                Ratings are calculated using the <a href="https://www.imo.org/en/MediaCentre/HotTopics/Pages/EEXI-CII-FAQ.aspx" target="_blank" style="color: #4ecdc4;">IMO CII framework</a>.
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-links">
+                <a href="FAQ.html">FAQ</a>
+                <a href="disclaimer.html">Disclaimer</a>
+                <a href="mailto:hello@dirtiestships.com">hello@dirtiestships.com</a>
+            </div>
+            <p>Data source: <a href="https://mrv.emsa.europa.eu/" target="_blank">EU MRV Regulation</a></p>
+            <p>CII calculated using IMO methodology with 2024 MRV data.</p>
+        </footer>
+    </div>
+
+    <script>
+        let chart = null;
+        let allShips = [];
+
+        const RATING_COLORS = {
+            'A': '#22c55e',
+            'B': '#84cc16',
+            'C': '#eab308',
+            'D': '#f97316',
+            'E': '#ef4444'
+        };
+
+        async function loadData() {
+            const response = await fetch('json/cii_data.json');
+            const data = await response.json();
+            allShips = data.ships;
+
+            // Populate ship type filter
+            const types = [...new Set(allShips.map(s => s.type))].sort();
+            const typeFilter = document.getElementById('type-filter');
+            types.forEach(type => {
+                const opt = document.createElement('option');
+                opt.value = type;
+                opt.textContent = type;
+                typeFilter.appendChild(opt);
+            });
+
+            updateStats(allShips);
+            renderChart();
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function updateStats(ships) {
+            const counts = { A: 0, B: 0, C: 0, D: 0, E: 0 };
+            ships.forEach(s => counts[s.cii_rating]++);
+
+            const statsHtml = ['A', 'B', 'C', 'D', 'E'].map(rating => `
+                <div class="cii-stat-box">
+                    <div class="cii-stat-rating rating-${rating}">${rating}</div>
+                    <div class="cii-stat-count">${counts[rating].toLocaleString()}</div>
+                    <div class="cii-stat-label">${(counts[rating] / ships.length * 100).toFixed(1)}%</div>
+                </div>
+            `).join('');
+
+            document.getElementById('cii-stats').innerHTML = statsHtml;
+        }
+
+        function getFilteredShips() {
+            const typeFilter = document.getElementById('type-filter').value;
+            const ratingFilter = document.getElementById('rating-filter').value;
+
+            return allShips.filter(ship => {
+                if (typeFilter !== 'all' && ship.type !== typeFilter) return false;
+                if (ratingFilter !== 'all' && ship.cii_rating !== ratingFilter) return false;
+                return true;
+            });
+        }
+
+        function renderChart() {
+            const ships = getFilteredShips();
+            const yAxisMode = document.getElementById('y-axis-mode').value;
+
+            updateStats(ships);
+
+            // Prepare datasets by rating
+            const datasets = ['A', 'B', 'C', 'D', 'E'].map(rating => {
+                const ratingShips = ships.filter(s => s.cii_rating === rating);
+                return {
+                    label: `Rating ${rating}`,
+                    data: ratingShips.map(s => ({
+                        x: s.dwt,
+                        y: yAxisMode === 'ratio' ? (s.cii_attained / s.cii_required) : s.cii_attained,
+                        ship: s
+                    })),
+                    backgroundColor: RATING_COLORS[rating] + '99',
+                    borderColor: RATING_COLORS[rating],
+                    borderWidth: 1,
+                    pointRadius: 3,
+                    pointHoverRadius: 6
+                };
+            });
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            const ctx = document.getElementById('cii-chart').getContext('2d');
+
+            const chartConfig = {
+                type: 'scatter',
+                data: { datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const ship = context.raw.ship;
+                                    return [
+                                        `${ship.name}`,
+                                        `Type: ${ship.type}`,
+                                        `DWT: ${ship.dwt.toLocaleString()} t`,
+                                        `CII Attained: ${ship.cii_attained.toFixed(2)}`,
+                                        `CII Required: ${ship.cii_required.toFixed(2)}`,
+                                        `Rating: ${ship.cii_rating}`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'logarithmic',
+                            title: {
+                                display: true,
+                                text: 'Deadweight (tonnes)',
+                                color: '#888'
+                            },
+                            ticks: {
+                                color: '#888',
+                                callback: function(value) {
+                                    if (value >= 1000000) return (value/1000000) + 'M';
+                                    if (value >= 1000) return (value/1000) + 'K';
+                                    return value;
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255,255,255,0.1)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: yAxisMode === 'ratio' ? 'CII Ratio (Attained / Required)' : 'CII Attained (gCO₂/t·nm)',
+                                color: '#888'
+                            },
+                            ticks: {
+                                color: '#888'
+                            },
+                            grid: {
+                                color: 'rgba(255,255,255,0.1)'
+                            }
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const ship = elements[0].element.$context.raw.ship;
+                            const encodedImo = btoa(ship.imo).replace(/=/g, '');
+                            window.open(`ship.html?id=${encodedImo}`, '_blank');
+                        }
+                    }
+                }
+            };
+
+            // Add reference line at y=1 for ratio mode
+            if (yAxisMode === 'ratio') {
+                chartConfig.options.plugins.annotation = {
+                    annotations: {
+                        line1: {
+                            type: 'line',
+                            yMin: 1,
+                            yMax: 1,
+                            borderColor: 'rgba(255, 255, 255, 0.5)',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            label: {
+                                display: true,
+                                content: 'Required CII',
+                                position: 'end'
+                            }
+                        }
+                    }
+                };
+            }
+
+            chart = new Chart(ctx, chartConfig);
+        }
+
+        // Event listeners
+        document.getElementById('type-filter').addEventListener('change', renderChart);
+        document.getElementById('rating-filter').addEventListener('change', renderChart);
+        document.getElementById('y-axis-mode').addEventListener('change', renderChart);
+
+        // Load data on page load
+        loadData();
+    </script>
+</body>
+</html>
