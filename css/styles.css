@@ -1136,6 +1136,39 @@ tr.emission-minimal {
 }
 
 /* ============================================
+   COUNTRY COMPARISON
+   ============================================ */
+/* Country rows in company table */
+tr.country-row {
+    background: linear-gradient(90deg, rgba(78, 205, 196, 0.1), transparent);
+    border-left: 3px solid #4ecdc4;
+}
+
+tr.country-row:hover {
+    background: linear-gradient(90deg, rgba(78, 205, 196, 0.2), rgba(78, 205, 196, 0.05));
+}
+
+tr.country-row td {
+    color: #4ecdc4;
+    font-style: italic;
+}
+
+tr.country-row .co2-value {
+    color: #4ecdc4;
+}
+
+.country-label {
+    font-size: 0.7rem;
+    background: rgba(78, 205, 196, 0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-style: normal;
+}
+
+/* ============================================
    EFFICIENCY BOXES
    ============================================ */
 .efficiency-summary {
