@@ -100,3 +100,35 @@ To process new Excel files into JSON:
 ├── /images/          # Header images
 └── /launch instructins/  # Deployment notes
 ```
+
+## Planned Improvements (Priority Order)
+
+1. **Enhanced Ship Detail Cards** (ship.html)
+   - Hero section with ship image (vessel finder API or placeholder by ship type)
+   - Large CII rating badge with color gradient background
+   - Emissions trend sparkline in header
+   - Quick stats bar (rank, emissions, voyages)
+
+2. **Interactive Chart Improvements**
+   - Click-to-filter on chart segments (click ship type → filter table)
+   - Animated number counters for stats
+   - Hover tooltips with more context
+   - Comparison overlays (year-over-year)
+
+3. **Search Autocomplete**
+   - Dropdown suggestions as you type
+   - Ship type icons next to results
+   - Recent searches memory
+   - "Did you mean..." for typos
+
+4. **Mobile Navigation Overhaul**
+   - Hamburger menu with slide-out drawer
+   - Bottom navigation bar for key pages
+   - Swipe gestures for pagination
+   - Touch-friendly filter controls
+
+5. **Comparison Tool Upgrade** (compare.html)
+   - Side-by-side ship cards instead of just table
+   - Radar chart comparing efficiency metrics
+   - "Add to compare" button on ship listings
+   - Shareable comparison URLs

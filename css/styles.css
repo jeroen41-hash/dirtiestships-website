@@ -537,6 +537,274 @@ tr.emission-minimal {
 }
 
 /* ============================================
+   ENHANCED SHIP HERO SECTION
+   ============================================ */
+.ship-hero {
+    position: relative;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    border: 1px solid rgba(78, 205, 196, 0.2);
+}
+
+.ship-hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    filter: blur(2px);
+}
+
+.ship-hero-content {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 30px;
+    padding: 30px;
+    align-items: center;
+}
+
+.ship-type-icon {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(78, 205, 196, 0.05));
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(78, 205, 196, 0.3);
+}
+
+.ship-type-icon svg {
+    width: 70px;
+    height: 70px;
+    fill: #4ecdc4;
+    opacity: 0.8;
+}
+
+.ship-hero-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ship-hero-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.ship-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    color: #888;
+    font-size: 0.95rem;
+}
+
+.ship-hero-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ship-hero-meta .label {
+    color: #666;
+}
+
+.ship-hero-meta .value {
+    color: #4ecdc4;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.quick-stats {
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.quick-stat {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    min-width: 100px;
+}
+
+.quick-stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.quick-stat-value.rank-high {
+    color: #ff6b6b;
+}
+
+.quick-stat-label {
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+}
+
+.cii-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.cii-badge-letter {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.cii-badge-letter::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.2);
+}
+
+.cii-badge-letter.cii-a {
+    background: linear-gradient(135deg, #32CD32, #228B22);
+}
+
+.cii-badge-letter.cii-b {
+    background: linear-gradient(135deg, #9ACD32, #6B8E23);
+}
+
+.cii-badge-letter.cii-c {
+    background: linear-gradient(135deg, #FFA500, #FF8C00);
+}
+
+.cii-badge-letter.cii-d {
+    background: linear-gradient(135deg, #E65100, #BF360C);
+}
+
+.cii-badge-letter.cii-e {
+    background: linear-gradient(135deg, #C62828, #8E0000);
+}
+
+.cii-badge-label {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 10px;
+}
+
+.cii-badge-ratio {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: #4ecdc4;
+    margin-top: 4px;
+}
+
+.sparkline-container {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sparkline {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 30px;
+}
+
+.sparkline-bar {
+    width: 8px;
+    background: #4ecdc4;
+    border-radius: 2px 2px 0 0;
+    transition: all 0.3s ease;
+}
+
+.sparkline-bar:hover {
+    background: #6ee7df;
+}
+
+.sparkline-bar.up {
+    background: #ff6b6b;
+}
+
+.sparkline-label {
+    font-size: 0.7rem;
+    color: #666;
+}
+
+.trend-indicator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.trend-indicator.up {
+    background: rgba(255, 107, 107, 0.15);
+    color: #ff6b6b;
+}
+
+.trend-indicator.down {
+    background: rgba(78, 205, 196, 0.15);
+    color: #4ecdc4;
+}
+
+@media (max-width: 900px) {
+    .ship-hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .ship-type-icon {
+        margin: 0 auto;
+    }
+
+    .ship-hero-meta {
+        justify-content: center;
+    }
+
+    .quick-stats {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .sparkline-container {
+        justify-content: center;
+    }
+}
+
+/* ============================================
    VESSEL SPECIFICATIONS
    ============================================ */
 .vessel-specs {

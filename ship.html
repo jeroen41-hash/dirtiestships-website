@@ -172,6 +172,42 @@
             `;
         }
 
+        function getShipTypeIcon(shipType) {
+            // Generic ship SVG icon
+            return `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 21c-1.39 0-2.78-.47-4-1.32-2.44 1.71-5.56 1.71-8 0C6.78 20.53 5.39 21 4 21H2v2h2c1.38 0 2.74-.35 4-.99 2.52 1.29 5.48 1.29 8 0 1.26.65 2.62.99 4 .99h2v-2h-2zM3.95 19H4c1.6 0 3.02-.88 4-2 .98 1.12 2.4 2 4 2s3.02-.88 4-2c.98 1.12 2.4 2 4 2h.05l1.89-6.68c.08-.26.06-.54-.06-.78s-.34-.42-.6-.5L20 10.62V6c0-1.1-.9-2-2-2h-3V1H9v3H6c-1.1 0-2 .9-2 2v4.62l-1.29.42c-.26.08-.48.26-.6.5s-.15.52-.06.78L3.95 19zM6 6h12v3.97L12 8 6 9.97V6z"/>
+            </svg>`;
+        }
+
+        function buildSparkline(emissionsHistory) {
+            if (!emissionsHistory || emissionsHistory.length < 2) return '';
+
+            const maxCo2 = Math.max(...emissionsHistory.map(e => e.co2));
+            const minCo2 = Math.min(...emissionsHistory.map(e => e.co2));
+            const range = maxCo2 - minCo2 || 1;
+
+            // Calculate overall trend
+            const first = emissionsHistory[0].co2;
+            const last = emissionsHistory[emissionsHistory.length - 1].co2;
+            const trendPct = ((last - first) / first * 100).toFixed(0);
+            const trendClass = trendPct > 0 ? 'up' : 'down';
+            const trendSign = trendPct > 0 ? '+' : '';
+
+            const bars = emissionsHistory.map((item, i) => {
+                const height = 20 + ((item.co2 - minCo2) / range) * 80; // 20-100% height
+                const isUp = i > 0 && item.co2 > emissionsHistory[i - 1].co2;
+                return `<div class="sparkline-bar ${isUp ? 'up' : ''}" style="height: ${height}%;" title="${item.year}: ${Math.round(item.co2).toLocaleString()}t"></div>`;
+            }).join('');
+
+            return `
+                <div class="sparkline-container">
+                    <span class="sparkline-label">${emissionsHistory.length}yr trend:</span>
+                    <div class="sparkline">${bars}</div>
+                    <div class="trend-indicator ${trendClass}">${trendSign}${trendPct}% since ${emissionsHistory[0].year}</div>
+                </div>
+            `;
+        }
+
         function buildVesselSpecsSection() {
             if (!vesselSpecs) return '';
 
@@ -252,45 +288,72 @@
 
             const meohTag = meohVessels.has(imo) ? ' <span class="meoh-tag">&lt;MeOH&gt;</span>' : '';
 
+            // Build sparkline data
+            const sparklineHtml = buildSparkline(emissionsHistory);
+
+            // Get latest emissions for quick stats
+            const latestEmissions = emissionsHistory[emissionsHistory.length - 1];
+            const co2Value = latestEmissions ? Math.round(latestEmissions.co2).toLocaleString() : 'N/A';
+
+            // CII data
+            const ciiRating = vesselSpecs?.cii_rating || null;
+            const ciiAttained = vesselSpecs?.cii_attained;
+            const ciiRequired = vesselSpecs?.cii_required;
+            const ciiRatio = ciiAttained && ciiRequired ? (ciiAttained / ciiRequired * 100).toFixed(1) : null;
+
+            // Vessel specs for meta
+            const yearBuilt = vesselSpecs?.year_of_build || '';
+            const length = vesselSpecs?.length_overall || '';
+            const beam = vesselSpecs?.beam || '';
+            const gt = vesselSpecs?.gross_tonnage ? parseInt(vesselSpecs.gross_tonnage).toLocaleString() : '';
+            const dwt = vesselSpecs?.deadweight ? parseInt(vesselSpecs.deadweight).toLocaleString() : '';
+
             let html = `
-                <div class="ship-header">
-                    <div class="ship-name">${escapeHtml(ship.name)}${meohTag}</div>
-                    <div class="ship-imo">IMO: ${imo}</div>
-                    <div class="ship-details">
-                        <div class="detail-box">
-                            <div class="detail-label">Ship Type</div>
-                            <div class="detail-value">${escapeHtml(ship.type)}</div>
+                <div class="ship-hero">
+                    <div class="ship-hero-bg" style="background-image: url('images/ship-smoke-left.jpg');"></div>
+                    <div class="ship-hero-content">
+                        <div class="ship-type-icon">
+                            ${getShipTypeIcon(ship.type)}
                         </div>
-                        <div class="detail-box">
-                            <div class="detail-label">Flag State</div>
-                            <div class="detail-value">${escapeHtml(ship.country || ship.registry)}</div>
-                        </div>
-                        <div class="detail-box">
-                            <div class="detail-label">Registry</div>
-                            <div class="detail-value">${escapeHtml(ship.registry)}</div>
-                        </div>
-                        ${ship.company ? `
-                        <div class="detail-box">
-                            <div class="detail-label">Company</div>
-                            <div class="detail-value">${escapeHtml(ship.company)}</div>
-                        </div>
-                        ` : ''}
-                        ${ship.efficiency ? `
-                        <div class="detail-box">
-                            <div class="detail-label">Efficiency Rating</div>
-                            <div class="detail-value">${escapeHtml(ship.efficiency)}</div>
-                        </div>
-                        ` : ''}
-                        <div class="detail-box">
-                            <div class="detail-label">${latestYear} Ranking</div>
-                            <div class="detail-value">
-                                <span class="rank-badge ${ship.rank <= 10 ? 'top-10' : (ship.rank <= 100 ? 'top-100' : '')}">#${ship.rank}</span>
+                        <div class="ship-hero-info">
+                            <h1 class="ship-hero-name">${escapeHtml(ship.name)}${meohTag}</h1>
+                            <div class="ship-hero-meta">
+                                <span><span class="label">IMO:</span> <span class="value">${imo}</span></span>
+                                <span><span class="label">Type:</span> <span class="value">${escapeHtml(ship.type)}</span></span>
+                                <span><span class="label">Flag:</span> <span class="value">${escapeHtml(ship.country || ship.registry)}</span></span>
+                                ${yearBuilt ? `<span><span class="label">Built:</span> <span class="value">${yearBuilt}</span></span>` : ''}
+                                ${length ? `<span><span class="label">Length:</span> <span class="value">${length} m</span></span>` : ''}
+                                ${beam ? `<span><span class="label">Beam:</span> <span class="value">${beam} m</span></span>` : ''}
+                                ${dwt ? `<span><span class="label">DWT:</span> <span class="value">${dwt} t</span></span>` : ''}
+                                ${gt ? `<span><span class="label">GT:</span> <span class="value">${gt}</span></span>` : ''}
                             </div>
+                            <div class="quick-stats">
+                                <div class="quick-stat">
+                                    <div class="quick-stat-value ${ship.rank <= 100 ? 'rank-high' : ''}">#${ship.rank}</div>
+                                    <div class="quick-stat-label">${latestYear} Rank</div>
+                                </div>
+                                <div class="quick-stat">
+                                    <div class="quick-stat-value">${co2Value}</div>
+                                    <div class="quick-stat-label">Tonnes ${latestYear === '2024' ? 'CO2-eq' : 'CO2'}</div>
+                                </div>
+                                ${ship.company ? `
+                                <div class="quick-stat">
+                                    <div class="quick-stat-value" style="font-size: 0.9rem;">${escapeHtml(ship.company.length > 15 ? ship.company.substring(0, 15) + '...' : ship.company)}</div>
+                                    <div class="quick-stat-label">Company</div>
+                                </div>
+                                ` : ''}
+                            </div>
+                            ${sparklineHtml}
                         </div>
+                        ${ciiRating ? `
+                        <div class="cii-badge">
+                            <div class="cii-badge-letter cii-${ciiRating.toLowerCase()}">${ciiRating}</div>
+                            <div class="cii-badge-label">CII ${vesselSpecs?.cii_year || '2024'}</div>
+                            ${ciiRatio ? `<div class="cii-badge-ratio">${ciiRatio}% of required</div>` : ''}
+                        </div>
+                        ` : ''}
                     </div>
                 </div>
-
-                ${buildVesselSpecsSection()}
 
                 <div class="chart-container">
                     <div class="chart-title">Annual Emissions History</div>
