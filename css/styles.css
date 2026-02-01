@@ -22,6 +22,39 @@ body {
     font-family: 'JetBrains Mono', 'Courier New', monospace;
 }
 
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(78, 205, 196, 0.3);
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(78, 205, 196, 0.5);
+}
+
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(78, 205, 196, 0.3) rgba(0, 0, 0, 0.2);
+}
 
 /* ============================================
    LAYOUT
@@ -194,6 +227,156 @@ nav a:hover, nav a.active {
 
 .search-box input::placeholder {
     color: rgba(255,255,255,0.7);
+}
+
+.search-box input:focus {
+    background: rgba(255,255,255,0.15);
+    box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.3);
+}
+
+/* ============================================
+   SEARCH AUTOCOMPLETE
+   ============================================ */
+.autocomplete-container {
+    position: relative;
+}
+
+.autocomplete-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #1a1a2e;
+    border-radius: 12px;
+    margin-top: 8px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    border: 1px solid rgba(78, 205, 196, 0.2);
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+}
+
+.autocomplete-dropdown.visible {
+    display: block;
+    animation: fadeSlideIn 0.2s ease-out;
+}
+
+.autocomplete-section {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.autocomplete-section:last-child {
+    border-bottom: none;
+}
+
+.autocomplete-section-title {
+    padding: 8px 16px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    font-weight: 600;
+}
+
+.autocomplete-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.selected {
+    background: rgba(78, 205, 196, 0.15);
+}
+
+.autocomplete-item-icon {
+    width: 32px;
+    height: 32px;
+    background: rgba(78, 205, 196, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.autocomplete-item-icon svg {
+    width: 18px;
+    height: 18px;
+    fill: #4ecdc4;
+}
+
+.autocomplete-item-icon.recent svg {
+    fill: #888;
+}
+
+.autocomplete-item-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.autocomplete-item-name {
+    color: #fff;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.autocomplete-item-name mark {
+    background: rgba(78, 205, 196, 0.3);
+    color: #4ecdc4;
+    border-radius: 2px;
+    padding: 0 2px;
+}
+
+.autocomplete-item-meta {
+    font-size: 0.8rem;
+    color: #888;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.autocomplete-item-rank {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: #ff6b6b;
+    flex-shrink: 0;
+}
+
+.autocomplete-hint {
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    color: #888;
+    text-align: center;
+    font-style: italic;
+}
+
+.autocomplete-hint a {
+    color: #4ecdc4;
+    text-decoration: none;
+}
+
+.autocomplete-hint a:hover {
+    text-decoration: underline;
+}
+
+.clear-recent {
+    padding: 8px 16px;
+    font-size: 0.75rem;
+    color: #888;
+    cursor: pointer;
+    text-align: right;
+}
+
+.clear-recent:hover {
+    color: #ff6b6b;
 }
 
 .filter-box select {

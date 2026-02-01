@@ -79,8 +79,9 @@
         </header>
 
         <div class="controls">
-            <div class="search-box">
-                <input type="text" id="search" placeholder="Search by ship name or IMO number...">
+            <div class="search-box autocomplete-container">
+                <input type="text" id="search" placeholder="Search by ship name or IMO number..." autocomplete="off">
+                <div class="autocomplete-dropdown" id="autocomplete-dropdown"></div>
             </div>
             <div class="filter-box">
                 <select id="ship-type-filter">
@@ -285,12 +286,221 @@
             });
         }
 
+        // ============================================
+        // AUTOCOMPLETE FUNCTIONALITY
+        // ============================================
+        const RECENT_SEARCHES_KEY = 'dirtiestships_recent_searches';
+        const MAX_RECENT_SEARCHES = 5;
+        const MAX_SUGGESTIONS = 8;
+        let selectedAutocompleteIndex = -1;
+
+        function getRecentSearches() {
+            try {
+                return JSON.parse(localStorage.getItem(RECENT_SEARCHES_KEY)) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        function saveRecentSearch(ship) {
+            const recent = getRecentSearches().filter(s => s.imo !== ship.imo);
+            recent.unshift({ imo: ship.imo, name: ship.name, type: ship.type, rank: ship.rank });
+            localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(recent.slice(0, MAX_RECENT_SEARCHES)));
+        }
+
+        function clearRecentSearches() {
+            localStorage.removeItem(RECENT_SEARCHES_KEY);
+            updateAutocomplete('');
+        }
+
+        function getShipIcon() {
+            return `<svg viewBox="0 0 24 24"><path d="M20 21c-1.39 0-2.78-.47-4-1.32-2.44 1.71-5.56 1.71-8 0C6.78 20.53 5.39 21 4 21H2v2h2c1.38 0 2.74-.35 4-.99 2.52 1.29 5.48 1.29 8 0 1.26.65 2.62.99 4 .99h2v-2h-2zM3.95 19H4c1.6 0 3.02-.88 4-2 .98 1.12 2.4 2 4 2s3.02-.88 4-2c.98 1.12 2.4 2 4 2h.05l1.89-6.68c.08-.26.06-.54-.06-.78s-.34-.42-.6-.5L20 10.62V6c0-1.1-.9-2-2-2h-3V1H9v3H6c-1.1 0-2 .9-2 2v4.62l-1.29.42c-.26.08-.48.26-.6.5s-.15.52-.06.78L3.95 19zM6 6h12v3.97L12 8 6 9.97V6z"/></svg>`;
+        }
+
+        function getClockIcon() {
+            return `<svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/></svg>`;
+        }
+
+        function highlightMatch(text, query) {
+            if (!query) return escapeHtml(text);
+            const escaped = escapeHtml(text);
+            const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            return escaped.replace(regex, '<mark>$1</mark>');
+        }
+
+        function levenshteinDistance(a, b) {
+            const matrix = Array(b.length + 1).fill(null).map(() => Array(a.length + 1).fill(null));
+            for (let i = 0; i <= a.length; i++) matrix[0][i] = i;
+            for (let j = 0; j <= b.length; j++) matrix[j][0] = j;
+            for (let j = 1; j <= b.length; j++) {
+                for (let i = 1; i <= a.length; i++) {
+                    const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+                    matrix[j][i] = Math.min(matrix[j][i - 1] + 1, matrix[j - 1][i] + 1, matrix[j - 1][i - 1] + cost);
+                }
+            }
+            return matrix[b.length][a.length];
+        }
+
+        function findSuggestions(query) {
+            if (!query || query.length < 2) return [];
+            const q = query.toLowerCase();
+
+            // Exact and prefix matches
+            const matches = allShips.filter(ship =>
+                ship.name.toLowerCase().includes(q) || ship.imo.includes(q)
+            ).slice(0, MAX_SUGGESTIONS);
+
+            return matches;
+        }
+
+        function findFuzzyMatch(query) {
+            if (!query || query.length < 3) return null;
+            const q = query.toLowerCase();
+
+            // Find closest match using Levenshtein distance
+            let bestMatch = null;
+            let bestScore = Infinity;
+
+            for (const ship of allShips.slice(0, 2000)) { // Limit for performance
+                const words = ship.name.toLowerCase().split(/\s+/);
+                for (const word of words) {
+                    if (word.length >= 3) {
+                        const dist = levenshteinDistance(q, word);
+                        if (dist < bestScore && dist <= 2 && dist < word.length * 0.4) {
+                            bestScore = dist;
+                            bestMatch = ship;
+                        }
+                    }
+                }
+            }
+
+            return bestMatch;
+        }
+
+        function updateAutocomplete(query) {
+            const dropdown = document.getElementById('autocomplete-dropdown');
+            const recent = getRecentSearches();
+            const suggestions = findSuggestions(query);
+
+            let html = '';
+
+            // Show recent searches if no query
+            if (!query && recent.length > 0) {
+                html += `<div class="autocomplete-section">
+                    <div class="autocomplete-section-title">Recent Searches</div>
+                    ${recent.map(ship => `
+                        <div class="autocomplete-item" data-imo="${ship.imo}">
+                            <div class="autocomplete-item-icon recent">${getClockIcon()}</div>
+                            <div class="autocomplete-item-content">
+                                <div class="autocomplete-item-name">${escapeHtml(ship.name)}</div>
+                                <div class="autocomplete-item-meta">${escapeHtml(ship.type)}</div>
+                            </div>
+                            <div class="autocomplete-item-rank">#${ship.rank}</div>
+                        </div>
+                    `).join('')}
+                    <div class="clear-recent" onclick="clearRecentSearches()">Clear recent</div>
+                </div>`;
+            }
+
+            // Show suggestions
+            if (query && suggestions.length > 0) {
+                html += `<div class="autocomplete-section">
+                    <div class="autocomplete-section-title">Ships</div>
+                    ${suggestions.map(ship => `
+                        <div class="autocomplete-item" data-imo="${ship.imo}">
+                            <div class="autocomplete-item-icon">${getShipIcon()}</div>
+                            <div class="autocomplete-item-content">
+                                <div class="autocomplete-item-name">${highlightMatch(ship.name, query)}</div>
+                                <div class="autocomplete-item-meta">${escapeHtml(ship.type)} · IMO ${ship.imo}</div>
+                            </div>
+                            <div class="autocomplete-item-rank">#${ship.rank}</div>
+                        </div>
+                    `).join('')}
+                </div>`;
+            }
+
+            // Show "did you mean" if no matches but fuzzy match found
+            if (query && suggestions.length === 0) {
+                const fuzzyMatch = findFuzzyMatch(query);
+                if (fuzzyMatch) {
+                    html += `<div class="autocomplete-hint">
+                        Did you mean <a href="#" onclick="selectShip('${fuzzyMatch.imo}'); return false;">${escapeHtml(fuzzyMatch.name)}</a>?
+                    </div>`;
+                } else {
+                    html += `<div class="autocomplete-hint">No ships found matching "${escapeHtml(query)}"</div>`;
+                }
+            }
+
+            dropdown.innerHTML = html;
+            dropdown.classList.toggle('visible', html.length > 0);
+            selectedAutocompleteIndex = -1;
+
+            // Add click handlers
+            dropdown.querySelectorAll('.autocomplete-item').forEach((item, index) => {
+                item.addEventListener('click', () => selectShip(item.dataset.imo));
+                item.addEventListener('mouseenter', () => {
+                    dropdown.querySelectorAll('.autocomplete-item').forEach(i => i.classList.remove('selected'));
+                    item.classList.add('selected');
+                    selectedAutocompleteIndex = index;
+                });
+            });
+        }
+
+        function selectShip(imo) {
+            const ship = allShips.find(s => s.imo === imo);
+            if (ship) {
+                saveRecentSearch(ship);
+                window.location.href = `ship.html?id=${encodeId(imo)}`;
+            }
+        }
+
+        function hideAutocomplete() {
+            document.getElementById('autocomplete-dropdown').classList.remove('visible');
+        }
+
         // Event listeners
         document.getElementById('year-select').addEventListener('change', (e) => {
             loadData(e.target.value);
         });
 
-        document.getElementById('search').addEventListener('input', applyFilters);
+        const searchInput = document.getElementById('search');
+
+        searchInput.addEventListener('input', (e) => {
+            applyFilters();
+            updateAutocomplete(e.target.value.trim());
+        });
+
+        searchInput.addEventListener('focus', () => {
+            updateAutocomplete(searchInput.value.trim());
+        });
+
+        searchInput.addEventListener('keydown', (e) => {
+            const dropdown = document.getElementById('autocomplete-dropdown');
+            const items = dropdown.querySelectorAll('.autocomplete-item');
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedAutocompleteIndex = Math.min(selectedAutocompleteIndex + 1, items.length - 1);
+                items.forEach((item, i) => item.classList.toggle('selected', i === selectedAutocompleteIndex));
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedAutocompleteIndex = Math.max(selectedAutocompleteIndex - 1, 0);
+                items.forEach((item, i) => item.classList.toggle('selected', i === selectedAutocompleteIndex));
+            } else if (e.key === 'Enter' && selectedAutocompleteIndex >= 0) {
+                e.preventDefault();
+                const selectedItem = items[selectedAutocompleteIndex];
+                if (selectedItem) selectShip(selectedItem.dataset.imo);
+            } else if (e.key === 'Escape') {
+                hideAutocomplete();
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.autocomplete-container')) {
+                hideAutocomplete();
+            }
+        });
+
         document.getElementById('ship-type-filter').addEventListener('change', applyFilters);
 
         document.getElementById('prev-btn').addEventListener('click', () => {
