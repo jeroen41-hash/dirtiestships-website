@@ -4,5 +4,9 @@
     "mmsi": "352004564",
     "year_of_build": "2024",
     "gross_tonnage": "75698",
-    "deadweight": "19800"
+    "deadweight": "19800",
+    "cii_rating": "A",
+    "cii_attained": 3.539,
+    "cii_required": 8.462,
+    "cii_year": 2024
 }

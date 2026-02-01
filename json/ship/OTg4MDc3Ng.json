@@ -5,5 +5,9 @@
     "year_of_build": "2023",
     "length_overall": "112.00",
     "beam": "18.00",
-    "gross_tonnage": "7200"
+    "gross_tonnage": "7200",
+    "cii_rating": "E",
+    "cii_attained": 81.526,
+    "cii_required": 30.983,
+    "cii_year": 2024
 }

@@ -5,5 +5,9 @@
     "year_of_build": "2024",
     "length_overall": "199.90",
     "gross_tonnage": "68534",
-    "deadweight": "19322"
+    "deadweight": "19322",
+    "cii_rating": "C",
+    "cii_attained": 5.014,
+    "cii_required": 5.086,
+    "cii_year": 2024
 }
