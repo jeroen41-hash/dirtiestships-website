@@ -166,6 +166,7 @@
             <p style="color: #888; font-size: 0.9rem; margin-bottom: 20px;">
                 Each dot represents a ship. Lower CII values indicate better carbon efficiency.
                 Ships above the reference line (CII ratio > 1) exceed their required emissions intensity.
+                <span id="outlier-note" style="color: #f97316;"></span>
             </p>
 
             <div class="cii-stats" id="cii-stats">
@@ -279,6 +280,9 @@
             document.getElementById('cii-stats').innerHTML = statsHtml;
         }
 
+        // Cap CII at 99th percentile to exclude extreme outliers
+        const CII_MAX_DISPLAY = 50;
+
         function getFilteredShips() {
             const typeFilter = document.getElementById('type-filter').value;
             const ratingFilter = document.getElementById('rating-filter').value;
@@ -286,6 +290,8 @@
             return allShips.filter(ship => {
                 if (typeFilter !== 'all' && ship.type !== typeFilter) return false;
                 if (ratingFilter !== 'all' && ship.cii_rating !== ratingFilter) return false;
+                // Exclude extreme outliers that disrupt the chart scale
+                if (ship.cii_attained > CII_MAX_DISPLAY) return false;
                 return true;
             });
         }
@@ -293,6 +299,22 @@
         function renderChart() {
             const ships = getFilteredShips();
             const yAxisMode = document.getElementById('y-axis-mode').value;
+
+            // Count outliers excluded
+            const typeFilter = document.getElementById('type-filter').value;
+            const ratingFilter = document.getElementById('rating-filter').value;
+            const outliers = allShips.filter(ship => {
+                if (typeFilter !== 'all' && ship.type !== typeFilter) return false;
+                if (ratingFilter !== 'all' && ship.cii_rating !== ratingFilter) return false;
+                return ship.cii_attained > CII_MAX_DISPLAY;
+            }).length;
+
+            const outlierNote = document.getElementById('outlier-note');
+            if (outliers > 0) {
+                outlierNote.textContent = `(${outliers} extreme outliers with CII > ${CII_MAX_DISPLAY} hidden)`;
+            } else {
+                outlierNote.textContent = '';
+            }
 
             updateStats(ships);
 
