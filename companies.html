@@ -279,8 +279,12 @@
                 isCountry: false
             }));
 
+            // Only include countries with emissions smaller than the top company
+            const topCompanyEmissions = filteredCompanies.length > 0 ? filteredCompanies[0].co2eq : 0;
+            const countriesSmaller = europeanCountryEmissions.filter(c => c.co2 < topCompanyEmissions);
+
             // Merge and sort by emissions (descending)
-            const merged = [...companiesWithRank, ...europeanCountryEmissions]
+            const merged = [...companiesWithRank, ...countriesSmaller]
                 .sort((a, b) => b.co2 - a.co2);
 
             // Find which items fall in current page range
@@ -314,11 +318,12 @@
                 }
             }).join('');
 
-            renderPagination(merged.length);
+            renderPagination(merged.length, countriesSmaller.length);
         }
 
-        function renderPagination(totalItems) {
-            const total = totalItems || filteredCompanies.length + europeanCountryEmissions.length;
+        function renderPagination(totalItems, countryCount) {
+            const total = totalItems || filteredCompanies.length;
+            const countries = countryCount || 0;
             const totalPages = Math.ceil(total / ROWS_PER_PAGE);
             const pagination = document.getElementById('pagination');
 
@@ -327,15 +332,18 @@
                 return;
             }
 
+            const countryText = countries > 0 ? ` + ${countries} countries` : '';
             pagination.innerHTML = `
                 <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>
-                <span class="page-info">Page ${currentPage} of ${totalPages} (${filteredCompanies.length} companies + ${europeanCountryEmissions.length} countries)</span>
+                <span class="page-info">Page ${currentPage} of ${totalPages} (${filteredCompanies.length} companies${countryText})</span>
                 <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>
             `;
         }
 
         function goToPage(page) {
-            const totalPages = Math.ceil((filteredCompanies.length + europeanCountryEmissions.length) / ROWS_PER_PAGE);
+            const topCompanyEmissions = filteredCompanies.length > 0 ? filteredCompanies[0].co2eq : 0;
+            const countriesCount = europeanCountryEmissions.filter(c => c.co2 < topCompanyEmissions).length;
+            const totalPages = Math.ceil((filteredCompanies.length + countriesCount) / ROWS_PER_PAGE);
             if (page >= 1 && page <= totalPages) {
                 currentPage = page;
                 renderCompanyTable();
