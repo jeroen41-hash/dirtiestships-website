@@ -1,5 +1,10 @@
 {
     "imo": "9306213",
-    "updated_at": "2026-02-01 05:08:04",
-    "mmsi": "636019225"
+    "updated_at": "2026-02-02 04:47:22",
+    "mmsi": "636019225",
+    "year_of_build": "2007",
+    "length_overall": "168.02",
+    "beam": "25.73",
+    "gross_tonnage": "15345",
+    "deadweight": "20993"
 }

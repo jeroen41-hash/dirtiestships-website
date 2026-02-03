@@ -1,14 +1,10 @@
 {
     "imo": "9537977",
-    "updated_at": "2026-01-30 19:11:12",
+    "updated_at": "2026-02-03 05:25:12",
     "mmsi": "538011226",
     "year_of_build": "2011",
     "length_overall": "180.00",
     "beam": "30.04",
     "gross_tonnage": "24210",
-    "deadweight": "35732",
-    "cii_rating": "A",
-    "cii_attained": 6.477,
-    "cii_required": 7.914,
-    "cii_year": 2024
+    "deadweight": "35732"
 }
