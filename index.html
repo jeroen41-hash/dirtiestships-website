@@ -74,7 +74,15 @@
                 </div>
                 <div class="stat-box">
                     <div class="stat-value" id="total-ets">-</div>
-                    <div class="stat-label">EU ETS (€ billions)</div>
+                    <div class="stat-label">EU ETS 2024 (€ bn)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="eua-price">-</div>
+                    <div class="stat-label">EUA Price Today</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="ets-projected">-</div>
+                    <div class="stat-label">EU ETS 2026 (€ bn)</div>
                 </div>
             </div>
         </header>
@@ -142,10 +150,33 @@
         let sortDirection = 'asc';
         let currentYear = '2024';
         let meohVessels = new Set();
+        let euaPrice = 65; // Default fallback price
 
         // Unpadded Base64 encoding (removes trailing =)
         function encodeId(imo) {
             return btoa(imo).replace(/=+$/, '');
+        }
+
+        // Load EUA price
+        fetch('json/eua_price.json')
+            .then(response => response.json())
+            .then(data => {
+                euaPrice = data.price;
+                document.getElementById('eua-price').textContent = '€' + euaPrice.toFixed(0);
+                // Recalculate projected ETS if data already loaded
+                if (allShips.length > 0 && currentYear === '2024') {
+                    updateProjectedEts();
+                }
+            })
+            .catch(() => {
+                document.getElementById('eua-price').textContent = '€' + euaPrice.toFixed(0);
+            });
+
+        function updateProjectedEts() {
+            // 2026 projected: 100% scope * current EUA price (assuming same emissions as 2024)
+            const totalEmissions = allShips.reduce((sum, ship) => sum + (ship.co2eq || 0), 0);
+            const etsProjected = 1.0 * totalEmissions * euaPrice;
+            document.getElementById('ets-projected').textContent = (etsProjected / 1000000000).toFixed(1);
         }
 
         // Load MeOH-capable vessels list
@@ -184,12 +215,15 @@
                     const totalEmissions = isNew ? data.total_co2eq : data.total_co2;
                     document.getElementById('total-co2').textContent = (totalEmissions / 1000000).toFixed(2);
 
-                    // Calculate EU ETS: 40% * total CO2 * €65 per tonne, display in billions (2024 only)
+                    // Calculate EU ETS 2024: 40% scope * €65/tonne (historical)
                     if (year === '2024') {
-                        const euEts = 0.4 * totalEmissions * 65;
-                        document.getElementById('total-ets').textContent = (euEts / 1000000000).toFixed(1);
+                        const euEts2024 = 0.4 * totalEmissions * 65;
+                        document.getElementById('total-ets').textContent = (euEts2024 / 1000000000).toFixed(1);
+                        // Calculate 2026 projected: 100% scope * current EUA price
+                        updateProjectedEts();
                     } else {
                         document.getElementById('total-ets').textContent = 'N/A';
+                        document.getElementById('ets-projected').textContent = 'N/A';
                     }
 
                     // Populate ship type filter
