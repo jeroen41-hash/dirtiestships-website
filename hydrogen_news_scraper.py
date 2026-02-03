@@ -75,7 +75,8 @@ FEEDS = [
     "https://www.rivieramm.com/rss/news-content-hub",
     "https://shipandbunker.com/news/feed",
     "https://splash247.com/feed/",
-    "https://www.google.com/alerts/feeds/11361701321732954749/806710994395188837"
+    "https://prod-qt-images.s3.amazonaws.com/production/bairdmaritime/feed.xml",
+    "https://www.google.nl/alerts/feeds/11361701321732954749/13243579899754437557"
 ]
 
 # Keywords for initial filtering (article must contain at least one)

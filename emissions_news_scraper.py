@@ -1,5 +1,7 @@
 # 1. FIX: Monkey patch for the new lxml_html_clean module
 import sys
+
+
 try:
     import lxml_html_clean
     sys.modules['lxml.html.clean'] = lxml_html_clean
@@ -13,6 +15,8 @@ import time
 import subprocess
 from datetime import datetime
 from newspaper import Article
+
+
 
 # --- AI SUMMARY CONFIGURATION ---
 try:
@@ -75,6 +79,7 @@ FEEDS = [
     "https://www.rivieramm.com/rss/news-content-hub",
     "https://shipandbunker.com/news/feed",
     "https://splash247.com/feed/",
+    "https://prod-qt-images.s3.amazonaws.com/production/bairdmaritime/feed.xml",
     "https://www.google.nl/alerts/feeds/11361701321732954749/806710994395188837"
 ]
 
@@ -165,7 +170,7 @@ def slugify(text):
     return "".join([c if c.isalnum() else "-" for c in text.lower()]).strip("-")[:50]
 
 def scrape_and_update():
-    print(f"[{datetime.now()}] Starting Scrape for 2026 Maritime News...")
+    print(f"[{datetime.now()}] Starting Scrape for 2026 Emissions News...")
     
     # Load existing index
     if os.path.exists(NEWS_INDEX_FILE):
