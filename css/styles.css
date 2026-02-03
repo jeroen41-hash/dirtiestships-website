@@ -198,6 +198,24 @@ nav a:hover, nav a.active {
     margin-top: 5px;
 }
 
+.stat-box-link {
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.stat-box-link:hover {
+    background: rgba(78, 205, 196, 0.2);
+    border-color: #4ecdc4;
+    transform: translateY(-2px);
+}
+
+.stat-box-link .stat-label::after {
+    content: " \2197";
+    font-size: 0.7rem;
+}
+
 /* ============================================
    CONTROLS (SEARCH & FILTERS)
    ============================================ */
