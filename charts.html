@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VWX5EMQSLM"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-VWX5EMQSLM');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CO₂ emissions charts by ship type, company, and country. Visual breakdown of maritime pollution in European waters.">
+    <meta name="keywords" content="ship emissions chart, CO2 by ship type, shipping company emissions, maritime emissions by country, vessel pollution data">
+    <meta name="author" content="Dirtiest Ships">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://dirtiestships.com/charts.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dirtiestships.com/charts.html">
+    <meta property="og:title" content="CO₂ Emissions Charts – Ship Type, Company, Country">
+    <meta property="og:description" content="Visual breakdown of maritime CO₂ emissions by ship type, company, and flag state.">
+    <meta property="og:site_name" content="Dirtiest Ships">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://dirtiestships.com/charts.html">
+    <meta name="twitter:title" content="CO₂ Emissions Charts – Ship Type, Company, Country">
+    <meta name="twitter:description" content="Visual breakdown of maritime CO₂ emissions by ship type, company, and flag state.">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9641573711172527"
+     crossorigin="anonymous"></script>
+    <title>CO₂ Emissions Charts – By Type, Company & Country | DirtiestShips</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .chart-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .chart-tab {
+            padding: 10px 25px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 5px;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+        .chart-tab:hover {
+            background: rgba(78, 205, 196, 0.2);
+            color: #fff;
+        }
+        .chart-tab.active {
+            background: #4ecdc4;
+            color: #1a1a2e;
+            border-color: #4ecdc4;
+            font-weight: bold;
+        }
+        .chart-note {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="images/ship-smoke-left.jpg" alt="" class="header-img header-img-left">
+            <img src="images/ship-smoke-right.jpg" alt="" class="header-img header-img-right">
+            <h1>Dirtiest Ships <span style="font-size: 0.5em; font-weight: normal;">(in Europe)</span></h1>
+            <p class="subtitle" id="subtitle">CO2-eq Emissions by Ship Type (2024)</p>
+            <nav>
+                <div class="year-selector">
+                    <select id="year-select">
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                    </select>
+                </div>
+                <a href="index.html">Rankings</a>
+                <a href="charts.html" class="active">Charts</a>
+                <a href="compare.html">Compare</a>
+                <a href="cii.html">CII Ratings</a>
+                <a href="news.html">News</a>
+                <a href="FAQ.html">Why?</a>
+            </nav>
+        </header>
+
+        <div class="chart-tabs">
+            <button class="chart-tab active" data-view="type">By Ship Type</button>
+            <button class="chart-tab" data-view="company">By Company</button>
+            <button class="chart-tab" data-view="country">By Country</button>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-wrapper">
+                <canvas id="chart"></canvas>
+            </div>
+            <div class="chart-note" id="chart-note"></div>
+        </div>
+
+        <footer>
+            <div class="footer-links">
+                <a href="FAQ.html">FAQ</a>
+                <a href="rules.html">Regulations</a>
+                <a href="disclaimer.html">Disclaimer</a>
+                <a href="mailto:hello@dirtiestships.com">hello@dirtiestships.com</a>
+            </div>
+            <p>Data source: <a href="https://mrv.emsa.europa.eu/" target="_blank">EU MRV Regulation</a></p>
+            <p>This data shows annual CO2 emissions from ships calling at EU/EEA ports.</p>
+        </footer>
+    </div>
+
+    <script>
+        let chart = null;
+        let currentView = 'type';
+        let currentYear = '2024';
+
+        const notes = {
+            type: '',
+            company: '<strong>Note:</strong> Companies are consolidated where the same parent company reports under multiple subsidiaries. For example, MSC Group includes MSC Shipmanagement Ltd, Mediterranean Shipping Co, and MSC Cruises.',
+            country: '<strong>Note:</strong> Country refers to the flag state (port of registry), not the ship\'s operating region or company nationality. Major flag states like Liberia, Marshall Islands, and Panama are popular "flags of convenience" used by international shipping companies.'
+        };
+
+        const viewConfig = {
+            type: {
+                file: (year) => `json/${year}_ships_by_type.json`,
+                labelField: 'type',
+                title: (year, co2Label) => `${co2Label} Emissions by Ship Type (${year})`,
+                available: ['2024', '2023', '2022', '2021', '2020']
+            },
+            company: {
+                file: (year) => `json/${year}_companies_top15.json`,
+                labelField: 'company',
+                title: (year, co2Label) => `Top 15 Companies by ${co2Label} Emissions (${year})`,
+                available: ['2024']
+            },
+            country: {
+                file: (year) => `json/${year}_countries_top20.json`,
+                labelField: 'country',
+                title: (year, co2Label) => `Top 20 Countries by ${co2Label} Emissions (${year})`,
+                available: ['2024', '2023', '2022', '2021', '2020']
+            }
+        };
+
+        const colors = [
+            '#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3', '#f38181',
+            '#aa96da', '#fcbad3', '#a8d8ea', '#ff9a3c', '#1fab89',
+            '#62d2a2', '#9df3c4', '#d7fbe8', '#f9ed69', '#f08a5d',
+            '#b83b5e', '#6a2c70', '#c9b1ff', '#5c969e', '#ffc75f'
+        ];
+
+        function loadChart() {
+            const config = viewConfig[currentView];
+            const isNew = currentYear === '2024';
+            const co2Field = isNew ? 'co2eq' : 'co2';
+            const co2Label = isNew ? 'CO2-eq' : 'CO2';
+
+            // Check if view is available for selected year
+            if (!config.available.includes(currentYear)) {
+                if (chart) {
+                    chart.destroy();
+                    chart = null;
+                }
+                document.querySelector('.chart-wrapper').innerHTML =
+                    `<p class="loading">${currentView === 'company' ? 'Company' : 'This'} data is only available for ${config.available.join(', ')}.</p>`;
+                document.getElementById('chart-note').innerHTML = '';
+                document.getElementById('subtitle').textContent = config.title(currentYear, co2Label);
+                return;
+            }
+
+            // Restore canvas if needed
+            if (!document.getElementById('chart')) {
+                document.querySelector('.chart-wrapper').innerHTML = '<canvas id="chart"></canvas>';
+            }
+
+            document.getElementById('subtitle').textContent = config.title(currentYear, co2Label);
+            document.getElementById('chart-note').innerHTML = notes[currentView];
+
+            fetch(config.file(currentYear))
+                .then(response => response.json())
+                .then(data => {
+                    const ctx = document.getElementById('chart').getContext('2d');
+
+                    if (chart) {
+                        chart.destroy();
+                    }
+
+                    chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: data.map(d => d[config.labelField]),
+                            datasets: [{
+                                label: `${co2Label} Emissions (million tonnes)`,
+                                data: data.map(d => (d[co2Field] || d.co2) / 1000000),
+                                backgroundColor: colors.slice(0, data.length),
+                                borderColor: colors.slice(0, data.length),
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const item = data[context.dataIndex];
+                                            const emissions = item[co2Field] || item.co2;
+                                            return [
+                                                `${co2Label}: ${(emissions / 1000000).toFixed(2)} million tonnes`,
+                                                `Ships: ${item.count.toLocaleString()}`
+                                            ];
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: { color: '#888', maxRotation: 45, minRotation: 45 },
+                                    grid: { color: 'rgba(255,255,255,0.1)' }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        color: '#888',
+                                        callback: function(value) { return value + ' M'; }
+                                    },
+                                    grid: { color: 'rgba(255,255,255,0.1)' },
+                                    title: { display: true, text: `${co2Label} (million tonnes)`, color: '#888' }
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => {
+                    document.querySelector('.chart-wrapper').innerHTML = '<p class="loading">Error loading data.</p>';
+                });
+        }
+
+        // Tab click handlers
+        document.querySelectorAll('.chart-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentView = tab.dataset.view;
+                loadChart();
+            });
+        });
+
+        // Year selector
+        document.getElementById('year-select').addEventListener('change', (e) => {
+            currentYear = e.target.value;
+            loadChart();
+        });
+
+        // Initial load
+        loadChart();
+    </script>
+</body>
+</html>
