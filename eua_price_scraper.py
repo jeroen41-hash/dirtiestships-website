@@ -3,8 +3,8 @@
 Fetch current EU ETS carbon price (EUA - EU Allowance) and save to JSON.
 
 Sources tried in order:
-1. Investing.com (reliable financial data)
-2. Trading Economics
+1. Trading Economics (primary, matches frontend link)
+2. Investing.com
 3. Fallback to last known value
 
 Run daily via cron:
@@ -155,12 +155,12 @@ def main():
     print(f"[{datetime.now()}] Fetching EUA price...")
 
     # Try sources in order of reliability
-    price = fetch_investing_com()
-    source = "Investing.com"
+    price = fetch_trading_economics()
+    source = "Trading Economics"
 
     if price is None:
-        price = fetch_trading_economics()
-        source = "Trading Economics"
+        price = fetch_investing_com()
+        source = "Investing.com"
 
     if price is None:
         price = fetch_icap()
