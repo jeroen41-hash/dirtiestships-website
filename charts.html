@@ -111,6 +111,48 @@
             <div class="chart-note" id="chart-note"></div>
         </div>
 
+        <div class="chart-container" id="company-list-container" style="display: none;">
+            <h3 style="color: #4ecdc4; margin-bottom: 20px;">All Companies by CO2-eq Emissions</h3>
+            <div class="controls">
+                <div class="search-box">
+                    <input type="text" id="company-search" placeholder="Search companies...">
+                </div>
+            </div>
+            <div class="table-container">
+                <table id="company-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Company</th>
+                            <th>CO2-eq (tonnes)</th>
+                            <th>Ships</th>
+                        </tr>
+                    </thead>
+                    <tbody id="company-tbody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination" id="company-pagination"></div>
+        </div>
+
+        <div class="chart-container" id="country-list-container" style="display: none;">
+            <h3 style="color: #4ecdc4; margin-bottom: 20px;" id="country-list-title">Top 20 Countries by CO2-eq Emissions</h3>
+            <div class="table-container">
+                <table id="country-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Country</th>
+                            <th id="country-co2-header">CO2-eq (tonnes)</th>
+                            <th>Ships</th>
+                        </tr>
+                    </thead>
+                    <tbody id="country-tbody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <footer>
             <div class="footer-links">
                 <a href="FAQ.html">FAQ</a>
@@ -127,6 +169,12 @@
         let chart = null;
         let currentView = 'type';
         let currentYear = '2024';
+
+        // Company list state
+        let allCompanies = [];
+        let filteredCompanies = [];
+        const ROWS_PER_PAGE = 50;
+        let companyPage = 1;
 
         const notes = {
             type: '',
@@ -162,11 +210,46 @@
             '#b83b5e', '#6a2c70', '#c9b1ff', '#5c969e', '#ffc75f'
         ];
 
+        // European countries with annual CO2 emissions (2023 EEA data, in tonnes)
+        const europeanCountryEmissions = [
+            { name: 'Malta', flag: '\u{1F1F2}\u{1F1F9}', co2: 2100000, isCountry: true },
+            { name: 'Iceland', flag: '\u{1F1EE}\u{1F1F8}', co2: 3500000, isCountry: true },
+            { name: 'Cyprus', flag: '\u{1F1E8}\u{1F1FE}', co2: 7200000, isCountry: true },
+            { name: 'Luxembourg', flag: '\u{1F1F1}\u{1F1FA}', co2: 8100000, isCountry: true },
+            { name: 'Latvia', flag: '\u{1F1F1}\u{1F1FB}', co2: 8400000, isCountry: true },
+            { name: 'Estonia', flag: '\u{1F1EA}\u{1F1EA}', co2: 10500000, isCountry: true },
+            { name: 'Slovenia', flag: '\u{1F1F8}\u{1F1EE}', co2: 13200000, isCountry: true },
+            { name: 'Lithuania', flag: '\u{1F1F1}\u{1F1F9}', co2: 14100000, isCountry: true },
+            { name: 'Croatia', flag: '\u{1F1ED}\u{1F1F7}', co2: 17500000, isCountry: true },
+            { name: 'Ireland', flag: '\u{1F1EE}\u{1F1EA}', co2: 37800000, isCountry: true },
+        ];
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function getEmissionSeverity(rank) {
+            if (rank <= 15) return 'emission-extreme';
+            if (rank <= 50) return 'emission-high';
+            if (rank <= 200) return 'emission-medium';
+            if (rank <= 500) return 'emission-low';
+            return 'emission-minimal';
+        }
+
         function loadChart() {
             const config = viewConfig[currentView];
             const isNew = currentYear === '2024';
             const co2Field = isNew ? 'co2eq' : 'co2';
             const co2Label = isNew ? 'CO2-eq' : 'CO2';
+
+            // Show/hide list sections based on current view
+            document.getElementById('company-list-container').style.display =
+                (currentView === 'company' && currentYear === '2024') ? 'block' : 'none';
+            document.getElementById('country-list-container').style.display =
+                (currentView === 'country') ? 'block' : 'none';
 
             // Check if view is available for selected year
             if (!config.available.includes(currentYear)) {
@@ -248,6 +331,153 @@
                 })
                 .catch(error => {
                     document.querySelector('.chart-wrapper').innerHTML = '<p class="loading">Error loading data.</p>';
+                });
+
+            // Load list data for company/country views
+            if (currentView === 'company' && currentYear === '2024') {
+                loadCompanyList();
+            }
+            if (currentView === 'country') {
+                loadCountryList();
+            }
+        }
+
+        // ---- Company list ----
+        function loadCompanyList() {
+            fetch('json/2024_companies_all.json')
+                .then(response => response.json())
+                .then(data => {
+                    allCompanies = data;
+                    filteredCompanies = data;
+                    companyPage = 1;
+                    renderCompanyTable();
+                })
+                .catch(error => {
+                    document.getElementById('company-tbody').innerHTML =
+                        '<tr><td colspan="4">Error loading company data.</td></tr>';
+                });
+        }
+
+        function renderCompanyTable() {
+            const tbody = document.getElementById('company-tbody');
+            const start = (companyPage - 1) * ROWS_PER_PAGE;
+            const end = start + ROWS_PER_PAGE;
+
+            const companiesWithRank = filteredCompanies.map((c, i) => ({
+                ...c,
+                rank: i + 1,
+                co2: c.co2eq,
+                isCountry: false
+            }));
+
+            const topCompanyEmissions = filteredCompanies.length > 0 ? filteredCompanies[0].co2eq : 0;
+            const countriesSmaller = europeanCountryEmissions.filter(c => c.co2 < topCompanyEmissions);
+
+            const merged = [...companiesWithRank, ...countriesSmaller]
+                .sort((a, b) => b.co2 - a.co2);
+
+            const pageData = merged.slice(start, end);
+
+            tbody.innerHTML = pageData.map((item, index) => {
+                const animDelay = `style="animation-delay: ${index * 0.02}s"`;
+
+                if (item.isCountry) {
+                    return `
+                        <tr class="country-row" ${animDelay}>
+                            <td class="rank"></td>
+                            <td>${item.flag} ${escapeHtml(item.name)} <span class="country-label">country</span></td>
+                            <td class="co2-value">${item.co2.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
+                            <td>-</td>
+                        </tr>
+                    `;
+                } else {
+                    const severityClass = getEmissionSeverity(item.rank);
+                    return `
+                        <tr class="${severityClass}" ${animDelay}>
+                            <td class="rank">${item.rank}</td>
+                            <td>${escapeHtml(item.company)}</td>
+                            <td class="co2-value">${item.co2.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                            <td>${item.count}</td>
+                        </tr>
+                    `;
+                }
+            }).join('');
+
+            renderCompanyPagination(merged.length, countriesSmaller.length);
+        }
+
+        function renderCompanyPagination(totalItems, countryCount) {
+            const total = totalItems || filteredCompanies.length;
+            const countries = countryCount || 0;
+            const totalPages = Math.ceil(total / ROWS_PER_PAGE);
+            const pagination = document.getElementById('company-pagination');
+
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+
+            const countryText = countries > 0 ? ` + ${countries} countries` : '';
+            pagination.innerHTML = `
+                <button onclick="goToCompanyPage(${companyPage - 1})" ${companyPage === 1 ? 'disabled' : ''}>Previous</button>
+                <span class="page-info">Page ${companyPage} of ${totalPages} (${filteredCompanies.length} companies${countryText})</span>
+                <button onclick="goToCompanyPage(${companyPage + 1})" ${companyPage === totalPages ? 'disabled' : ''}>Next</button>
+            `;
+        }
+
+        function goToCompanyPage(page) {
+            const topCompanyEmissions = filteredCompanies.length > 0 ? filteredCompanies[0].co2eq : 0;
+            const countriesCount = europeanCountryEmissions.filter(c => c.co2 < topCompanyEmissions).length;
+            const totalPages = Math.ceil((filteredCompanies.length + countriesCount) / ROWS_PER_PAGE);
+            if (page >= 1 && page <= totalPages) {
+                companyPage = page;
+                renderCompanyTable();
+            }
+        }
+
+        document.getElementById('company-search').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            if (query === '') {
+                filteredCompanies = allCompanies;
+            } else {
+                filteredCompanies = allCompanies.filter(c =>
+                    c.company.toLowerCase().includes(query)
+                );
+            }
+            companyPage = 1;
+            renderCompanyTable();
+        });
+
+        // ---- Country list ----
+        function loadCountryList() {
+            const isNew = currentYear === '2024';
+            const co2Field = isNew ? 'co2eq' : 'co2';
+            const co2Label = isNew ? 'CO2-eq' : 'CO2';
+
+            document.getElementById('country-list-title').textContent =
+                `Top 20 Countries by ${co2Label} Emissions (${currentYear})`;
+            document.getElementById('country-co2-header').textContent = `${co2Label} (tonnes)`;
+
+            fetch(`json/${currentYear}_countries_top20.json`)
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById('country-tbody');
+                    tbody.innerHTML = data.map((item, index) => {
+                        const emissions = item[co2Field] || item.co2;
+                        const animDelay = `style="animation-delay: ${index * 0.02}s"`;
+                        return `
+                            <tr ${animDelay}>
+                                <td class="rank">${index + 1}</td>
+                                <td>${escapeHtml(item.country)}</td>
+                                <td class="co2-value">${emissions.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                                <td>${item.count.toLocaleString()}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                })
+                .catch(error => {
+                    document.getElementById('country-tbody').innerHTML =
+                        '<tr><td colspan="4">Error loading country data.</td></tr>';
                 });
         }
 
