@@ -217,6 +217,70 @@ nav a:hover, nav a.active {
 }
 
 /* ============================================
+   EMISSIONS TREND POPUP
+   ============================================ */
+.trend-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.trend-overlay.visible {
+    display: flex;
+}
+
+.trend-popup {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border: 1px solid rgba(78, 205, 196, 0.3);
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.trend-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 1;
+}
+
+.trend-close:hover {
+    color: #fff;
+}
+
+.trend-title {
+    color: #4ecdc4;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.trend-chart-wrapper {
+    height: 300px;
+    position: relative;
+}
+
+.trend-note {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 15px;
+    text-align: center;
+}
+
+/* ============================================
    CONTROLS (SEARCH & FILTERS)
    ============================================ */
 .controls {

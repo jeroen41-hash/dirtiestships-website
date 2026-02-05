@@ -34,6 +34,7 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9641573711172527"
      crossorigin="anonymous"></script>
     <title>Dirtiest Ships in Europe – CO₂ Emissions Ranking | DirtiestShips.com</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -65,7 +66,7 @@
                     <div class="stat-value" id="total-ships">-</div>
                     <div class="stat-label">Ships Tracked</div>
                 </div>
-                <div class="stat-box">
+                <div class="stat-box stat-box-link" id="co2-stat-box" title="View emissions trend">
                     <div class="stat-value" id="total-co2">-</div>
                     <div class="stat-label" id="co2-label">Total CO2 (million tonnes)</div>
                 </div>
@@ -137,6 +138,17 @@
             <p>Data source: <a href="https://mrv.emsa.europa.eu/" target="_blank">EU MRV Regulation</a></p>
             <p>This data shows annual CO2 emissions from ships calling at EU/EEA ports.</p>
         </footer>
+    </div>
+
+    <div class="trend-overlay" id="trend-overlay">
+        <div class="trend-popup">
+            <button class="trend-close" id="trend-close">&times;</button>
+            <h3 class="trend-title">Total Emissions Trend (2020-2024)</h3>
+            <div class="trend-chart-wrapper">
+                <canvas id="trendChart"></canvas>
+            </div>
+            <p class="trend-note">Note: 2024 uses CO2-eq (includes methane etc.), 2020-2023 use CO2 only.</p>
+        </div>
     </div>
 
     <script>
@@ -572,6 +584,109 @@
                 currentPage = 1;
                 renderTable();
             });
+        });
+
+        // ============================================
+        // EMISSIONS TREND POPUP
+        // ============================================
+        let trendChart = null;
+        const yearlyTotals = {};
+
+        // Pre-load totals from all years for the trend chart
+        ['2020', '2021', '2022', '2023', '2024'].forEach(year => {
+            fetch(`json/${year}_ships_data.json`)
+                .then(r => r.json())
+                .then(data => {
+                    yearlyTotals[year] = {
+                        emissions: year === '2024' ? data.total_co2eq : data.total_co2,
+                        ships: data.total_ships,
+                        label: year === '2024' ? 'CO2-eq' : 'CO2'
+                    };
+                })
+                .catch(() => {});
+        });
+
+        function showTrendPopup() {
+            const overlay = document.getElementById('trend-overlay');
+            overlay.classList.add('visible');
+
+            const years = ['2020', '2021', '2022', '2023', '2024'];
+            const data = years.map(y => yearlyTotals[y]).filter(Boolean);
+            if (data.length === 0) return;
+
+            const emissions = years.map(y => yearlyTotals[y] ? yearlyTotals[y].emissions / 1000000 : null);
+            const labels = years.map(y => yearlyTotals[y] ? `${y}${y === '2024' ? ' (CO2-eq)' : ''}` : y);
+
+            const barColors = emissions.map((val, i) => {
+                if (i === 0 || val === null) return '#4ecdc4';
+                const prev = emissions[i - 1];
+                if (prev === null) return '#4ecdc4';
+                return val > prev ? '#ff6b6b' : '#4ecdc4';
+            });
+
+            if (trendChart) trendChart.destroy();
+
+            const ctx = document.getElementById('trendChart').getContext('2d');
+            trendChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total Emissions (million tonnes)',
+                        data: emissions,
+                        backgroundColor: barColors,
+                        borderColor: barColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const y = years[context.dataIndex];
+                                    const info = yearlyTotals[y];
+                                    if (!info) return '';
+                                    return [
+                                        `${info.label}: ${(info.emissions / 1000000).toFixed(2)} million tonnes`,
+                                        `Ships: ${info.ships.toLocaleString()}`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#888' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                color: '#888',
+                                callback: function(value) { return value.toFixed(0) + ' M'; }
+                            },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            title: { display: true, text: 'Million tonnes', color: '#888' }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.getElementById('co2-stat-box').addEventListener('click', showTrendPopup);
+
+        document.getElementById('trend-close').addEventListener('click', () => {
+            document.getElementById('trend-overlay').classList.remove('visible');
+        });
+
+        document.getElementById('trend-overlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                e.currentTarget.classList.remove('visible');
+            }
         });
 
         // Initial load
