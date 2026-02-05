@@ -285,7 +285,7 @@
                 }
             });
 
-            const meohTag = meohVessels.has(imo) ? ' <span class="meoh-tag">&lt;MeOH&gt;</span>' : '';
+            const isMeoh = meohVessels.has(imo);
 
             // Build sparkline data
             const sparklineHtml = buildSparkline(emissionsHistory);
@@ -315,7 +315,7 @@
                             ${getShipTypeIcon(ship.type)}
                         </div>
                         <div class="ship-hero-info">
-                            <h1 class="ship-hero-name">${escapeHtml(ship.name)}${meohTag}</h1>
+                            <h1 class="ship-hero-name">${escapeHtml(ship.name)}</h1>
                             <div class="ship-hero-meta">
                                 <span><span class="label">IMO:</span> <span class="value">${imo}</span></span>
                                 <span><span class="label">Type:</span> <span class="value">${escapeHtml(ship.type)}</span></span>
@@ -344,11 +344,21 @@
                             </div>
                             ${sparklineHtml}
                         </div>
-                        ${ciiRating ? `
-                        <div class="cii-badge">
-                            <div class="cii-badge-letter cii-${ciiRating.toLowerCase()}">${ciiRating}</div>
-                            <div class="cii-badge-label">CII ${vesselSpecs?.cii_year || '2024'}</div>
-                            ${ciiRatio ? `<div class="cii-badge-ratio">${ciiRatio}% of required</div>` : ''}
+                        ${ciiRating || isMeoh ? `
+                        <div class="hero-badges">
+                            ${ciiRating ? `
+                            <div class="cii-badge">
+                                <div class="cii-badge-letter cii-${ciiRating.toLowerCase()}">${ciiRating}</div>
+                                <div class="cii-badge-label">CII ${vesselSpecs?.cii_year || '2024'}</div>
+                                ${ciiRatio ? `<div class="cii-badge-ratio">${ciiRatio}% of required</div>` : ''}
+                            </div>
+                            ` : ''}
+                            ${isMeoh ? `
+                            <div class="meoh-badge">
+                                <div class="meoh-badge-icon">MeOH</div>
+                                <div class="meoh-badge-label">Methanol Capable</div>
+                            </div>
+                            ` : ''}
                         </div>
                         ` : ''}
                     </div>

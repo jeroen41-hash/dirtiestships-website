@@ -940,6 +940,53 @@ tr.emission-minimal {
     margin-top: 4px;
 }
 
+.hero-badges {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.meoh-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.meoh-badge-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    box-shadow: 0 4px 20px rgba(46, 204, 113, 0.3);
+    position: relative;
+}
+
+.meoh-badge-icon::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(46, 204, 113, 0.3);
+}
+
+.meoh-badge-label {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 10px;
+}
+
 .sparkline-container {
     margin-top: 15px;
     display: flex;
