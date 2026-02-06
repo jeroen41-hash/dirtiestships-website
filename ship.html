@@ -226,6 +226,165 @@
             `;
         }
 
+        // CII rating boundaries (ratio of attained/required)
+        const CII_BOUNDARIES = {
+            A: 0.83,  // A: ratio ≤ 0.83
+            B: 0.94,  // B: 0.83 < ratio ≤ 0.94
+            C: 1.06,  // C: 0.94 < ratio ≤ 1.06
+            D: 1.19,  // D: 1.06 < ratio ≤ 1.19
+            E: Infinity // E: ratio > 1.19
+        };
+
+        function buildCiiImprovementSection() {
+            if (!vesselSpecs || !vesselSpecs.cii_rating) return '';
+
+            const rating = vesselSpecs.cii_rating;
+            const attained = vesselSpecs.cii_attained;
+            const required = vesselSpecs.cii_required;
+
+            // Only show improvement section for D and E ratings
+            if (!['D', 'E'].includes(rating) || !attained || !required) return '';
+
+            const currentRatio = attained / required;
+
+            // Calculate target for next rating
+            let targetRating, targetRatio, targetAttained;
+            if (rating === 'E') {
+                targetRating = 'D';
+                targetRatio = CII_BOUNDARIES.D;
+            } else if (rating === 'D') {
+                targetRating = 'C';
+                targetRatio = CII_BOUNDARIES.C;
+            }
+
+            targetAttained = required * targetRatio;
+            const reductionNeeded = attained - targetAttained;
+            const reductionPct = (reductionNeeded / attained * 100);
+
+            // Get 2024 emissions for calculating absolute CO2 reduction
+            const ship2024 = shipData['2024'];
+            const totalCO2 = ship2024 ? ship2024.co2eq : null;
+            const co2Reduction = totalCO2 ? (totalCO2 * reductionPct / 100) : null;
+
+            // Calculate practical measures
+            // Speed reduction: fuel consumption ∝ speed³, so 10% speed → ~27% fuel savings
+            // To save X%, need to reduce speed by approximately (1 - (1-X)^(1/3)) * 100%
+            const speedReduction = (1 - Math.pow(1 - reductionPct/100, 1/3)) * 100;
+
+            // Alternative fuels: Methanol has ~7% lower CO2 per energy unit vs HFO
+            const methanolBlend = Math.min(100, reductionPct / 0.07);
+
+            // Also calculate what it takes to reach C (regulatory threshold)
+            let toC_reductionPct = null;
+            let toC_co2Reduction = null;
+            if (rating === 'E') {
+                const toC_targetAttained = required * CII_BOUNDARIES.C;
+                const toC_reductionNeeded = attained - toC_targetAttained;
+                toC_reductionPct = (toC_reductionNeeded / attained * 100);
+                toC_co2Reduction = totalCO2 ? (totalCO2 * toC_reductionPct / 100) : null;
+            }
+
+            return `
+                <div class="vessel-specs cii-improvement-section">
+                    <div class="specs-title">CII Improvement Pathway</div>
+                    <div class="improvement-intro">
+                        This ship currently has a <strong class="cii-rating-${rating.toLowerCase()}">${rating}</strong> rating.
+                        IMO regulations require ships with D/E ratings to submit corrective action plans.
+                        ${rating === 'E' ? ' Ships with E rating for 3 consecutive years face operational restrictions.' : ''}
+                    </div>
+
+                    <div class="improvement-targets">
+                        <div class="improvement-target">
+                            <div class="target-header">
+                                <span class="target-from cii-rating-${rating.toLowerCase()}">${rating}</span>
+                                <span class="target-arrow">→</span>
+                                <span class="target-to cii-rating-${targetRating.toLowerCase()}">${targetRating}</span>
+                            </div>
+                            <div class="target-stats">
+                                <div class="target-stat">
+                                    <span class="target-value">${reductionPct.toFixed(1)}%</span>
+                                    <span class="target-label">CII Reduction Needed</span>
+                                </div>
+                                ${co2Reduction ? `
+                                <div class="target-stat">
+                                    <span class="target-value">${Math.round(co2Reduction).toLocaleString()}</span>
+                                    <span class="target-label">Tonnes CO2-eq to Save</span>
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+
+                        ${rating === 'E' && toC_reductionPct ? `
+                        <div class="improvement-target target-compliance">
+                            <div class="target-header">
+                                <span class="target-from cii-rating-e">E</span>
+                                <span class="target-arrow">→</span>
+                                <span class="target-to cii-rating-c">C</span>
+                                <span class="compliance-badge">Compliance</span>
+                            </div>
+                            <div class="target-stats">
+                                <div class="target-stat">
+                                    <span class="target-value">${toC_reductionPct.toFixed(1)}%</span>
+                                    <span class="target-label">CII Reduction Needed</span>
+                                </div>
+                                ${toC_co2Reduction ? `
+                                <div class="target-stat">
+                                    <span class="target-value">${Math.round(toC_co2Reduction).toLocaleString()}</span>
+                                    <span class="target-label">Tonnes CO2-eq to Save</span>
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="improvement-measures">
+                        <div class="measures-title">Potential Measures to Achieve ${targetRating} Rating</div>
+                        <div class="measures-grid">
+                            <div class="measure-item">
+                                <div class="measure-icon">⚓</div>
+                                <div class="measure-content">
+                                    <div class="measure-name">Speed Reduction</div>
+                                    <div class="measure-value">${speedReduction.toFixed(1)}% slower cruising</div>
+                                    <div class="measure-note">Fuel use scales with speed³</div>
+                                </div>
+                            </div>
+                            <div class="measure-item">
+                                <div class="measure-icon">🧪</div>
+                                <div class="measure-content">
+                                    <div class="measure-name">Methanol Blend</div>
+                                    <div class="measure-value">${methanolBlend > 100 ? '100%+ (+ other measures)' : methanolBlend.toFixed(0) + '% methanol fuel'}</div>
+                                    <div class="measure-note">~7% CO2 reduction per 10% blend</div>
+                                </div>
+                            </div>
+                            <div class="measure-item">
+                                <div class="measure-icon">🔧</div>
+                                <div class="measure-content">
+                                    <div class="measure-name">Hull & Propeller</div>
+                                    <div class="measure-value">3-10% improvement possible</div>
+                                    <div class="measure-note">Regular cleaning & coating</div>
+                                </div>
+                            </div>
+                            <div class="measure-item">
+                                <div class="measure-icon">🗺️</div>
+                                <div class="measure-content">
+                                    <div class="measure-name">Route Optimization</div>
+                                    <div class="measure-value">5-10% improvement possible</div>
+                                    <div class="measure-note">Weather routing, port efficiency</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="improvement-note">
+                        <strong>Note:</strong> These are estimates based on industry averages. Actual improvements depend on
+                        ship-specific factors including age, design, operating profile, and trade routes.
+                        Multiple measures can be combined for greater effect.
+                    </div>
+                </div>
+            `;
+        }
+
         function buildCiiSection() {
             if (!vesselSpecs || !vesselSpecs.cii_rating) return '';
 
@@ -244,6 +403,7 @@
                         ${ratio ? `<div class="spec-item"><span class="spec-label">Ratio</span><span class="spec-value ${ratio > 100 ? 'cii-over' : 'cii-under'}">${ratio}%</span></div>` : ''}
                     </div>
                 </div>
+                ${buildCiiImprovementSection()}
             `;
         }
 
