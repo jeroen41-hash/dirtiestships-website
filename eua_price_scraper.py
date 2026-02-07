@@ -130,6 +130,12 @@ def save_price(price, source):
 def push_to_github():
     """Commit and push price update to GitHub."""
     try:
+        # Check if we're in a git repo
+        result = subprocess.run(["git", "rev-parse", "--git-dir"], capture_output=True, cwd=BASE_DIR)
+        if result.returncode != 0:
+            print(f"Not a git repository at {BASE_DIR}, skipping push.")
+            return False
+
         env = os.environ.copy()
         env['GIT_SSH_COMMAND'] = 'ssh -i /home/jeroen/.ssh/id_ed25519 -o StrictHostKeyChecking=no'
 
