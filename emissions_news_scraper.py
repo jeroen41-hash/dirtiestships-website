@@ -14,6 +14,7 @@ import os
 import time
 import subprocess
 from datetime import datetime
+from urllib.parse import urlparse, parse_qs
 from newspaper import Article
 
 
@@ -178,6 +179,15 @@ LOCAL_NEWS_DIR = os.path.join(BASE_DIR, "news_emissions")
 if not os.path.exists(LOCAL_NEWS_DIR):
     os.makedirs(LOCAL_NEWS_DIR)
 
+def resolve_url(url):
+    """Extract real URL from Google redirect URLs."""
+    parsed = urlparse(url)
+    if parsed.hostname and 'google' in parsed.hostname:
+        params = parse_qs(parsed.query)
+        if 'url' in params:
+            return params['url'][0]
+    return url
+
 def slugify(text):
     """Simple function to make titles safe for filenames."""
     return "".join([c if c.isalnum() else "-" for c in text.lower()]).strip("-")[:50]
@@ -202,10 +212,11 @@ def scrape_and_update():
         for entry in feed.entries:
             # Check keywords in title
             if any(key.lower() in entry.title.lower() for key in KEYWORDS):
-                if entry.link not in existing_urls:
+                real_url = resolve_url(entry.link)
+                if real_url not in existing_urls and entry.link not in existing_urls:
                     try:
                         # Extract Article
-                        article = Article(entry.link)
+                        article = Article(real_url)
                         article.download()
                         article.parse()
 
@@ -232,8 +243,8 @@ def scrape_and_update():
                             "title": article.title,
                             "summary": ai_summary,
                             "content": article.text,
-                            "source_url": entry.link,
-                            "source": feed_url.split('/')[2].replace('www.', ''),
+                            "source_url": real_url,
+                            "source": urlparse(real_url).hostname.replace('www.', ''),
                             "score": score
                         }
 
@@ -245,7 +256,7 @@ def scrape_and_update():
 
                         # 2. ADD TO MAIN INDEX
                         news_index.insert(0, news_item)
-                        existing_urls.add(entry.link)
+                        existing_urls.add(real_url)
                         new_count += 1
 
                         print(f"Archived (score {score}): {filename}")
