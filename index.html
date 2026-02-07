@@ -62,7 +62,7 @@
                 <a href="FAQ.html">Why?</a>
             </nav>
             <div class="stats">
-                <div class="stat-box">
+                <div class="stat-box stat-box-link" id="ships-stat-box" title="View ships tracked trend">
                     <div class="stat-value" id="total-ships">-</div>
                     <div class="stat-label">Ships Tracked</div>
                 </div>
@@ -76,7 +76,7 @@
                 </div>
                 <a href="https://tradingeconomics.com/commodity/carbon" target="_blank" class="stat-box stat-box-link" title="View historic EUA prices">
                     <div class="stat-value" id="eua-price">-</div>
-                    <div class="stat-label">EUA Price Today</div>
+                    <div class="stat-label" id="eua-label">EUA Price</div>
                 </a>
                 <div class="stat-box">
                     <div class="stat-value" id="ets-projected">-</div>
@@ -151,6 +151,17 @@
         </div>
     </div>
 
+    <div class="trend-overlay" id="ships-trend-overlay">
+        <div class="trend-popup">
+            <button class="trend-close" id="ships-trend-close">&times;</button>
+            <h3 class="trend-title">Ships Tracked (2020-2024)</h3>
+            <div class="trend-chart-wrapper">
+                <canvas id="shipsTrendChart"></canvas>
+            </div>
+            <p class="trend-note">Number of ships reporting emissions under EU MRV regulation per year.</p>
+        </div>
+    </div>
+
     <script>
         let allShips = [];
         let filteredShips = [];
@@ -173,6 +184,11 @@
             .then(data => {
                 euaPrice = data.price;
                 document.getElementById('eua-price').textContent = '€' + euaPrice.toFixed(0);
+                if (data.updated_at) {
+                    const parts = data.updated_at.split(/[- ]/);
+                    const dd = parts[2], mm = parts[1], yy = parts[0].slice(2);
+                    document.getElementById('eua-label').textContent = `EUA Price ${dd}-${mm}-${yy}`;
+                }
                 // Recalculate projected ETS if data already loaded
                 if (allShips.length > 0 && currentYear === '2024') {
                     updateProjectedEts();
@@ -684,6 +700,85 @@
         });
 
         document.getElementById('trend-overlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                e.currentTarget.classList.remove('visible');
+            }
+        });
+
+        // Ships tracked trend popup
+        let shipsTrendChart = null;
+
+        function showShipsTrendPopup() {
+            const overlay = document.getElementById('ships-trend-overlay');
+            overlay.classList.add('visible');
+
+            const years = ['2020', '2021', '2022', '2023', '2024'];
+            const ships = years.map(y => yearlyTotals[y] ? yearlyTotals[y].ships : null);
+
+            const barColors = ships.map((val, i) => {
+                if (i === 0 || val === null) return '#4ecdc4';
+                const prev = ships[i - 1];
+                if (prev === null) return '#4ecdc4';
+                return val > prev ? '#4ecdc4' : '#ff6b6b';
+            });
+
+            if (shipsTrendChart) shipsTrendChart.destroy();
+
+            const ctx = document.getElementById('shipsTrendChart').getContext('2d');
+            shipsTrendChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: years,
+                    datasets: [{
+                        label: 'Ships Tracked',
+                        data: ships,
+                        backgroundColor: barColors,
+                        borderColor: barColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const y = years[context.dataIndex];
+                                    const info = yearlyTotals[y];
+                                    if (!info) return '';
+                                    return `Ships: ${info.ships.toLocaleString()}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#888' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                color: '#888',
+                                callback: function(value) { return value.toLocaleString(); }
+                            },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            title: { display: true, text: 'Number of ships', color: '#888' }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.getElementById('ships-stat-box').addEventListener('click', showShipsTrendPopup);
+
+        document.getElementById('ships-trend-close').addEventListener('click', () => {
+            document.getElementById('ships-trend-overlay').classList.remove('visible');
+        });
+
+        document.getElementById('ships-trend-overlay').addEventListener('click', (e) => {
             if (e.target === e.currentTarget) {
                 e.currentTarget.classList.remove('visible');
             }
