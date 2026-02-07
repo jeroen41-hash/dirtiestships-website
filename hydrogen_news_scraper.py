@@ -38,6 +38,19 @@ GENERAL RULES:
 - Focus on the technological and environmental significance.
 """
 
+# Load .env file from script directory
+def load_env():
+    env_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+    if os.path.exists(env_file):
+        with open(env_file) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    key, value = line.split("=", 1)
+                    os.environ.setdefault(key.strip(), value.strip())
+
+load_env()
+
 # Initialize Gemini client
 gemini_client = None
 if GEMINI_AVAILABLE:
