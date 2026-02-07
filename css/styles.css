@@ -1179,7 +1179,7 @@ tr.emission-minimal {
    ============================================ */
 .cii-improvement-section {
     border: 1px solid rgba(255, 107, 107, 0.3);
-    background: rgba(255, 107, 107, 0.05);
+    background: rgba(20, 10, 15, 0.6);
 }
 
 .improvement-intro {
@@ -1224,7 +1224,7 @@ tr.emission-minimal {
 
 .target-arrow {
     font-size: 1.5rem;
-    color: #666;
+    color: #aaa;
 }
 
 .compliance-badge {
@@ -1258,7 +1258,7 @@ tr.emission-minimal {
 .target-label {
     display: block;
     font-size: 0.75rem;
-    color: #888;
+    color: #bbb;
     text-transform: uppercase;
     margin-top: 5px;
 }
@@ -1312,14 +1312,14 @@ tr.emission-minimal {
 
 .measure-note {
     font-size: 0.75rem;
-    color: #666;
+    color: #aaa;
     margin-top: 4px;
 }
 
 .improvement-note {
     font-size: 0.85rem;
-    color: #666;
-    background: rgba(0,0,0,0.2);
+    color: #aaa;
+    background: rgba(0,0,0,0.3);
     padding: 12px;
     border-radius: 6px;
     line-height: 1.5;
