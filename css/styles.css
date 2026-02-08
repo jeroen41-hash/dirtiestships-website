@@ -1115,12 +1115,6 @@ tr.emission-minimal {
         margin: 0 auto;
     }
 
-    .hero-map {
-        width: 100%;
-        height: 200px;
-        margin: 0 auto;
-    }
-
     .ship-hero-meta {
         justify-content: center;
     }
@@ -1374,18 +1368,17 @@ tr.emission-minimal {
 }
 
 /* ============================================
-   LIVE SHIP LOCATION MAP (in hero)
+   LIVE SHIP LOCATION MAP
    ============================================ */
-.hero-map {
-    width: 200px;
-    height: 180px;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid rgba(78, 205, 196, 0.3);
-    flex-shrink: 0;
+.live-location {
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 30px;
 }
 
-.hero-map iframe {
+.live-location iframe {
+    border-radius: 8px;
     display: block;
 }
 
