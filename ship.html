@@ -207,6 +207,25 @@
             `;
         }
 
+        function buildLiveLocationSection() {
+            if (!vesselSpecs || !vesselSpecs.mmsi) return '';
+
+            return `
+                <div class="live-location">
+                    <div class="chart-title">Live Ship Location</div>
+                    <iframe
+                        src="https://www.marinetraffic.com/en/ais/embed/mmsi:${vesselSpecs.mmsi}/zoom:8/maptype:0/shownames:true/showmenu:false"
+                        width="100%"
+                        height="400"
+                        frameborder="0"
+                        loading="lazy"
+                        referrerpolicy="no-referrer"
+                        allowfullscreen
+                    ></iframe>
+                </div>
+            `;
+        }
+
         function buildVesselSpecsSection() {
             if (!vesselSpecs) return '';
 
@@ -524,6 +543,8 @@
                         ` : ''}
                     </div>
                 </div>
+
+                ${buildLiveLocationSection()}
 
                 <div class="chart-container">
                     <div class="chart-title">Annual Emissions History</div>

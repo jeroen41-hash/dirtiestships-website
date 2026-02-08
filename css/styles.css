@@ -1368,6 +1368,21 @@ tr.emission-minimal {
 }
 
 /* ============================================
+   LIVE SHIP LOCATION MAP
+   ============================================ */
+.live-location {
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.live-location iframe {
+    border-radius: 8px;
+    display: block;
+}
+
+/* ============================================
    EMISSIONS TABLE
    ============================================ */
 .emissions-table {
