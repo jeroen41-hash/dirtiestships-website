@@ -29,7 +29,7 @@ warnings.filterwarnings('ignore')
 
 # Constants
 BASE_DIR = Path(__file__).parent
-EXCEL_FILE = BASE_DIR / "data" / "2024-v160-17012026-EU MRV Publication of information.xlsx"
+EXCEL_FILE = BASE_DIR / "data" / "2024-v173-07022026-EU MRV Publication of information.xlsx"
 SHIPS_DATA_FILE = BASE_DIR / "json" / "2024_ships_data.json"
 SHIP_JSON_DIR = BASE_DIR / "json" / "ship"
 
