@@ -70,6 +70,8 @@
         let vesselSpecs = null;
         let vesselSpecsLoaded = false;
         let meohVessels = new Set();
+        const EUA_AVG_2024 = 65.89; // 2024 average EUA price in EUR
+        const ETS_SCOPE_2024 = 0.40; // 40% of emissions covered in 2024
 
         // Load MeOH-capable vessels list
         fetch('json/meoh_vessels.json')
@@ -515,6 +517,14 @@
                                     <div class="quick-stat-value">${co2Value}</div>
                                     <div class="quick-stat-label">Tonnes ${latestYear === '2024' ? 'CO2-eq' : 'CO2'}</div>
                                 </div>
+                                ${latestYear === '2024' && latestEmissions ? (() => {
+                                    const etsCost = EUA_AVG_2024 * ETS_SCOPE_2024 * latestEmissions.co2 / 1000;
+                                    return `
+                                <div class="quick-stat">
+                                    <div class="quick-stat-value">€${Math.round(etsCost).toLocaleString()}k</div>
+                                    <div class="quick-stat-label">Est. ETS Cost '24</div>
+                                </div>`;
+                                })() : ''}
                                 ${ship.company ? `
                                 <div class="quick-stat quick-stat-wide">
                                     <div class="quick-stat-value quick-stat-company">${escapeHtml(ship.company)}</div>
