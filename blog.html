@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VWX5EMQSLM"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-VWX5EMQSLM');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Dirtiest Ships</title>
+    <meta name="description" content="Original analysis and insights about maritime CO2 emissions, CII ratings, and the shipping industry's environmental impact.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://dirtiestships.com/blog.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dirtiestships.com/blog.html">
+    <meta property="og:title" content="Blog - Dirtiest Ships">
+    <meta property="og:description" content="Original analysis and insights about maritime CO2 emissions and the shipping industry.">
+    <meta property="og:site_name" content="Dirtiest Ships">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9641573711172527"
+     crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .blog-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* --- List view --- */
+        .blog-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .blog-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 25px;
+            border-left: 4px solid #4ecdc4;
+            text-decoration: none;
+            display: block;
+            transition: background 0.2s;
+        }
+
+        .blog-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .blog-card-date {
+            color: #888;
+            font-size: 0.85em;
+            margin-bottom: 8px;
+        }
+
+        .blog-card-title {
+            color: #fff;
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .blog-card-excerpt {
+            color: #ccc;
+            font-size: 1.05em;
+            line-height: 1.5;
+        }
+
+        .blog-card-author {
+            color: #888;
+            font-size: 0.85em;
+            margin-top: 12px;
+        }
+
+        /* --- Post view --- */
+        .back-link {
+            display: inline-block;
+            color: #4ecdc4;
+            text-decoration: none;
+            margin-bottom: 25px;
+            font-size: 0.95em;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .blog-post-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .blog-post-title {
+            color: #fff;
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .blog-post-meta {
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .blog-post-content {
+            color: #ddd;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+
+        .blog-post-content h1 {
+            display: none; /* hide duplicate h1 from markdown */
+        }
+
+        .blog-post-content h2 {
+            color: #fff;
+            font-size: 1.5em;
+            margin-top: 35px;
+            margin-bottom: 15px;
+        }
+
+        .blog-post-content h3 {
+            color: #fff;
+            font-size: 1.2em;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .blog-post-content p {
+            margin-bottom: 16px;
+        }
+
+        .blog-post-content ul, .blog-post-content ol {
+            margin-bottom: 16px;
+            padding-left: 25px;
+        }
+
+        .blog-post-content li {
+            margin-bottom: 6px;
+        }
+
+        .blog-post-content a {
+            color: #4ecdc4;
+            text-decoration: none;
+        }
+
+        .blog-post-content a:hover {
+            text-decoration: underline;
+        }
+
+        .blog-post-content blockquote {
+            border-left: 3px solid #4ecdc4;
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #aaa;
+            font-style: italic;
+        }
+
+        .blog-post-content code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        .blog-post-content pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 16px;
+        }
+
+        .blog-post-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .blog-post-content strong {
+            color: #fff;
+        }
+
+        .blog-post-content img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .loading {
+            text-align: center;
+            color: #888;
+            padding: 40px;
+        }
+
+        .error-message {
+            text-align: center;
+            color: #888;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="images/ship-smoke-left.jpg" alt="" class="header-img header-img-left">
+            <img src="images/ship-smoke-right.jpg" alt="" class="header-img header-img-right">
+            <h1>Dirtiest Ships <span style="font-size: 0.5em; font-weight: normal;">(in Europe)</span></h1>
+            <p class="subtitle">Blog</p>
+            <nav>
+                <a href="index.html">Rankings</a>
+                <a href="charts.html">Charts</a>
+                <a href="compare.html">Compare</a>
+                <a href="cii.html">CII Ratings</a>
+                <a href="news.html">News</a>
+                <a href="blog.html" class="active">Blog</a>
+                <a href="FAQ.html">Why?</a>
+            </nav>
+        </header>
+
+        <div class="blog-container">
+            <div id="blogContent">
+                <div class="loading">Loading...</div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-links">
+                <a href="FAQ.html">FAQ</a>
+                <a href="rules.html">Regulations</a>
+                <a href="disclaimer.html">Disclaimer</a>
+                <a href="mailto:hello@dirtiestships.com">hello@dirtiestships.com</a>
+            </div>
+            <p>Data source: <a href="https://mrv.emsa.europa.eu/" target="_blank">EU MRV Regulation</a></p>
+            <p>This data shows annual CO2 emissions from ships calling at EU/EEA ports.</p>
+        </footer>
+    </div>
+
+    <script>
+        const container = document.getElementById('blogContent');
+        const params = new URLSearchParams(window.location.search);
+        const postSlug = params.get('post');
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr + 'T00:00:00');
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function renderPostList(posts) {
+            if (!posts.length) {
+                container.innerHTML = '<div class="error-message">No blog posts yet. Check back soon!</div>';
+                return;
+            }
+
+            const sorted = posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            container.innerHTML = '<div class="blog-list">' + sorted.map(post => `
+                <a href="blog.html?post=${encodeURIComponent(post.slug)}" class="blog-card">
+                    <div class="blog-card-date">${formatDate(post.date)}</div>
+                    <div class="blog-card-title">${post.title}</div>
+                    <div class="blog-card-excerpt">${post.excerpt}</div>
+                    <div class="blog-card-author">By ${post.author}</div>
+                </a>
+            `).join('') + '</div>';
+        }
+
+        function renderPost(post, markdown) {
+            document.title = post.title + ' - Dirtiest Ships Blog';
+
+            container.innerHTML = `
+                <a href="blog.html" class="back-link">&larr; Back to all posts</a>
+                <div class="blog-post-header">
+                    <h1 class="blog-post-title">${post.title}</h1>
+                    <div class="blog-post-meta">${formatDate(post.date)} &middot; ${post.author}</div>
+                </div>
+                <div class="blog-post-content">${marked.parse(markdown)}</div>
+            `;
+        }
+
+        // Load blog data
+        fetch('json/blog.json')
+            .then(r => r.json())
+            .then(data => {
+                const posts = data.posts || [];
+
+                if (postSlug) {
+                    const post = posts.find(p => p.slug === postSlug);
+                    if (!post) {
+                        container.innerHTML = '<div class="error-message">Post not found. <a href="blog.html" style="color:#4ecdc4;">Back to blog</a></div>';
+                        return;
+                    }
+
+                    fetch('blog/posts/' + post.slug + '.md')
+                        .then(r => {
+                            if (!r.ok) throw new Error('Not found');
+                            return r.text();
+                        })
+                        .then(md => renderPost(post, md))
+                        .catch(() => {
+                            container.innerHTML = '<div class="error-message">Could not load post. <a href="blog.html" style="color:#4ecdc4;">Back to blog</a></div>';
+                        });
+                } else {
+                    renderPostList(posts);
+                }
+            })
+            .catch(() => {
+                container.innerHTML = '<div class="error-message">Could not load blog. Please try again later.</div>';
+            });
+    </script>
+</body>
+</html>
