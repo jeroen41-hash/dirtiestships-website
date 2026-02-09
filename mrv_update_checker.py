@@ -16,17 +16,16 @@ Configure:
 
 import json
 import os
-import smtplib
 import subprocess
 import sys
 from datetime import datetime
-from email.mime.text import MIMEText
 from pathlib import Path
 
 import requests
 
 # ---- Configuration ----
 NOTIFY_EMAIL = "jeroen41@gmail.com"
+EMAIL_FROM = "scraper@dirtiestships.com"
 API_URL = "https://mrv.emsa.europa.eu/api/public-emission-report/downloadable-files"
 DOWNLOAD_URL = "https://mrv.emsa.europa.eu/api/public-emission-report/reporting-period-document/binary/{period}/{version}"
 BASE_DIR = Path(__file__).parent
@@ -125,11 +124,7 @@ def download_file(period, version, filename):
 
 
 def send_email(updates):
-    """Send notification email about updates."""
-    if NOTIFY_EMAIL == "CHANGE_ME@example.com":
-        print("  WARNING: NOTIFY_EMAIL not configured, skipping email.")
-        return False
-
+    """Send notification email via msmtp."""
     subject = f"MRV Data Update - {len(updates)} file(s) updated"
 
     lines = ["EU MRV emission report data has been updated:\n"]
@@ -142,30 +137,34 @@ def send_email(updates):
     lines.append(f"\nChecked at: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
     body = "\n".join(lines)
 
-    msg = MIMEText(body)
-    msg["Subject"] = subject
-    msg["From"] = f"MRV Checker <{NOTIFY_EMAIL}>"
-    msg["To"] = NOTIFY_EMAIL
+    email_content = f"""To: {NOTIFY_EMAIL}
+From: {EMAIL_FROM}
+Subject: {subject}
+Content-Type: text/plain; charset=utf-8
+
+{body}
+"""
 
     try:
-        with smtplib.SMTP("localhost") as server:
-            server.send_message(msg)
-        print(f"  Email sent to {NOTIFY_EMAIL}")
-        return True
+        process = subprocess.Popen(
+            ["msmtp", "-t"],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        stdout, stderr = process.communicate(input=email_content.encode("utf-8"))
+
+        if process.returncode == 0:
+            print(f"  Email sent to {NOTIFY_EMAIL}")
+            return True
+        else:
+            print(f"  msmtp error: {stderr.decode()}")
+            return False
+    except FileNotFoundError:
+        print("  ERROR: msmtp not installed. Run: sudo apt install msmtp msmtp-mta")
+        return False
     except Exception as e:
         print(f"  Email error: {e}")
-        # Fallback: try using mail command
-        try:
-            proc = subprocess.run(
-                ["mail", "-s", subject, NOTIFY_EMAIL],
-                input=body.encode(), timeout=10
-            )
-            if proc.returncode == 0:
-                print(f"  Email sent via mail command to {NOTIFY_EMAIL}")
-                return True
-        except Exception:
-            pass
-        print(f"  Could not send email. Install postfix or configure SMTP.")
         return False
 
 
