@@ -19,13 +19,16 @@ BASE_DIR = Path(__file__).parent
 EMAIL_TO = os.environ.get("NEWS_EMAIL_TO", "your-email@example.com")  # Change this!
 EMAIL_FROM = os.environ.get("NEWS_EMAIL_FROM", "scraper@dirtiestships.com")
 
+# Repo directories
+HYDROGEN_DIR = Path("/media/jeroen/work/16 Claude/hydrogenshipbuilding")
+
 # JSON files produced by scrapers
 EMISSIONS_NEWS_FILE = BASE_DIR / "json" / "news.json"
-HYDROGEN_NEWS_FILE = BASE_DIR / "json" / "news_hydrogen.json"
+HYDROGEN_NEWS_FILE = HYDROGEN_DIR / "json" / "news_hydrogen.json"
 
 # Scraper scripts
 EMISSIONS_SCRAPER = BASE_DIR / "emissions_news_scraper.py"
-HYDROGEN_SCRAPER = BASE_DIR / "hydrogen_news_scraper.py"
+HYDROGEN_SCRAPER = HYDROGEN_DIR / "hydrogen_news_scraper.py"
 
 
 def run_scraper(script_path, name):
