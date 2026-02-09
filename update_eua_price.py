@@ -91,8 +91,8 @@ def git_commit_and_push():
     """Commit updated JSON files and push to GitHub."""
     os.chdir(SCRIPT_DIR)
 
-    # Pull latest first to avoid conflicts
-    subprocess.run(["git", "pull", "--rebase"], check=True, capture_output=True)
+    # Pull latest first to avoid conflicts (ignore failure e.g. no upstream set)
+    subprocess.run(["git", "pull", "--rebase", "origin", "main"], capture_output=True)
 
     # Stage the two JSON files
     subprocess.run(
@@ -114,7 +114,7 @@ def git_commit_and_push():
         check=True, capture_output=True
     )
 
-    subprocess.run(["git", "push"], check=True, capture_output=True)
+    subprocess.run(["git", "push", "-u", "origin", "main"], check=True, capture_output=True)
     print("Committed and pushed to GitHub.")
 
 
