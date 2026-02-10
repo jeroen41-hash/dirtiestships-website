@@ -232,7 +232,7 @@
             document.getElementById('search').value = '';
             document.getElementById('ship-type-filter').innerHTML = '<option value="">All Ship Types</option>';
 
-            fetch(`json/${year}_ships_data.json`)
+            fetch(`json/${year}_ships_data.json?v=2`)
                 .then(response => response.json())
                 .then(data => {
                     allShips = data.ships;
@@ -613,7 +613,7 @@
 
         // Pre-load totals from all years for the trend chart
         ['2020', '2021', '2022', '2023', '2024'].forEach(year => {
-            fetch(`json/${year}_ships_data.json`)
+            fetch(`json/${year}_ships_data.json?v=2`)
                 .then(r => r.json())
                 .then(data => {
                     yearlyTotals[year] = {
