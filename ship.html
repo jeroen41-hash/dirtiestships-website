@@ -247,24 +247,14 @@
             `;
         }
 
-        // IMO default emission factors (tonnes CO2 per tonne fuel)
-        const FUEL_BENCHMARKS = [
-            { fuel: 'Methanol', cf: 1.375, color: '#2ecc71' },
-            { fuel: 'Ethanol', cf: 1.913, color: '#27ae60' },
-            { fuel: 'LNG', cf: 2.750, color: '#3498db' },
-            { fuel: 'LPG (Propane)', cf: 3.000, color: '#9b59b6' },
-            { fuel: 'HFO', cf: 3.114, color: '#e67e22' },
-            { fuel: 'MDO/MGO', cf: 3.206, color: '#e74c3c' },
-        ];
-
-        function getCFactorInterpretation(cf) {
-            if (cf < 1.5) return { text: 'Consistent with methanol as primary fuel. This is among the lowest-carbon conventional marine fuels.', color: '#2ecc71' };
-            if (cf < 2.2) return { text: 'Suggests significant use of alternative low-carbon fuels such as ethanol or fuel blends.', color: '#27ae60' };
-            if (cf < 2.9) return { text: 'Consistent with LNG (liquefied natural gas) as primary fuel, which produces ~12% less CO2 per tonne than conventional oil fuels.', color: '#3498db' };
-            if (cf < 3.05) return { text: 'Suggests use of LPG or a mix of LNG and conventional fuels.', color: '#9b59b6' };
-            if (cf < 3.15) return { text: 'Consistent with Heavy Fuel Oil (HFO), the most common marine fuel. No indication of alternative fuel use.', color: '#e67e22' };
-            if (cf < 3.25) return { text: 'Consistent with Marine Diesel Oil (MDO) or Marine Gas Oil (MGO), conventional distillate fuels.', color: '#e74c3c' };
-            return { text: 'Higher than expected for any single fuel type. May indicate data quality issues or unusual fuel mix.', color: '#e74c3c' };
+        function getCFactorFuel(cf) {
+            if (cf < 1.5) return { fuel: 'Methanol', color: '#2ecc71' };
+            if (cf < 2.2) return { fuel: 'Ethanol / low-carbon blend', color: '#27ae60' };
+            if (cf < 2.9) return { fuel: 'LNG', color: '#3498db' };
+            if (cf < 3.05) return { fuel: 'LPG / LNG mix', color: '#9b59b6' };
+            if (cf < 3.15) return { fuel: 'HFO', color: '#e67e22' };
+            if (cf < 3.25) return { fuel: 'MDO / MGO', color: '#e74c3c' };
+            return { fuel: 'Unknown mix', color: '#e74c3c' };
         }
 
         function buildCFactorSection() {
@@ -280,9 +270,16 @@
             if (cFactorHistory.length === 0) return '';
 
             const latest = cFactorHistory[cFactorHistory.length - 1];
-            const interp = getCFactorInterpretation(latest.cf);
+            const fuelInfo = getCFactorFuel(latest.cf);
 
-            // Calculate fleet average for comparison (from 2024 data)
+            // Previous year comparison
+            let prevYear = null;
+            if (cFactorHistory.length > 1) {
+                prevYear = cFactorHistory[cFactorHistory.length - 2];
+            }
+            const yoyChange = prevYear ? ((latest.cf - prevYear.cf) / prevYear.cf * 100) : null;
+
+            // Fleet average (from 2024 data)
             let fleetAvg = null;
             if (allShips2024.length > 0) {
                 const withCf = allShips2024.filter(s => s.c_factor && s.c_factor > 0);
@@ -290,85 +287,21 @@
                     fleetAvg = withCf.reduce((sum, s) => sum + s.c_factor, 0) / withCf.length;
                 }
             }
-
-            // Build scale position (range 1.0 to 3.5)
-            const scaleMin = 1.0;
-            const scaleMax = 3.5;
-            const shipPos = Math.max(0, Math.min(100, (latest.cf - scaleMin) / (scaleMax - scaleMin) * 100));
-
-            // Trend across years
-            let trendHtml = '';
-            if (cFactorHistory.length > 1) {
-                const first = cFactorHistory[0];
-                const change = ((latest.cf - first.cf) / first.cf * 100).toFixed(1);
-                const trendDir = change > 0 ? 'increased' : 'decreased';
-                const trendClass = change > 0 ? 'cii-over' : 'cii-under';
-                trendHtml = `
-                    <div class="cfactor-trend">
-                        C-Factor has <span class="${trendClass}">${trendDir} by ${Math.abs(change)}%</span> since ${first.year}
-                    </div>
-                `;
-            }
+            const fleetDiff = fleetAvg ? ((latest.cf - fleetAvg) / fleetAvg * 100) : null;
 
             return `
                 <div class="vessel-specs">
-                    <div class="specs-title">C-Factor Analysis</div>
-                    <div class="cfactor-overview">
-                        <div class="cfactor-value-box">
-                            <div class="cfactor-big-value" style="color: ${interp.color}">${latest.cf.toFixed(4)}</div>
-                            <div class="cfactor-year">${latest.year} C-Factor</div>
-                            ${trendHtml}
-                        </div>
-                        <div class="cfactor-explanation">
-                            <p>${interp.text}</p>
-                            ${fleetAvg ? `<p class="cfactor-fleet-note">Fleet average: <strong>${fleetAvg.toFixed(3)}</strong>. This ship is <strong>${latest.cf < fleetAvg ? ((1 - latest.cf / fleetAvg) * 100).toFixed(1) + '% below' : ((latest.cf / fleetAvg - 1) * 100).toFixed(1) + '% above'}</strong> average.</p>` : ''}
-                        </div>
+                    <div class="specs-title">C-Factor (${latest.year})</div>
+                    <div class="specs-grid">
+                        <div class="spec-item"><span class="spec-label">C-Factor</span><span class="spec-value">${latest.cf.toFixed(4)}</span></div>
+                        <div class="spec-item"><span class="spec-label">Likely Fuel</span><span class="spec-value" style="color: ${fuelInfo.color}">${fuelInfo.fuel}</span></div>
+                        ${prevYear ? `<div class="spec-item"><span class="spec-label">vs ${prevYear.year}</span><span class="spec-value ${yoyChange > 0 ? 'cii-over' : 'cii-under'}">${yoyChange > 0 ? '+' : ''}${yoyChange.toFixed(1)}% <span style="color: #888; font-weight: normal">(${prevYear.cf.toFixed(4)})</span></span></div>` : ''}
+                        ${fleetAvg ? `<div class="spec-item"><span class="spec-label">vs Fleet Avg</span><span class="spec-value ${fleetDiff > 0 ? 'cii-over' : 'cii-under'}">${fleetDiff > 0 ? '+' : ''}${fleetDiff.toFixed(1)}% <span style="color: #888; font-weight: normal">(${fleetAvg.toFixed(3)})</span></span></div>` : ''}
                     </div>
-
-                    <div class="cfactor-scale">
-                        <div class="cfactor-scale-bar">
-                            ${FUEL_BENCHMARKS.map(b => {
-                                const pos = Math.max(0, Math.min(100, (b.cf - scaleMin) / (scaleMax - scaleMin) * 100));
-                                return `<div class="cfactor-benchmark" style="left: ${pos}%"><div class="cfactor-benchmark-line" style="background: ${b.color}"></div><div class="cfactor-benchmark-label">${b.fuel}<br>${b.cf}</div></div>`;
-                            }).join('')}
-                            <div class="cfactor-ship-marker" style="left: ${shipPos}%">
-                                <div class="cfactor-ship-dot"></div>
-                                <div class="cfactor-ship-label">This ship</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    ${cFactorHistory.length > 1 ? `
-                    <div class="cfactor-history">
-                        <table class="emissions-table">
-                            <thead>
-                                <tr>
-                                    <th>Year</th>
-                                    <th>C-Factor</th>
-                                    <th>Change</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${cFactorHistory.map((item, i) => {
-                                    let change = '-';
-                                    let changeClass = '';
-                                    if (i > 0) {
-                                        const pct = ((item.cf - cFactorHistory[i-1].cf) / cFactorHistory[i-1].cf * 100).toFixed(1);
-                                        change = (parseFloat(pct) > 0 ? '+' : '') + pct + '%';
-                                        changeClass = parseFloat(pct) > 0 ? 'change-positive' : 'change-negative';
-                                    }
-                                    return `<tr><td>${item.year}</td><td class="co2-value">${item.cf.toFixed(4)}</td><td class="${changeClass}">${change}</td></tr>`;
-                                }).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                    ` : ''}
-
-                    <div class="comparison-note">
-                        <strong>What is C-Factor?</strong> The C-Factor (Carbon Factor) is the ratio of total CO2 emissions to total fuel consumption (tonnes CO2 / tonnes fuel).
-                        It reveals the carbon intensity of the fuel mix used by a ship. Each fuel type has a characteristic emission factor:
-                        HFO produces ~3.114 tonnes CO2 per tonne burned, while LNG produces ~2.750 and methanol only ~1.375.
-                        A ship's C-Factor close to a specific benchmark suggests that fuel is dominant in its energy mix.
+                    <div class="comparison-note" style="margin-top: 15px;">
+                        <strong>What is C-Factor?</strong> The ratio of CO2 emissions to fuel consumed (tonnes CO2 / tonnes fuel).
+                        Each fuel has a characteristic value: HFO ~3.114, LNG ~2.750, methanol ~1.375.
+                        The C-Factor reveals what fuel a ship primarily burns.
                     </div>
                 </div>
             `;
