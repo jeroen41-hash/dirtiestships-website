@@ -106,18 +106,19 @@
                         <th data-sort="type">Type</th>
                         <th data-sort="registry">Registry</th>
                         <th data-sort="co2" id="co2-header">CO2 (m tonnes)</th>
+                        <th data-sort="c_factor" id="cfactor-header">C-Factor</th>
                     </tr>
                 </thead>
                 <tbody id="ships-table">
                     <!-- Loading skeletons -->
-                    <tr class="skeleton-row-tr"><td colspan="5"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
-                    <tr class="skeleton-row-tr"><td colspan="5"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
-                    <tr class="skeleton-row-tr"><td colspan="5"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
-                    <tr class="skeleton-row-tr"><td colspan="5"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
-                    <tr class="skeleton-row-tr"><td colspan="5"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
-                    <tr class="skeleton-row-tr"><td colspan="5"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
-                    <tr class="skeleton-row-tr"><td colspan="5"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
-                    <tr class="skeleton-row-tr"><td colspan="5"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
+                    <tr class="skeleton-row-tr"><td colspan="6"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
+                    <tr class="skeleton-row-tr"><td colspan="6"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
+                    <tr class="skeleton-row-tr"><td colspan="6"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
+                    <tr class="skeleton-row-tr"><td colspan="6"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
+                    <tr class="skeleton-row-tr"><td colspan="6"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
+                    <tr class="skeleton-row-tr"><td colspan="6"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
+                    <tr class="skeleton-row-tr"><td colspan="6"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
+                    <tr class="skeleton-row-tr"><td colspan="6"><div class="skeleton-row"><div class="skeleton-cell rank"></div><div class="skeleton-cell name"></div><div class="skeleton-cell type"></div><div class="skeleton-cell registry"></div><div class="skeleton-cell co2"></div></div></td></tr>
                 </tbody>
             </table>
         </div>
@@ -224,9 +225,10 @@
             document.getElementById('co2-label').textContent = `Total ${co2Label} (million tonnes)`;
             document.getElementById('co2-header').textContent = `${co2Label} (m tonnes)`;
             document.getElementById('co2-header').dataset.sort = co2Field;
+            // C-Factor column always visible
 
             // Reset
-            document.getElementById('ships-table').innerHTML = '<tr><td colspan="5" class="loading">Loading data...</td></tr>';
+            document.getElementById('ships-table').innerHTML = '<tr><td colspan="6" class="loading">Loading data...</td></tr>';
             document.getElementById('search').value = '';
             document.getElementById('ship-type-filter').innerHTML = '<option value="">All Ship Types</option>';
 
@@ -269,7 +271,7 @@
                 })
                 .catch(error => {
                     document.getElementById('ships-table').innerHTML =
-                        '<tr><td colspan="5" class="loading">Error loading data.</td></tr>';
+                        '<tr><td colspan="6" class="loading">Error loading data.</td></tr>';
                 });
         }
 
@@ -282,7 +284,7 @@
             const co2Field = isNew ? 'co2eq' : 'co2';
 
             if (pageShips.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="loading">No ships found matching your criteria.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="loading">No ships found matching your criteria.</td></tr>';
             } else {
                 tbody.innerHTML = pageShips.map((ship, index) => {
                     const meohTag = meohVessels.has(ship.imo) ? ' <span class="meoh-tag">&lt;MeOH&gt;</span>' : '';
@@ -294,6 +296,7 @@
                         <td class="ship-type">${escapeHtml(ship.type)}</td>
                         <td>${escapeHtml(ship.registry)}</td>
                         <td class="co2-value">${ship[co2Field].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                        <td class="co2-value">${ship.c_factor ? ship.c_factor.toFixed(2) : '-'}</td>
                     </tr>
                 `}).join('');
             }
@@ -333,8 +336,8 @@
             const co2Field = isNew ? 'co2eq' : 'co2';
 
             filteredShips.sort((a, b) => {
-                let aVal = sortColumn === 'co2' ? a[co2Field] : a[sortColumn];
-                let bVal = sortColumn === 'co2' ? b[co2Field] : b[sortColumn];
+                let aVal = sortColumn === 'co2' ? a[co2Field] : (sortColumn === 'c_factor' ? (a.c_factor || 0) : a[sortColumn]);
+                let bVal = sortColumn === 'co2' ? b[co2Field] : (sortColumn === 'c_factor' ? (b.c_factor || 0) : b[sortColumn]);
 
                 if (typeof aVal === 'string') {
                     aVal = aVal.toLowerCase();
@@ -591,7 +594,7 @@
                     sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
                 } else {
                     sortColumn = column;
-                    sortDirection = (column === 'co2' || column === 'co2eq') ? 'desc' : 'asc';
+                    sortDirection = (column === 'co2' || column === 'co2eq' || column === 'c_factor') ? 'desc' : 'asc';
                 }
 
                 th.classList.add(sortDirection === 'asc' ? 'sorted-asc' : 'sorted-desc');
