@@ -256,7 +256,7 @@
         }
 
         function loadNews() {
-            fetch('json/news.json')
+            fetch('json/news.json?v=' + Date.now())
                 .then(response => response.json())
                 .then(data => {
                     // Handle both array format and {news: []} format
