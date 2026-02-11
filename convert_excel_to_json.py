@@ -189,34 +189,50 @@ def main():
     company_imo_lookup = build_company_imo_lookup()
 
     # First pass: aggregate by company IMO
-    cimo_agg = defaultdict(lambda: {'co2eq': 0.0, 'count': 0, 'names': defaultdict(int)})
+    cimo_agg = defaultdict(lambda: {'co2eq': 0.0, 'fuel': 0.0, 'count': 0, 'names': defaultdict(int)})
     for ship in ships:
         cimo = ship['company_imo']
         cimo_agg[cimo]['co2eq'] += ship['co2eq']
         cimo_agg[cimo]['count'] += 1
         cimo_agg[cimo]['names'][ship['company']] += 1
+        cf = ship.get('c_factor', 0) or 0
+        if cf > 0:
+            cimo_agg[cimo]['fuel'] += ship['co2eq'] / cf
 
     # Second pass: merge grouped company IMOs, keep others as-is
-    group_agg = defaultdict(lambda: {'co2eq': 0.0, 'count': 0})
+    group_agg = defaultdict(lambda: {'co2eq': 0.0, 'fuel': 0.0, 'count': 0})
     for cimo, data in cimo_agg.items():
         group = company_imo_lookup.get(cimo)
         if group:
             group_agg[group]['co2eq'] += data['co2eq']
+            group_agg[group]['fuel'] += data['fuel']
             group_agg[group]['count'] += data['count']
         else:
             # Use the most common company name for this IMO
             label = max(data['names'], key=data['names'].get)
             group_agg[label]['co2eq'] += data['co2eq']
+            group_agg[label]['fuel'] += data['fuel']
             group_agg[label]['count'] += data['count']
 
-    companies_top = sorted(
-        [{'company': g, 'co2eq': round(d['co2eq'], 2), 'count': d['count']}
-         for g, d in group_agg.items()],
+    def make_company(g, d):
+        entry = {'company': g, 'co2eq': round(d['co2eq'], 2), 'count': d['count']}
+        if d['fuel'] > 0:
+            entry['c_factor'] = round(d['co2eq'] / d['fuel'], 4)
+        return entry
+
+    companies_all = sorted(
+        [make_company(g, d) for g, d in group_agg.items()],
         key=lambda x: x['co2eq'], reverse=True
-    )[:15]
+    )
+    companies_top = companies_all[:15]
+
     with open('json/2024_companies_top15.json', 'w') as f:
         json.dump(companies_top, f, separators=(',', ':'))
     print(f"Wrote json/2024_companies_top15.json")
+
+    with open('json/2024_companies_all.json', 'w') as f:
+        json.dump(companies_all, f, separators=(',', ':'))
+    print(f"Wrote json/2024_companies_all.json ({len(companies_all)} companies)")
 
     # Verification: check top 3 ships
     print("\nTop 3 ships:")

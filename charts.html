@@ -125,6 +125,7 @@
                             <th>Rank</th>
                             <th>Company</th>
                             <th>CO2-eq (tonnes)</th>
+                            <th>C-Factor</th>
                             <th>Ships</th>
                         </tr>
                     </thead>
@@ -389,6 +390,7 @@
                             <td>${item.flag} ${escapeHtml(item.name)} <span class="country-label">country</span></td>
                             <td class="co2-value">${item.co2.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</td>
                             <td>-</td>
+                            <td>-</td>
                         </tr>
                     `;
                 } else {
@@ -398,6 +400,7 @@
                             <td class="rank">${item.rank}</td>
                             <td>${escapeHtml(item.company)}</td>
                             <td class="co2-value">${item.co2.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                            <td class="co2-value">${item.c_factor ? item.c_factor.toFixed(4) : '-'}</td>
                             <td>${item.count}</td>
                         </tr>
                     `;
