@@ -255,13 +255,34 @@
             return div.innerHTML;
         }
 
+        function deduplicateNews(articles) {
+            const stopWords = new Set(['the','a','an','and','or','to','for','of','in','on','by','is','at','its','with','from','as','that','this','it']);
+            function getKeyWords(title) {
+                return title.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 2 && !stopWords.has(w));
+            }
+            function similarity(a, b) {
+                const setA = new Set(a);
+                const setB = new Set(b);
+                const intersection = [...setA].filter(w => setB.has(w));
+                const smaller = Math.min(setA.size, setB.size);
+                return smaller > 0 ? intersection.length / smaller : 0;
+            }
+            const kept = [];
+            for (const article of articles) {
+                const words = getKeyWords(article.title);
+                const isDupe = kept.some(k => similarity(words, getKeyWords(k.title)) > 0.6);
+                if (!isDupe) kept.push(article);
+            }
+            return kept;
+        }
+
         function loadNews() {
             fetch('json/news.json?v=' + Date.now())
                 .then(response => response.json())
                 .then(data => {
                     // Handle both array format and {news: []} format
                     const newsArray = Array.isArray(data) ? data : (data.news || []);
-                    allNews = newsArray.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    allNews = deduplicateNews(newsArray).sort((a, b) => new Date(b.date) - new Date(a.date));
                     renderNews();
                 })
                 .catch(error => {
