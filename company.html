@@ -123,6 +123,7 @@
                             <td><a href="ship.html?id=${encodeId(s.imo)}" style="color: #4ecdc4; text-decoration: none;">${escapeHtml(s.name)}</a></td>
                             <td>${escapeHtml(s.type || '')}</td>
                             <td class="co2-value">${co2}</td>
+                            <td class="co2-value">${s.c_factor ? s.c_factor.toFixed(4) : '-'}</td>
                         </tr>`;
                     }).join('');
 
@@ -162,6 +163,7 @@
                                             <th>Ship Name</th>
                                             <th>Type</th>
                                             <th>CO2-eq (tonnes)</th>
+                                            <th>C-Factor</th>
                                         </tr>
                                     </thead>
                                     <tbody>
