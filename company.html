@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VWX5EMQSLM"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-VWX5EMQSLM');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View CO2 emissions data for this shipping company. See all ships and total emissions from EU MRV data.">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Dirtiest Ships">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9641573711172527"
+     crossorigin="anonymous"></script>
+    <title>Company Details - Dirtiest Ships</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="images/ship-smoke-left.jpg" alt="" class="header-img header-img-left">
+            <img src="images/ship-smoke-right.jpg" alt="" class="header-img header-img-right">
+            <h1>Dirtiest Ships <span style="font-size: 0.5em; font-weight: normal;">(in Europe)</span></h1>
+            <p class="subtitle">Company Emissions Profile</p>
+            <nav>
+                <a href="index.html">Rankings</a>
+                <a href="charts.html">Charts</a>
+                <a href="compare.html">Compare</a>
+                <a href="cii.html">CII Ratings</a>
+                <a href="news.html">News</a>
+                <a href="FAQ.html">Why?</a>
+            </nav>
+        </header>
+
+        <div id="content">
+            <div class="loading">Loading company data...</div>
+        </div>
+
+        <footer>
+            <div class="footer-links">
+                <a href="FAQ.html">FAQ</a>
+                <a href="rules.html">Regulations</a>
+                <a href="disclaimer.html">Disclaimer</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="mailto:hello@dirtiestships.com">hello@dirtiestships.com</a>
+            </div>
+            <p>Data source: <a href="https://mrv.emsa.europa.eu/" target="_blank">EU MRV Regulation</a></p>
+            <p>This data shows annual CO2 emissions from ships calling at EU/EEA ports.</p>
+        </footer>
+    </div>
+
+    <script>
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function encodeId(imo) {
+            return btoa(String(imo)).replace(/=+$/, '');
+        }
+
+        function getCompanyFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('name');
+        }
+
+        function showNotFound(message) {
+            document.getElementById('content').innerHTML = `
+                <div class="not-found">
+                    <h2>Company Not Found</h2>
+                    <p>${escapeHtml(message)}</p>
+                    <p style="margin-top: 20px;"><a href="charts.html" style="color: #4ecdc4;">Back to Charts</a></p>
+                </div>
+            `;
+        }
+
+        function loadCompanyData() {
+            const companyName = getCompanyFromURL();
+            if (!companyName) {
+                showNotFound('No company name provided.');
+                return;
+            }
+
+            document.title = `${companyName} - CO2 Emissions - Dirtiest Ships`;
+            document.querySelector('meta[name="description"]').content =
+                `View CO2 emissions data for ${companyName}. See all ships and total emissions from EU MRV data.`;
+
+            fetch('json/2024_ships_data.json')
+                .then(response => response.json())
+                .then(data => {
+                    const ships = (data.ships || data)
+                        .filter(s => s.company === companyName)
+                        .sort((a, b) => (b.co2eq || 0) - (a.co2eq || 0));
+
+                    if (ships.length === 0) {
+                        showNotFound(`No ships found for "${companyName}" in the 2024 dataset.`);
+                        return;
+                    }
+
+                    const totalCo2 = ships.reduce((sum, s) => sum + (s.co2eq || 0), 0);
+                    const shipsWithCf = ships.filter(s => s.c_factor && s.c_factor > 0);
+                    const avgCFactor = shipsWithCf.length > 0
+                        ? shipsWithCf.reduce((sum, s) => sum + s.c_factor, 0) / shipsWithCf.length
+                        : null;
+
+                    const shipsRows = ships.map((s, i) => {
+                        const co2 = (s.co2eq || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        return `<tr style="animation-delay: ${i * 0.02}s">
+                            <td class="rank">${i + 1}</td>
+                            <td><a href="ship.html?id=${encodeId(s.imo)}" style="color: #4ecdc4; text-decoration: none;">${escapeHtml(s.name)}</a></td>
+                            <td>${escapeHtml(s.type || '')}</td>
+                            <td class="co2-value">${co2}</td>
+                        </tr>`;
+                    }).join('');
+
+                    document.getElementById('content').innerHTML = `
+                        <div class="ship-hero">
+                            <div class="ship-hero-bg" style="background-image: url('images/ship-smoke-left.jpg');"></div>
+                            <div class="ship-hero-content">
+                                <div class="ship-hero-info">
+                                    <h1 class="ship-hero-name">${escapeHtml(companyName)}</h1>
+                                    <div class="quick-stats">
+                                        <div class="quick-stat">
+                                            <div class="quick-stat-value">${(totalCo2 / 1000000).toFixed(2)}M</div>
+                                            <div class="quick-stat-label">Tonnes CO2-eq</div>
+                                        </div>
+                                        <div class="quick-stat">
+                                            <div class="quick-stat-value">${ships.length}</div>
+                                            <div class="quick-stat-label">Ships</div>
+                                        </div>
+                                        ${avgCFactor ? `
+                                        <div class="quick-stat">
+                                            <div class="quick-stat-value">${avgCFactor.toFixed(2)}</div>
+                                            <div class="quick-stat-label">Avg C-Factor</div>
+                                        </div>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                            <div class="chart-title">Ships (${ships.length}) — Sorted by CO2-eq</div>
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Ship Name</th>
+                                            <th>Type</th>
+                                            <th>CO2-eq (tonnes)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${shipsRows}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error loading ship data:', error);
+                    showNotFound('Error loading data. Please try again later.');
+                });
+        }
+
+        loadCompanyData();
+    </script>
+</body>
+</html>

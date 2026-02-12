@@ -78,43 +78,6 @@
         .company-link:hover {
             text-decoration: underline;
         }
-        .company-ships-row td {
-            padding: 0 !important;
-            background: rgba(0,0,0,0.3);
-        }
-        .company-ships-panel {
-            max-height: 400px;
-            overflow-y: auto;
-            padding: 15px;
-        }
-        .company-ships-panel h4 {
-            color: #4ecdc4;
-            margin: 0 0 10px 0;
-            font-size: 0.95rem;
-        }
-        .company-ships-table {
-            width: 100%;
-            font-size: 0.85rem;
-            border-collapse: collapse;
-        }
-        .company-ships-table th {
-            color: #888;
-            text-align: left;
-            padding: 6px 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .company-ships-table td {
-            padding: 6px 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            color: #ccc;
-        }
-        .company-ships-table a {
-            color: #4ecdc4;
-            text-decoration: none;
-        }
-        .company-ships-table a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
@@ -222,8 +185,6 @@
         let filteredCompanies = [];
         const ROWS_PER_PAGE = 50;
         let companyPage = 1;
-        let allShipsData = null;
-        let expandedCompany = null;
 
         const notes = {
             type: '',
@@ -445,7 +406,7 @@
                     return `
                         <tr class="${severityClass}" ${animDelay}>
                             <td class="rank">${item.rank}</td>
-                            <td><a href="#" class="company-link" data-company="${escapeHtml(item.company)}">${escapeHtml(item.company)}</a></td>
+                            <td><a href="company.html?name=${encodeURIComponent(item.company)}" class="company-link">${escapeHtml(item.company)}</a></td>
                             <td class="co2-value">${item.co2.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                             <td class="co2-value">${item.c_factor ? item.c_factor.toFixed(4) : '-'}</td>
                             <td>${item.count}</td>
@@ -481,7 +442,6 @@
             const countriesCount = europeanCountryEmissions.filter(c => c.co2 < topCompanyEmissions).length;
             const totalPages = Math.ceil((filteredCompanies.length + countriesCount) / ROWS_PER_PAGE);
             if (page >= 1 && page <= totalPages) {
-                expandedCompany = null;
                 companyPage = page;
                 renderCompanyTable();
             }
@@ -496,73 +456,9 @@
                     c.company.toLowerCase().includes(query)
                 );
             }
-            expandedCompany = null;
             companyPage = 1;
             renderCompanyTable();
         });
-
-        // Event delegation for company name clicks
-        document.getElementById('company-tbody').addEventListener('click', (e) => {
-            const link = e.target.closest('.company-link');
-            if (!link) return;
-            e.preventDefault();
-            const companyName = link.dataset.company;
-            const row = link.closest('tr');
-            toggleCompanyShips(companyName, row);
-        });
-
-        async function toggleCompanyShips(companyName, row) {
-            // Collapse existing expansion
-            const existing = document.querySelector('.company-ships-row');
-            if (existing) existing.remove();
-
-            // If same company clicked, just collapse
-            if (expandedCompany === companyName) {
-                expandedCompany = null;
-                return;
-            }
-
-            expandedCompany = companyName;
-
-            // Lazy-load ship data
-            if (!allShipsData) {
-                try {
-                    const resp = await fetch('json/2024_ships_data.json');
-                    allShipsData = await resp.json();
-                } catch (err) {
-                    expandedCompany = null;
-                    return;
-                }
-            }
-
-            const ships = (allShipsData.ships || allShipsData)
-                .filter(s => s.company === companyName)
-                .sort((a, b) => (b.co2eq || 0) - (a.co2eq || 0));
-
-            const shipsHtml = ships.map((s, i) => {
-                const imoEncoded = btoa(String(s.imo || ''));
-                const co2 = (s.co2eq || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                return `<tr>
-                    <td>${i + 1}</td>
-                    <td><a href="ship.html?id=${imoEncoded}">${escapeHtml(s.name)}</a></td>
-                    <td>${escapeHtml(s.type || '')}</td>
-                    <td style="text-align:right">${co2}</td>
-                </tr>`;
-            }).join('');
-
-            const expansionRow = document.createElement('tr');
-            expansionRow.className = 'company-ships-row';
-            expansionRow.innerHTML = `<td colspan="5">
-                <div class="company-ships-panel">
-                    <h4>${escapeHtml(companyName)} — ${ships.length} ship${ships.length !== 1 ? 's' : ''}</h4>
-                    <table class="company-ships-table">
-                        <thead><tr><th>#</th><th>Ship Name</th><th>Type</th><th style="text-align:right">CO2-eq (tonnes)</th></tr></thead>
-                        <tbody>${shipsHtml}</tbody>
-                    </table>
-                </div>
-            </td>`;
-            row.after(expansionRow);
-        }
 
         // ---- Country list ----
         function loadCountryList() {
