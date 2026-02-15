@@ -1,0 +1,17 @@
+[project]
+name = "boox-notes-conversion"
+version = "0.1.0"
+description = "Boox Note Air handwriting → AI text conversion → daily email digest"
+requires-python = ">=3.10"
+dependencies = [
+    "anthropic>=0.39.0",
+    "PyMuPDF>=1.24.0",
+    "Pillow>=10.0.0",
+]
+
+[project.optional-dependencies]
+openai = ["openai>=1.0.0"]
+dev = ["pytest>=7.0.0"]
+
+[project.scripts]
+boox-notes = "src.cli:main"
