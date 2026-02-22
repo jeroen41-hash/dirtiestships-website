@@ -7,7 +7,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-VWX5EMQSLM');
     </script>
     <meta charset="UTF-8">
@@ -25,198 +24,512 @@
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9641573711172527"
      crossorigin="anonymous"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <style>
-        .blog-container {
-            max-width: 900px;
+        /* ── Reading progress bar ─────────────────── */
+        #read-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0%;
+            background: linear-gradient(90deg, #4ecdc4, #ff6b6b);
+            z-index: 9999;
+            transition: width 0.1s linear;
+            display: none;
+        }
+
+        /* ── Blog wrapper ─────────────────────────── */
+        .blog-wrap {
+            max-width: 960px;
             margin: 0 auto;
         }
 
-        /* --- List view --- */
-        .blog-list {
+        /* ── Section label ────────────────────────── */
+        .section-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #4ecdc4;
+            margin-bottom: 18px;
             display: flex;
-            flex-direction: column;
-            gap: 20px;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-eyebrow::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(78,205,196,0.25);
         }
 
-        .blog-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 25px;
-            border-left: 4px solid #4ecdc4;
-            text-decoration: none;
+        /* ── Featured post card ───────────────────── */
+        .featured-card {
             display: block;
-            transition: background 0.2s;
+            text-decoration: none;
+            background: rgba(0,0,0,0.45);
+            border: 1px solid rgba(78,205,196,0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 48px;
+            position: relative;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .featured-card:hover {
+            border-color: rgba(78,205,196,0.55);
+            transform: translateY(-3px);
         }
 
-        .blog-card:hover {
-            background: rgba(255, 255, 255, 0.08);
+        .featured-card-inner {
+            padding: 44px 48px;
+            position: relative;
+        }
+        /* decorative large number */
+        .featured-card-inner::before {
+            content: '01';
+            position: absolute;
+            top: 20px;
+            right: 36px;
+            font-family: 'Playfair Display', serif;
+            font-size: 7rem;
+            font-weight: 900;
+            color: rgba(78,205,196,0.06);
+            line-height: 1;
+            pointer-events: none;
+            user-select: none;
         }
 
-        .blog-card-date {
-            color: #888;
-            font-size: 0.85em;
-            margin-bottom: 8px;
-        }
-
-        .blog-card-title {
-            color: #fff;
-            font-size: 1.4em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            line-height: 1.3;
-        }
-
-        .blog-card-excerpt {
-            color: #ccc;
-            font-size: 1.05em;
-            line-height: 1.5;
-        }
-
-        .blog-card-author {
-            color: #888;
-            font-size: 0.85em;
-            margin-top: 12px;
-        }
-
-        /* --- Post view --- */
-        .back-link {
+        .featured-tag {
             display: inline-block;
+            background: rgba(78,205,196,0.15);
             color: #4ecdc4;
-            text-decoration: none;
-            margin-bottom: 25px;
-            font-size: 0.95em;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 3px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(78,205,196,0.3);
         }
 
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-        .blog-post-header {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .blog-post-title {
+        .featured-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            font-weight: 900;
             color: #fff;
-            font-size: 2em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            line-height: 1.2;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            max-width: 680px;
         }
 
-        .blog-post-meta {
+        .featured-excerpt {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.05rem;
+            color: #aaa;
+            line-height: 1.65;
+            max-width: 620px;
+            margin-bottom: 28px;
+        }
+
+        .featured-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: #666;
+        }
+        .featured-meta span { color: #555; }
+        .featured-meta .meta-date { color: #888; }
+        .featured-read-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #4ecdc4;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: auto;
+        }
+        .featured-read-cta svg {
+            transition: transform 0.2s;
+        }
+        .featured-card:hover .featured-read-cta svg {
+            transform: translateX(4px);
+        }
+
+        /* ── Post grid ────────────────────────────── */
+        .post-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 48px;
+        }
+        @media (max-width: 640px) {
+            .post-grid { grid-template-columns: 1fr; }
+            .featured-card-inner { padding: 28px 24px; }
+            .featured-title { font-size: 1.7rem; }
+        }
+
+        .post-card {
+            display: block;
+            text-decoration: none;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 10px;
+            padding: 28px;
+            transition: background 0.2s, border-color 0.2s, transform 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .post-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #4ecdc4, transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .post-card:hover {
+            background: rgba(255,255,255,0.07);
+            border-color: rgba(78,205,196,0.3);
+            transform: translateY(-2px);
+        }
+        .post-card:hover::after { opacity: 1; }
+
+        .post-card-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: #555;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .post-card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #e8e8e8;
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        .post-card-excerpt {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
             color: #888;
-            font-size: 0.9em;
+            line-height: 1.6;
+            margin-bottom: 18px;
         }
 
-        .blog-post-content {
-            color: #ddd;
-            line-height: 1.8;
-            font-size: 1.05em;
+        .post-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: #555;
+        }
+        .post-card-read {
+            color: #4ecdc4;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
         }
 
-        .blog-post-content h1 {
-            display: none; /* hide duplicate h1 from markdown */
+        /* ── No-posts state ───────────────────────── */
+        .blog-empty {
+            text-align: center;
+            padding: 80px 20px;
+            color: #555;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .blog-empty-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            opacity: 0.4;
         }
 
-        .blog-post-content h2 {
-            color: #fff;
-            font-size: 1.5em;
-            margin-top: 35px;
-            margin-bottom: 15px;
-        }
-
-        .blog-post-content h3 {
-            color: #fff;
-            font-size: 1.2em;
-            margin-top: 25px;
-            margin-bottom: 10px;
-        }
-
-        .blog-post-content p {
-            margin-bottom: 16px;
-        }
-
-        .blog-post-content ul, .blog-post-content ol {
-            margin-bottom: 16px;
-            padding-left: 25px;
-        }
-
-        .blog-post-content li {
-            margin-bottom: 6px;
-        }
-
-        .blog-post-content a {
+        /* ── Post reading view ────────────────────── */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             color: #4ecdc4;
             text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        .back-link:hover { opacity: 1; }
+
+        .post-header {
+            margin-bottom: 48px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
 
-        .blog-post-content a:hover {
-            text-decoration: underline;
+        .post-header-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .post-header-meta .dot { color: #333; }
+        .post-header-meta .reading-time { color: #4ecdc4; }
+
+        .post-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -0.01em;
+        }
+        @media (max-width: 640px) {
+            .post-title { font-size: 2rem; }
         }
 
-        .blog-post-content blockquote {
+        .post-excerpt-lead {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-style: italic;
+            color: #999;
+            line-height: 1.55;
             border-left: 3px solid #4ecdc4;
             padding-left: 20px;
-            margin: 20px 0;
-            color: #aaa;
-            font-style: italic;
+            margin-top: 24px;
         }
 
-        .blog-post-content code {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9em;
+        /* ── Post content typography ──────────────── */
+        .post-body {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.05rem;
+            line-height: 1.85;
+            color: #c8c8c8;
         }
+        .post-body h1 { display: none; }
 
-        .blog-post-content pre {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin-bottom: 16px;
-        }
-
-        .blog-post-content pre code {
-            background: none;
-            padding: 0;
-        }
-
-        .blog-post-content strong {
+        .post-body h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.7rem;
+            font-weight: 700;
             color: #fff;
+            margin-top: 52px;
+            margin-bottom: 18px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .post-body h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #e0e0e0;
+            margin-top: 36px;
+            margin-bottom: 12px;
+        }
+        .post-body p { margin-bottom: 20px; }
+
+        .post-body a {
+            color: #4ecdc4;
+            text-decoration: underline;
+            text-decoration-color: rgba(78,205,196,0.35);
+            text-underline-offset: 3px;
+            transition: text-decoration-color 0.2s;
+        }
+        .post-body a:hover { text-decoration-color: #4ecdc4; }
+
+        .post-body strong { color: #fff; font-weight: 600; }
+        .post-body em { color: #bbb; }
+
+        .post-body ul, .post-body ol {
+            margin: 0 0 20px 0;
+            padding-left: 0;
+            list-style: none;
+        }
+        .post-body ul li {
+            padding-left: 24px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .post-body ul li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: #4ecdc4;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .post-body ol {
+            counter-reset: item;
+        }
+        .post-body ol li {
+            padding-left: 32px;
+            margin-bottom: 8px;
+            position: relative;
+            counter-increment: item;
+        }
+        .post-body ol li::before {
+            content: counter(item) '.';
+            position: absolute;
+            left: 0;
+            color: #4ecdc4;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
         }
 
-        .blog-post-content img {
+        .post-body blockquote {
+            margin: 36px 0;
+            padding: 24px 32px;
+            background: rgba(78,205,196,0.05);
+            border-left: 3px solid #4ecdc4;
+            border-radius: 0 6px 6px 0;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.15rem;
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        .post-body code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85em;
+            background: rgba(78,205,196,0.1);
+            color: #4ecdc4;
+            padding: 2px 7px;
+            border-radius: 3px;
+        }
+        .post-body pre {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px;
+            padding: 24px;
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+        .post-body pre code {
+            background: none;
+            color: #a8d8d5;
+            padding: 0;
+            font-size: 0.88rem;
+        }
+
+        .post-body img {
             max-width: 100%;
             border-radius: 8px;
-            margin: 20px 0;
+            margin: 28px 0;
+            border: 1px solid rgba(255,255,255,0.07);
         }
 
-        .loading {
-            text-align: center;
-            color: #888;
-            padding: 40px;
+        .post-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+        }
+        .post-body th {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #4ecdc4;
+            border-bottom: 1px solid rgba(78,205,196,0.3);
+            padding: 10px 14px;
+            text-align: left;
+        }
+        .post-body td {
+            padding: 10px 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: #bbb;
+        }
+        .post-body tr:hover td {
+            background: rgba(255,255,255,0.02);
         }
 
-        .error-message {
-            text-align: center;
-            color: #888;
-            padding: 40px;
+        /* ── Post footer ──────────────────────────── */
+        .post-footer {
+            margin-top: 60px;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
         }
+        .post-footer-author {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .post-footer-back {
+            color: #4ecdc4;
+            text-decoration: none;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .post-footer-back:hover { text-decoration: underline; }
+
+        /* ── Loading / error ──────────────────────── */
+        .loading-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #444;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* ── Fade-in animation ────────────────────── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .anim-in {
+            animation: fadeUp 0.4s ease both;
+        }
+        .anim-in:nth-child(2) { animation-delay: 0.07s; }
+        .anim-in:nth-child(3) { animation-delay: 0.14s; }
+        .anim-in:nth-child(4) { animation-delay: 0.21s; }
     </style>
 </head>
 <body>
+    <div id="read-progress"></div>
+
     <div class="container">
         <header>
             <img src="images/ship-smoke-left.jpg" alt="" class="header-img header-img-left">
             <img src="images/ship-smoke-right.jpg" alt="" class="header-img header-img-right">
             <h1>Dirtiest Ships <span style="font-size: 0.5em; font-weight: normal;">(in Europe)</span></h1>
-            <p class="subtitle">Blog</p>
+            <p class="subtitle">Analysis &amp; Insights</p>
             <nav>
                 <a href="index.html">Rankings</a>
                 <a href="charts.html">Charts</a>
@@ -228,9 +541,9 @@
             </nav>
         </header>
 
-        <div class="blog-container">
+        <div class="blog-wrap">
             <div id="blogContent">
-                <div class="loading">Loading...</div>
+                <div class="loading-state">Loading&hellip;</div>
             </div>
         </div>
 
@@ -248,47 +561,144 @@
     </div>
 
     <script>
-        const container = document.getElementById('blogContent');
-        const params = new URLSearchParams(window.location.search);
-        const postSlug = params.get('post');
+        const container  = document.getElementById('blogContent');
+        const params     = new URLSearchParams(window.location.search);
+        const postSlug   = params.get('post');
+        const progress   = document.getElementById('read-progress');
 
+        /* ── Helpers ──────────────────────────────── */
         function formatDate(dateStr) {
-            const date = new Date(dateStr + 'T00:00:00');
-            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            const d = new Date(dateStr + 'T00:00:00');
+            return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
         }
 
-        function renderPostList(posts) {
+        function shortDate(dateStr) {
+            const d = new Date(dateStr + 'T00:00:00');
+            return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        function readingTime(text) {
+            const words = (text || '').split(/\s+/).length;
+            const mins  = Math.max(1, Math.round(words / 200));
+            return mins + ' min read';
+        }
+
+        function escapeHtml(t) {
+            if (!t) return '';
+            const d = document.createElement('div');
+            d.textContent = t;
+            return d.innerHTML;
+        }
+
+        /* ── List view ────────────────────────────── */
+        function renderList(posts) {
             if (!posts.length) {
-                container.innerHTML = '<div class="error-message">No blog posts yet. Check back soon!</div>';
+                container.innerHTML = `
+                    <div class="blog-empty">
+                        <div class="blog-empty-icon">⚓</div>
+                        <p>No posts yet — check back soon.</p>
+                    </div>`;
                 return;
             }
 
-            const sorted = posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+            const sorted = [...posts].sort((a, b) => new Date(b.date) - new Date(a.date));
+            const [featured, ...rest] = sorted;
 
-            container.innerHTML = '<div class="blog-list">' + sorted.map(post => `
-                <a href="blog.html?post=${encodeURIComponent(post.slug)}" class="blog-card">
-                    <div class="blog-card-date">${formatDate(post.date)}</div>
-                    <div class="blog-card-title">${post.title}</div>
-                    <div class="blog-card-excerpt">${post.excerpt}</div>
-                    <div class="blog-card-author">By ${post.author}</div>
-                </a>
-            `).join('') + '</div>';
+            let html = '<div class="section-eyebrow anim-in">Latest Post</div>';
+
+            // Featured card
+            html += `
+                <a href="blog.html?post=${encodeURIComponent(featured.slug)}" class="featured-card anim-in">
+                    <div class="featured-card-inner">
+                        <div class="featured-tag">Featured</div>
+                        <div class="featured-title">${escapeHtml(featured.title)}</div>
+                        <div class="featured-excerpt">${escapeHtml(featured.excerpt)}</div>
+                        <div class="featured-meta">
+                            <span class="meta-date">${shortDate(featured.date)}</span>
+                            <span>·</span>
+                            <span>${escapeHtml(featured.author)}</span>
+                        </div>
+                        <div style="margin-top:24px;">
+                            <span class="featured-read-cta">
+                                Read article
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M3 8h10M9 4l4 4-4 4" stroke="#4ecdc4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </a>`;
+
+            if (rest.length) {
+                html += '<div class="section-eyebrow anim-in">All Posts</div>';
+                html += '<div class="post-grid">';
+                rest.forEach((post, i) => {
+                    html += `
+                        <a href="blog.html?post=${encodeURIComponent(post.slug)}" class="post-card anim-in">
+                            <div class="post-card-date">${shortDate(post.date)}</div>
+                            <div class="post-card-title">${escapeHtml(post.title)}</div>
+                            <div class="post-card-excerpt">${escapeHtml(post.excerpt)}</div>
+                            <div class="post-card-footer">
+                                <span>${escapeHtml(post.author)}</span>
+                                <span class="post-card-read">Read →</span>
+                            </div>
+                        </a>`;
+                });
+                html += '</div>';
+            }
+
+            container.innerHTML = html;
         }
 
+        /* ── Post view ────────────────────────────── */
         function renderPost(post, markdown) {
-            document.title = post.title + ' - Dirtiest Ships Blog';
+            document.title = post.title + ' - Dirtiest Ships';
+
+            const rt = readingTime(markdown);
+
+            // Enable reading progress bar
+            progress.style.display = 'block';
+            window.addEventListener('scroll', () => {
+                const scrollEl = document.documentElement;
+                const pct = scrollEl.scrollTop / (scrollEl.scrollHeight - scrollEl.clientHeight) * 100;
+                progress.style.width = Math.min(pct, 100) + '%';
+            });
+
+            // Strip leading h1 from markdown for cleaner rendering
+            const mdBody = markdown.replace(/^#\s+.+\n?/, '');
+            const excerpt = post.excerpt
+                ? `<div class="post-excerpt-lead">${escapeHtml(post.excerpt)}</div>` : '';
 
             container.innerHTML = `
-                <a href="blog.html" class="back-link">&larr; Back to all posts</a>
-                <div class="blog-post-header">
-                    <h1 class="blog-post-title">${post.title}</h1>
-                    <div class="blog-post-meta">${formatDate(post.date)} &middot; ${post.author}</div>
-                </div>
-                <div class="blog-post-content">${marked.parse(markdown)}</div>
-            `;
+                <a href="blog.html" class="back-link anim-in">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M11 7H3M6 3L2 7l4 4" stroke="#4ecdc4" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    All posts
+                </a>
+                <article>
+                    <header class="post-header anim-in">
+                        <div class="post-header-meta">
+                            <span class="meta-date">${formatDate(post.date)}</span>
+                            <span class="dot">·</span>
+                            <span>${escapeHtml(post.author)}</span>
+                            <span class="dot">·</span>
+                            <span class="reading-time">${rt}</span>
+                        </div>
+                        <h1 class="post-title">${escapeHtml(post.title)}</h1>
+                        ${excerpt}
+                    </header>
+                    <div class="post-body anim-in">
+                        ${marked.parse(mdBody)}
+                    </div>
+                    <footer class="post-footer">
+                        <span class="post-footer-author">By ${escapeHtml(post.author)}</span>
+                        <a href="blog.html" class="post-footer-back">← Back to all posts</a>
+                    </footer>
+                </article>`;
         }
 
-        // Load blog data
+        /* ── Bootstrap ────────────────────────────── */
         fetch('json/blog.json')
             .then(r => r.json())
             .then(data => {
@@ -297,25 +707,21 @@
                 if (postSlug) {
                     const post = posts.find(p => p.slug === postSlug);
                     if (!post) {
-                        container.innerHTML = '<div class="error-message">Post not found. <a href="blog.html" style="color:#4ecdc4;">Back to blog</a></div>';
+                        container.innerHTML = `<div class="blog-empty"><p>Post not found. <a href="blog.html" style="color:#4ecdc4">← Back to blog</a></p></div>`;
                         return;
                     }
-
                     fetch('blog/posts/' + post.slug + '.md')
-                        .then(r => {
-                            if (!r.ok) throw new Error('Not found');
-                            return r.text();
-                        })
+                        .then(r => { if (!r.ok) throw new Error(); return r.text(); })
                         .then(md => renderPost(post, md))
                         .catch(() => {
-                            container.innerHTML = '<div class="error-message">Could not load post. <a href="blog.html" style="color:#4ecdc4;">Back to blog</a></div>';
+                            container.innerHTML = `<div class="blog-empty"><p>Could not load post. <a href="blog.html" style="color:#4ecdc4">← Back to blog</a></p></div>`;
                         });
                 } else {
-                    renderPostList(posts);
+                    renderList(posts);
                 }
             })
             .catch(() => {
-                container.innerHTML = '<div class="error-message">Could not load blog. Please try again later.</div>';
+                container.innerHTML = `<div class="blog-empty"><p>Could not load blog. Please try again later.</p></div>`;
             });
     </script>
 </body>

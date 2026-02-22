@@ -204,6 +204,7 @@
                 <a href="compare.html">Compare</a>
                 <a href="cii.html">CII Ratings</a>
                 <a href="news.html" class="active">News</a>
+                <a href="blog.html">Blog</a>
                 <a href="FAQ.html">Why?</a>
             </nav>
         </header>
@@ -293,7 +294,7 @@
         }
 
         function getFilteredNews() {
-            return allNews;
+            return allNews.filter(item => (item.score || 0) >= 50);
         }
 
         function renderNews() {
