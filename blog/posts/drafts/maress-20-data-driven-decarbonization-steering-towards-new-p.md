@@ -1,0 +1,21 @@
+The shipping industry faces intensifying pressure to decarbonize, driven by evolving regulations like the EU Emissions Trading System (ETS) and the IMO's Carbon Intensity Indicator ([CII ratings](/cii.html)). In this environment, data-driven solutions are becoming crucial for shipowners to track, manage, and improve their environmental performance. The launch of Maress 2.0, an updated version of the vessel performance monitoring software, highlights this growing need for sophisticated tools to achieve compliance and reduce emissions.
+
+## Maress 2.0: An Evolution in Data-Driven Decarbonization
+
+According to hellenicshippingnews.com, Maress 2.0 builds upon the original Maress platform, which has been used by over 700 offshore vessels to reduce fuel consumption and emissions. The upgraded software offers improved analytics, weather data integration, support for alternative fuels, and enhanced data validation features. These enhancements aim to provide ship operators with actionable insights into vessel performance, enabling them to optimize operations and reduce their carbon footprint. The article states a key feature allows instant comparison of vessels, or tracking a single vessel’s progress over time, helping to identify opportunities for efficiency and cost savings.
+
+## Quantifiable Emission Reductions: A Case Study
+
+The article highlights the impact of Maress through the results of three annual "Summer Campaigns" from 2023-2025. In 2025, over 300 vessels from 12 leading shipping companies reportedly saved approximately 12,000 metric tons of carbon dioxide emissions, achieving an average efficiency improvement of more than 10%. Similar results were seen in 2024, with 303 vessels saving over 7,000 mt of CO2, and in 2023, when 133 vessels saved 10,000 mt of CO2. While the exact methodology for calculating these savings isn't detailed, the consistency across the campaigns suggests a tangible benefit from using the Maress software. The success of Havila Subsea & Renewables' vessel Volantis, which achieved significant savings through real-time optimization while spending a large portion of its time in dynamic positioning or transit modes, exemplifies the potential of data-driven operational adjustments.
+
+## The Importance of Data Quality and Validation
+
+A key element of Maress 2.0 is its focus on data quality and validation. The new Data QA and Validation module aims to ensure that vessel data is trustworthy, enabling operators and crews to respond to issues before they impact operations or compliance. Accurate and reliable data is essential for effective emissions monitoring, reporting, and verification (MRV), particularly in the context of the EU ETS. The [EMSA MRV data](/charts.html) plays a critical role in understanding the overall emissions landscape of the shipping industry, and tools like Maress contribute to the accuracy of that data.
+
+## Alternative Fuels and Future-Proofing
+
+The inclusion of support for alternative fuels, such as biofuels, in Maress 2.0 is a significant development. As the shipping industry transitions towards cleaner energy sources, the ability to track and analyze the performance of vessels using these fuels will be crucial. This feature aligns with the broader industry trend of exploring and adopting alternative fuels to meet decarbonization targets and comply with increasingly stringent regulations. Support for alternative fuels also allows for better lifecycle analysis of emissions, something increasingly demanded by charterers and regulators.
+
+## What This Means for Shipping Emissions
+
+The development and adoption of software solutions like Maress 2.0 demonstrate the growing importance of data-driven approaches to decarbonizing the shipping industry. By providing shipowners and operators with the tools to monitor, analyze, and optimize vessel performance, these solutions can contribute to significant reductions in fuel consumption and emissions. As regulations like the EU ETS and the [CII ratings](/cii.html) system continue to incentivize emission reductions, the demand for such solutions is likely to increase. Companies that effectively leverage these tools will be better positioned to improve their [company rankings](/companies.html), achieve compliance, and contribute to a more sustainable maritime industry.

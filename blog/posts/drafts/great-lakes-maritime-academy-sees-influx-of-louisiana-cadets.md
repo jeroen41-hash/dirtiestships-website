@@ -1,0 +1,25 @@
+The Great Lakes Maritime Academy (GLMA) in Traverse City, Michigan, is experiencing an unexpected influx of cadets from Louisiana, highlighting a potential area for future emissions regulation within the US inland waterway system. While seemingly a local interest story, the movement of aspiring maritime professionals from the Gulf Coast to the Great Lakes underscores the complex interplay between regional shipping economies and the future pool of talent that will be managing vessels operating under increasing emissions scrutiny.
+
+## Louisiana's Pipeline to the Great Lakes
+
+According to a recent report by 9and10news.com, the GLMA attracts a significant number of cadets from Louisiana, with Rear Admiral Jerry Achenbach estimating that 15 to 18 percent of the academy's cohort hails from the "Bayou State." The primary draw for these cadets is the aspiration to become pilots on the Mississippi River, a critical artery for US shipping. Many graduates initially find work on offshore supply vessels before transitioning to piloting roles. This raises an interesting question: if the future Mississippi pilots train on the Great Lakes, what are the implications for future adoption of greener technologies and best practices on the Mississippi?
+
+The GLMA admits up to 60 cadets annually, offering both deck officer and engineering programs. The engineering program, as exemplified by second-year cadet Karson Keyser, prepares students to operate and maintain vessel engines and machinery. This focus on engineering is particularly relevant to future emissions reductions, as skilled engineers will be crucial in implementing and maintaining new technologies aimed at reducing shipping's carbon footprint. While the article does not specify the curriculum's focus on emissions reduction technologies, the fact that GLMA has a strong engineering program means there is opportunity to integrate modern emission reduction practices into the curriculum.
+
+## The Allure of the Great Lakes Shipping Industry
+
+The article cites Achenbach stating the Great Lakes shipping industry actively supports the academy, contributing approximately $5,000 per cadet for sea projects on Great Lakes freighters. This investment reveals the industry's commitment to developing skilled personnel. It is also important that these cadets stay in the Great Lakes region for a couple years after graduation. However, the desire for many cadets to return to the Mississippi River raises a challenge: how to retain talent within the Great Lakes region to drive innovation and sustainability in this specific shipping sector? This competition for skilled maritime professionals could also indirectly impact the rate of adoption of emissions-reducing technologies across different US waterways.
+
+## Implications for US Inland Waterway Emissions
+
+The article does not directly address emissions, but the movement of future maritime professionals across different shipping regions is relevant. The Mississippi River and the Great Lakes represent distinct shipping environments with different vessel types, operational profiles, and regulatory landscapes. The transfer of knowledge and best practices between these regions will be crucial for driving overall emissions reductions in the US maritime sector.
+
+For example, vessels operating on the Great Lakes may be subject to different air quality regulations than those on the Mississippi River. Cadets trained on the Great Lakes could bring their understanding of stricter environmental standards to the Mississippi, potentially influencing the adoption of cleaner technologies and practices in that region.
+
+## A Missed Opportunity for Emissions Data?
+
+While the article focuses on the human element of maritime training, it misses an opportunity to discuss the environmental aspects of shipping. It would be interesting to know what proportion of the GLMA's curriculum focuses on emissions reduction technologies, alternative fuels, and compliance with environmental regulations. Furthermore, examining the types of vessels cadets train on could provide insights into the academy's commitment to sustainability. Does the academy prioritize training on newer, more fuel-efficient vessels, or are cadets primarily exposed to older, more polluting ships?
+
+## What this means for shipping emissions:
+
+The movement of maritime cadets from Louisiana to the Great Lakes underscores the interconnectedness of the US shipping industry. While the immediate impact on shipping emissions is not directly discussed in the article, the training and career paths of these future maritime professionals will play a crucial role in shaping the industry's environmental performance. The movement of personnel also highlights the need for consistent and robust emissions monitoring across all US waterways, potentially drawing from the models used for the EU MRV or informing [CII ratings](/cii.html) methodologies applicable to inland shipping.
