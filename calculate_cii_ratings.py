@@ -68,7 +68,12 @@ def load_mrv_excel():
     """Load MRV Excel data and extract fuel consumption and distance info."""
     print(f"Loading MRV Excel from {EXCEL_FILE}...")
 
-    df = pd.read_excel(EXCEL_FILE, sheet_name="2024 Full ERs", header=2)
+    df_full = pd.read_excel(EXCEL_FILE, sheet_name="2024 Full ERs", header=2)
+    df_partial = pd.read_excel(EXCEL_FILE, sheet_name="2024 Partial ERs", header=2)
+
+    # Combine both sheets; Full ERs takes precedence (keep_duplicates='first')
+    df = pd.concat([df_full, df_partial], ignore_index=True)
+    df = df.drop_duplicates(subset=['IMO Number'], keep='first')
 
     # Convert relevant columns to numeric
     df['IMO Number'] = df['IMO Number'].astype(str).str.strip()
@@ -102,7 +107,7 @@ def load_mrv_excel():
                     'ship_type': ship_type
                 }
 
-    print(f"Loaded {len(mrv_data)} ships with distance data from MRV Excel")
+    print(f"Loaded {len(mrv_data)} ships with distance data from MRV Excel (Full + Partial ERs)")
     return mrv_data
 
 
