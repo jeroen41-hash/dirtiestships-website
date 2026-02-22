@@ -6,9 +6,10 @@ import openpyxl
 import sys
 from collections import defaultdict
 
-EXCEL_FILE = 'data/2024-v173-07022026-EU MRV Publication of information.xlsx'
-SHEET_NAME = '2024 Full ERs'
-HEADER_ROWS = 3  # skip first 3 rows (headers)
+EXCEL_FILE   = 'data/2024-v173-07022026-EU MRV Publication of information.xlsx'
+SHEET_FULL   = '2024 Full ERs'
+SHEET_PARTIAL = '2024 Partial ERs'
+HEADER_ROWS  = 3  # skip first 3 rows (headers)
 
 # Column indices (0-based)
 COL_IMO = 0
@@ -81,19 +82,18 @@ def build_company_imo_lookup():
     return lookup
 
 
-def main():
-    print(f"Loading {EXCEL_FILE}...")
-    wb = openpyxl.load_workbook(EXCEL_FILE, read_only=True, data_only=True)
-    ws = wb[SHEET_NAME]
-
-    registry_map = load_registry_mapping()
-
+def load_sheet(ws, registry_map, seen_imos=None):
+    """Parse a Full or Partial ERs worksheet, return list of ship dicts."""
+    if seen_imos is None:
+        seen_imos = set()
     ships = []
     skipped = 0
-
-    for i, row in enumerate(ws.iter_rows(min_row=HEADER_ROWS + 1, values_only=True)):
+    for row in ws.iter_rows(min_row=HEADER_ROWS + 1, values_only=True):
         imo = parse_str(row[COL_IMO])
         if not imo or imo == 'N/A':
+            skipped += 1
+            continue
+        if imo in seen_imos:
             skipped += 1
             continue
 
@@ -102,7 +102,6 @@ def main():
             skipped += 1
             continue
 
-        # Build fuel_per_transport
         fpt = {}
         for key, col in FPT_COLS.items():
             val = parse_float(row[col])
@@ -125,9 +124,30 @@ def main():
             'fuel_per_transport': fpt,
         }
         ships.append(ship)
+        seen_imos.add(imo)
+    return ships, skipped
+
+
+def main():
+    print(f"Loading {EXCEL_FILE}...")
+    wb = openpyxl.load_workbook(EXCEL_FILE, read_only=True, data_only=True)
+
+    registry_map = load_registry_mapping()
+
+    # Load Full ERs first
+    full_ships, full_skipped = load_sheet(wb[SHEET_FULL], registry_map)
+    seen_imos = {s['imo'] for s in full_ships}
+    print(f"  Full ERs:    {len(full_ships)} ships ({full_skipped} skipped)")
+
+    # Load Partial ERs, skipping IMOs already in Full ERs
+    partial_ships, partial_skipped = load_sheet(wb[SHEET_PARTIAL], registry_map, seen_imos)
+    print(f"  Partial ERs: {len(partial_ships)} ships ({partial_skipped} skipped)")
+
+    ships = full_ships + partial_ships
+    skipped = full_skipped + partial_skipped
 
     wb.close()
-    print(f"Loaded {len(ships)} ships ({skipped} skipped)")
+    print(f"Total: {len(ships)} ships ({skipped} skipped)")
 
     # Sort by co2eq descending, assign ranks
     ships.sort(key=lambda s: s['co2eq'], reverse=True)

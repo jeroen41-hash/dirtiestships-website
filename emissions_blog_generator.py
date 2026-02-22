@@ -68,7 +68,7 @@ DRAFTS_DIR     = os.path.join(BASE_DIR, "blog", "posts", "drafts")
 BLOG_DRAFTS    = os.path.join(BASE_DIR, "json", "blog_drafts.json")
 BLOG_JSON      = os.path.join(BASE_DIR, "json", "blog.json")
 
-BLOG_THRESHOLD = 70    # Minimum score to generate a blog post
+BLOG_THRESHOLD = 100   # Minimum score to generate a blog post
 MODEL          = "gemini-2.0-flash"
 
 # ---------------------------------------------------------------------------

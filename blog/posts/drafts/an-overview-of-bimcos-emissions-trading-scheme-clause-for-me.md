@@ -1,0 +1,27 @@
+The adoption of BIMCO's Emissions Trading Scheme (ETS) Clause for Memoranda of Agreement (MOA) 2025 marks a crucial step towards clarifying responsibilities in the increasingly complex world of maritime emissions regulations. As the EU Emissions Trading System (EU ETS) continues to impact ship sales and purchase agreements, and with the potential for more regional schemes to emerge, this clause offers a framework for allocating liabilities between buyers and sellers. This is particularly relevant to our tracking of CO2 emissions via the EU MRV data, our [CII ratings](/cii.html) tool, and analysis of EU ETS carbon costs.
+
+## Clear Allocation of Responsibilities
+
+The BIMCO clause, formally adopted in December 2025 (according to hellenicshippingnews.com), aims to provide "clear and practical contractual tools" for managing environmental regulations during vessel sale and purchase. It was developed through a collaborative effort involving shipowners, brokers, legal experts, and P&I clubs, emphasizing a practical approach to navigating the regulatory landscape. The core function of the clause is to clearly delineate responsibilities for emissions compliance between the seller and the buyer of a vessel.
+
+Specifically, the clause stipulates that the seller retains responsibility for all compliance obligations, including reporting and surrendering emission allowances, up to and including the point of vessel delivery. This ensures that buyers are not saddled with pre-existing emissions liabilities. From the moment of delivery, the buyer assumes full responsibility for the vessel’s compliance with applicable emission schemes. This includes surrendering allowances for post-delivery emissions and fulfilling ongoing reporting requirements. This is in line with the EU ETS, and prevents sellers passing on liability to buyers.
+
+## Indemnification and Future-Proofing
+
+The clause includes an indemnification provision, whereby the seller agrees to protect the buyer from any claims, losses, damages, or liabilities arising from non-compliance or failure to surrender emission allowances prior to delivery (hellenicshippingnews.com). While this indemnity is less likely to be triggered under the current EU ETS structure, where pre-delivery liabilities remain with the seller, its inclusion is designed to future-proof the clause against the potential evolution of emissions trading schemes globally. This is critical because the regulatory landscape is far from static, and other jurisdictions may adopt different mechanisms for allocating emissions responsibilities.
+
+It's worth noting that this approach differs from the FuelEU Maritime regulation. FuelEU Maritime requires buyers to assume the sellers’ accrued compliance balance at delivery, necessitating financial settlement at the point of ownership transfer. The BIMCO clause offers a different approach, aligning responsibilities more directly with the period of ownership, at least when it comes to compliance with emissions trading schemes.
+
+## Implications for EU ETS and Beyond
+
+The BIMCO clause is designed to be adaptable and applicable beyond the EU ETS. It aims to cover any emission scheme(s) worldwide, anticipating the development of future cap-and-trade mechanisms. This forward-looking approach is essential, given the increasing global focus on decarbonizing the shipping industry. As we track on [emissions data](/charts.html), regional emissions schemes are already impacting fleet activity and are influencing investment decisions.
+
+However, the article provided by hellenicshippingnews.com does not specify how the clause interacts with the complexities of vessel operations that span multiple jurisdictions or the practical challenges of verifying pre-delivery emissions in all scenarios. It also lacks detail on how this clause might affect smaller shipping companies or those operating with older vessels. The impact on charter agreements is also not mentioned, leaving questions about the liability for emissions caused during a charter period.
+
+## Contractual Certainty in a Dynamic Landscape
+
+The adoption of the BIMCO ETS Clause for MOA 2025 underscores the growing need for contractual certainty in the face of evolving environmental regulations. By clearly assigning responsibilities and providing a framework for managing emissions compliance during vessel ownership transfers, the clause aims to mitigate potential disputes and facilitate smoother transactions. It also encourages transparency and accountability, as sellers are required to provide verified emissions reports for the period of their ownership. This greater transparency could in turn influence our [company rankings](/companies.html), as environmental performance becomes more visible and monetized.
+
+## What this means for shipping emissions
+
+This BIMCO clause doesn't directly reduce shipping emissions. However, by clarifying financial responsibilities for CO2 under emissions trading schemes during vessel sales, it indirectly promotes emissions reductions. Sellers are incentivized to minimize emissions prior to sale to reduce their allowance obligations, and buyers have certainty about the emissions performance of their new assets. This, in conjunction with mechanisms like the EU ETS and FuelEU Maritime, will likely steer the industry towards greater efficiency and adoption of cleaner fuels.

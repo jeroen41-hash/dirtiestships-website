@@ -1,0 +1,27 @@
+The IMO's Sub-Committee on Pollution Prevention and Response (PPR) concluded its 13th session (PPR 13) in February 2026, addressing crucial aspects of maritime pollution and laying groundwork for future regulations. The meeting saw progress in several key areas, from biofouling management to exhaust gas cleaning systems, all of which will impact the emissions profile of the global shipping fleet and the operational costs for ship owners already grappling with the EU ETS.
+
+## Biofouling Framework Moves Forward
+
+A significant development from PPR 13 was the commencement of discussions on a legally binding framework for managing ships' biofouling. Biofouling, the accumulation of aquatic organisms on a ship's hull, increases drag, leading to higher fuel consumption and, consequently, greater CO2 emissions. While the source article is light on specific details, it notes the agreement that a new convention is the most suitable way forward and will be considered at MEPC 86 in 2027, with the aim of finalizing a draft legal framework by 2029 for consideration by MEPC 89. This framework aims to minimize the transfer of invasive aquatic species, but a side benefit will be decreased fuel consumption by reducing drag. The delay in implementation means this will not address emissions for several years; however, companies proactively addressing biofouling through hull cleaning and advanced coatings may see benefits in their [CII ratings](/cii.html) in the interim.
+
+## Air Pollution: Black Carbon and NOx Emissions
+
+PPR 13 also tackled air pollution, including black carbon (BC) and NOx emissions. Discussions on reducing BC emissions in the Arctic through a "polar fuel" concept were held, but the committee acknowledged that fuel quality alone is insufficient and there are overlaps with measures such as the Arctic HFO ban and sulphur limits in Emission Control Areas (ECAs). Refined proposals are expected at PPR 14 in 2027.
+
+Regarding NOx emissions, the sub-committee began reviewing the NOx emission requirements under MARPOL Annex VI and the NOx Technical Code (NTC) 2008. The need to address elevated NOx emissions at low engine loads was acknowledged. Amendments to the NTC 2008 were also agreed to, facilitating the certification of engines operating on non-carbon fuels like ammonia and hydrogen. These amendments are expected to be approved at MEPC 84 and adopted at MEPC 85 in November 2026. This is a critical step in enabling the adoption of alternative fuels, a key decarbonization pathway for the industry, and may impact the [company rankings](/companies.html) as new technologies are adopted.
+
+## Discharge Water and Tank Cleaning
+
+The handling of discharge water from Exhaust Gas Cleaning Systems (EGCSs), also known as scrubbers, was another point of discussion. PPR 13 concluded that member states proposing new Particularly Sensitive Sea Area (PSSA) designations should first undertake a risk assessment to determine whether discharge restrictions are reasonable, following the methodology outlined in MEPC.1/Circ.899. This is relevant to ships fitted with open-loop scrubbers, which discharge washwater into the sea. Restrictions on EGCS discharge could increase the operational costs for ships using this technology, as they may be forced to switch to more expensive compliant fuels in certain areas.
+
+Efforts to improve cargo tank stripping, tank washing operations, and prewash procedures also saw progress. There was support for including the ship’s position during the discharge of tank washings within the format of the Cargo Record Book (CRB) for vessels carrying noxious liquid substances in bulk.
+
+## Oily Bilge Water and Sewage Treatment
+
+PPR 13 addressed the handling of oily bilge water by agreeing on amendments to MARPOL Annex I, introducing a new Regulation 12B and revising the format of the IOPP certificate and the Oil Record Book (ORB). The new regulation introduces the Oily Bilge Water Service Tank, intended for the controlled dewatering of oily bilge water.
+
+Progress was also made on the revision of MARPOL Annex IV, concerning sewage treatment. A Correspondence Group was established to continue working on draft amendments related to the Sewage Record Book (SRB), Sewage Management Plan (SMP), and associated guidelines, reporting to PPR 14 in 2027.
+
+## What This Means for Shipping Emissions
+
+PPR 13's outcomes represent incremental progress towards reducing the environmental impact of shipping. While the biofouling framework promises longer-term benefits in fuel efficiency, the amendments regarding NOx emissions and alternative fuel certification could have a more immediate impact on enabling the adoption of cleaner fuels. The discussions surrounding EGCS discharge water highlight the ongoing debate about the environmental trade-offs of different emissions reduction technologies. Ultimately, the effectiveness of these measures will depend on their implementation and enforcement, as well as the broader uptake of sustainable practices across the industry. As new regulations come into force, the [EU ETS carbon costs](/charts.html) for non-compliant ships will increase, impacting operational profitability and potentially accelerating the transition to cleaner technologies.
