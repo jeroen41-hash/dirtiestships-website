@@ -19,6 +19,8 @@ COL_EFFICIENCY = 4
 COL_REGISTRY = 5
 COL_COMPANY_IMO = 8   # Company/DoC holder IMO number
 COL_COMPANY = 9
+COL_FUEL  = 23       # Total fuel consumption [m tonnes]
+COL_CO2   = 28       # Total CO₂ emissions [m tonnes]
 COL_CO2EQ = 58       # Total CO2eq emissions [m tonnes]
 COL_FPT_MASS = 74    # Fuel consumption per transport work (mass)
 COL_FPT_VOLUME = 76  # (volume)
@@ -111,6 +113,10 @@ def load_sheet(ws, registry_map, seen_imos=None):
         registry = parse_str(row[COL_REGISTRY])
         country = registry_map.get(registry, registry)
 
+        fuel  = parse_float(row[COL_FUEL])
+        co2   = parse_float(row[COL_CO2])
+        c_factor = round(co2 / fuel, 4) if (fuel and fuel > 0 and co2 and co2 > 0) else None
+
         ship = {
             'imo': imo,
             'name': parse_str(row[COL_NAME]),
@@ -123,6 +129,9 @@ def load_sheet(ws, registry_map, seen_imos=None):
             'country': country,
             'fuel_per_transport': fpt,
         }
+        if c_factor is not None:
+            ship['c_factor']     = c_factor
+            ship['fuel_tonnes']  = round(fuel, 2)
         ships.append(ship)
         seen_imos.add(imo)
     return ships, skipped
