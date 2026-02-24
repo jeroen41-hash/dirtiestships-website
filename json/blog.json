@@ -1,6 +1,14 @@
 {
   "posts": [
     {
+      "slug": "lng-from-waste-to-wake",
+      "title": "LNG – From Waste to Wake",
+      "date": "2026-02-16",
+      "excerpt": "FuelEU Maritime incentivizes LNG shipowners to switch to Bio-LNG due to its favorable lifecycle GHG emissions. Bio-LNG, produced via onshore purification and liquefaction, utilizes existing LNG inf...",
+      "author": "DirtiestShips",
+      "source_url": "https://www.hellenicshippingnews.com/lng-from-waste-to-wake/"
+    },
+    {
       "slug": "ammonia-technology-moves-closer-to-powering-deep-sea-shippin",
       "title": "Ammonia technology moves closer to powering deep-sea shipping",
       "date": "2026-02-16",
