@@ -1,32 +1,6 @@
 {
   "posts": [
     {
-      "slug": "ammonia-technology-moves-closer-to-powering-deep-sea-shippin",
-      "title": "Ammonia technology moves closer to powering deep-sea shipping",
-      "date": "2026-02-16",
-      "excerpt": "Everllence's new ME-LGIA dual-fuel engine, rated at 10-15 MW, is slated for use in seven ships, but ammonia's lifecycle emissions remain a concern. Ammonia's high toxicity necessitates specialized ...",
-      "author": "DirtiestShips",
-      "source_url": "https://www.hellenicshippingnews.com/ammonia-technology-moves-closer-to-powering-deep-sea-shipping/",
-      "source_name": "hellenicshippingnews.com",
-      "score": 228,
-      "featured_image": "",
-      "scheduled": "2026-02-24 08:10",
-      "created": "2026-02-22 19:15"
-    },
-    {
-      "slug": "lng-from-waste-to-wake",
-      "title": "LNG – From Waste to Wake",
-      "date": "2026-02-16",
-      "excerpt": "FuelEU Maritime incentivizes LNG shipowners to switch to Bio-LNG due to its favorable lifecycle GHG emissions. Bio-LNG, produced via onshore purification and liquefaction, utilizes existing LNG inf...",
-      "author": "DirtiestShips",
-      "source_url": "https://www.hellenicshippingnews.com/lng-from-waste-to-wake/",
-      "source_name": "hellenicshippingnews.com",
-      "score": 208,
-      "featured_image": "",
-      "scheduled": "2026-02-23 09:08",
-      "created": "2026-02-22 19:15"
-    },
-    {
       "slug": "maress-20-data-driven-decarbonization-steering-towards-new-p",
       "title": "Maress 2.0: Data-driven Decarbonization Steering Towards New Performance Heights",
       "date": "2026-02-17",
@@ -66,19 +40,6 @@
       "created": "2026-02-22 19:16"
     },
     {
-      "slug": "caribbean-pushes-for-coordinated-maritime-decarbonisation-st",
-      "title": "Caribbean Pushes for Coordinated Maritime Decarbonisation Strategy",
-      "date": "2026-02-10",
-      "excerpt": "Caribbean nations are coordinating maritime decarbonisation efforts, but dirtiestships.com questions if this will truly reduce carbon intensity or just create bureaucracy. Calls for investment in a...",
-      "author": "DirtiestShips",
-      "source_url": "https://shipandbunker.com/news/am/821927-caribbean-pushes-for-coordinated-maritime-decarbonisation-strategy-at-imo-event",
-      "source_name": "shipandbunker.com",
-      "score": 149,
-      "featured_image": "https://shipandbunker.cdn.speedyrails.net/a/img/_mt_6540329e18474f1906f89a05b35f2f90.jpg",
-      "scheduled": null,
-      "created": "2026-02-22 19:16"
-    },
-    {
       "slug": "uk-shipping-industry-urges-course-correction-on-uk-ets-expan",
       "title": "UK Shipping Industry Urges Course Correction on UK ETS Expansion",
       "date": "2026-02-13",
@@ -100,19 +61,6 @@
       "source_url": "https://www.hellenicshippingnews.com/new-analysis-warns-there-is-no-obvious-compromise-to-the-net-zero-framework/",
       "source_name": "hellenicshippingnews.com",
       "score": 130,
-      "featured_image": "",
-      "scheduled": null,
-      "created": "2026-02-22 19:17"
-    },
-    {
-      "slug": "why-canada-iceland-and-norway-must-show-leadership-on-cuttin",
-      "title": "Why Canada, Iceland and Norway Must Show Leadership on Cutting Shipping's Arctic Emissions",
-      "date": "2026-01-30",
-      "excerpt": "Ahead of next month's meeting of the International Maritime Organization's (IMO) Pollution Prevention and Response committee (PPR 13, February 9-13), the Clean Arctic Alliance is calling on Canada,...",
-      "author": "DirtiestShips",
-      "source_url": "https://www.hellenicshippingnews.com/why-canada-iceland-and-norway-must-show-leadership-on-cutting-shippings-arctic-emissions/",
-      "source_name": "hellenicshippingnews.com",
-      "score": 123,
       "featured_image": "",
       "scheduled": null,
       "created": "2026-02-22 19:17"
@@ -233,32 +181,6 @@
       "featured_image": "",
       "scheduled": null,
       "created": "2026-02-22 19:18"
-    },
-    {
-      "slug": "lr-advisory-to-support-geogas-on-fueleu-compliance-and-pooli",
-      "title": "LR Advisory to Support Geogas on FuelEU Compliance and Pooling",
-      "date": "2026-02-10",
-      "excerpt": "Geogas enlists Lloyd's Register to navigate FuelEU Maritime, a scheme that allows carbon credit trading. This likely aims to offset continued fossil fuel use across their fleet. Will Geogas reduce ...",
-      "author": "DirtiestShips",
-      "source_url": "https://shipandbunker.com/news/emea/852614-lr-advisory-to-support-geogas-on-fueleu-compliance-and-pooling",
-      "source_name": "shipandbunker.com",
-      "score": 103,
-      "featured_image": "https://shipandbunker.cdn.speedyrails.net/a/img/_mt_98a52cba574f6b2af5a381c57a9e89ff.jpg",
-      "scheduled": null,
-      "created": "2026-02-22 19:18"
-    },
-    {
-      "slug": "ppr-13-the-quiet-imo-meeting-that-could-change-how-ships-are",
-      "title": "PPR 13: The Quiet IMO Meeting That Could Change How Ships Are Actually Run",
-      "date": "2026-02-18",
-      "excerpt": "IMO's PPR 13 indicates a shift towards measuring environmental performance by actual vessel operation, not just fuel type. Increased scrutiny of biofouling management will likely force operators to...",
-      "author": "DirtiestShips",
-      "source_url": "https://gcaptain.com/ppr-13-the-quiet-imo-meeting-that-could-change-how-ships-are-actually-run/",
-      "source_name": "gcaptain.com",
-      "score": 100,
-      "featured_image": "https://gcaptain.com/wp-content/uploads/2017/10/shutterstock_1901401.jpg",
-      "scheduled": "2026-02-23 12:01",
-      "created": "2026-02-22 19:19"
     }
   ]
 }

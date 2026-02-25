@@ -1,6 +1,39 @@
 {
   "posts": [
     {
+      "slug": "eu-shipping-emissions-new-regulations-explained",
+      "title": "EU Shipping Emissions: New Regulations Explained",
+      "date": "2026-02-23",
+      "excerpt": "The EU's new regulations aim to cut shipping emissions via the Emissions Trading System (ETS) and incentivizing cleaner fuels. These mandates force shipowners to innovate or face penalties for exce...",
+      "author": "DirtiestShips",
+      "source_url": "https://www.thedetroitbureau.com/today-report/eu-shipping-emissions-new-regulations-explained-1767647818"
+    },
+    {
+      "slug": "ppr-13-the-quiet-imo-meeting-that-could-change-how-ships-are",
+      "title": "PPR 13: The Quiet IMO Meeting That Could Change How Ships Are Actually Run",
+      "date": "2026-02-18",
+      "excerpt": "IMO's PPR 13 indicates a shift towards measuring environmental performance by actual vessel operation, not just fuel type. Increased scrutiny of biofouling management will likely force operators to...",
+      "author": "DirtiestShips",
+      "featured_image": "https://gcaptain.com/wp-content/uploads/2017/10/shutterstock_1901401.jpg",
+      "source_url": "https://gcaptain.com/ppr-13-the-quiet-imo-meeting-that-could-change-how-ships-are-actually-run/"
+    },
+    {
+      "slug": "lng-from-waste-to-wake",
+      "title": "LNG – From Waste to Wake",
+      "date": "2026-02-16",
+      "excerpt": "FuelEU Maritime incentivizes LNG shipowners to switch to Bio-LNG due to its favorable lifecycle GHG emissions. Bio-LNG, produced via onshore purification and liquefaction, utilizes existing LNG inf...",
+      "author": "DirtiestShips",
+      "source_url": "https://www.hellenicshippingnews.com/lng-from-waste-to-wake/"
+    },
+    {
+      "slug": "ammonia-technology-moves-closer-to-powering-deep-sea-shippin",
+      "title": "Ammonia technology moves closer to powering deep-sea shipping",
+      "date": "2026-02-16",
+      "excerpt": "Everllence's new ME-LGIA dual-fuel engine, rated at 10-15 MW, is slated for use in seven ships, but ammonia's lifecycle emissions remain a concern. Ammonia's high toxicity necessitates specialized ...",
+      "author": "DirtiestShips",
+      "source_url": "https://www.hellenicshippingnews.com/ammonia-technology-moves-closer-to-powering-deep-sea-shipping/"
+    },
+    {
       "slug": "green-vessel-investments-continue-despite-delays",
       "title": "\"Green\" Vessel Investments Continue Despite Delays",
       "date": "2026-02-13",
