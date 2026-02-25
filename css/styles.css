@@ -152,6 +152,17 @@ nav a:hover, nav a.active {
     color: #1a1a2e;
 }
 
+nav a.nav-sister {
+    color: #00d97e;
+    border-color: #00d97e;
+    margin-left: 10px;
+}
+
+nav a.nav-sister:hover {
+    background: #00d97e;
+    color: #1a1a2e;
+}
+
 /* ============================================
    YEAR SELECTOR
    ============================================ */
