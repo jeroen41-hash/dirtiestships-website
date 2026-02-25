@@ -1053,6 +1053,46 @@ tr.emission-minimal {
     margin-top: 10px;
 }
 
+.ccs-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.ccs-badge-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #7AB8A4, #4F7A6A);
+    box-shadow: 0 4px 20px rgba(79, 122, 106, 0.3);
+    position: relative;
+}
+
+.ccs-badge-icon::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(122, 184, 164, 0.3);
+}
+
+.ccs-badge-label {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 10px;
+}
+
 .sparkline-container {
     margin-top: 15px;
     display: flex;
@@ -1878,6 +1918,19 @@ footer a:hover {
 /* ============================================
    FUEL TYPE TAGS
    ============================================ */
+.ccs-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, #7AB8A4, #4F7A6A);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 5px;
+    vertical-align: middle;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+}
+
 .meoh-tag {
     display: inline-block;
     background: linear-gradient(135deg, #2ecc71, #27ae60);

@@ -174,6 +174,7 @@
         let sortDirection = 'asc';
         let currentYear = '2024';
         let meohVessels = new Set();
+        let ccsVessels = new Set();
         let euaPrice = 65; // Default fallback price
 
         // Unpadded Base64 encoding (removes trailing =)
@@ -213,6 +214,14 @@
             .then(response => response.json())
             .then(data => {
                 meohVessels = new Set(data.vessels.map(v => v.imo));
+            })
+            .catch(() => {});
+
+        // Load CCS-equipped vessels list
+        fetch('json/ccs_vessels.json')
+            .then(response => response.json())
+            .then(data => {
+                ccsVessels = new Set(data.vessels.map(v => v.imo));
             })
             .catch(() => {});
 
@@ -290,11 +299,12 @@
             } else {
                 tbody.innerHTML = pageShips.map((ship, index) => {
                     const meohTag = meohVessels.has(ship.imo) ? ' <span class="meoh-tag">&lt;MeOH&gt;</span>' : '';
+                    const ccsTag  = ccsVessels.has(ship.imo)  ? ' <span class="ccs-tag">CCS</span>' : '';
                     const animDelay = `style="animation-delay: ${index * 0.02}s"`;
                     return `
                     <tr ${animDelay}>
                         <td class="rank ${ship.rank <= 3 ? 'rank-' + ship.rank : ''}">#${ship.rank}</td>
-                        <td class="ship-name"><a href="ship.html?id=${encodeId(ship.imo)}" class="ship-link">${escapeHtml(ship.name)}</a>${meohTag}</td>
+                        <td class="ship-name"><a href="ship.html?id=${encodeId(ship.imo)}" class="ship-link">${escapeHtml(ship.name)}</a>${meohTag}${ccsTag}</td>
                         <td class="ship-type">${escapeHtml(ship.type)}</td>
                         <td>${escapeHtml(ship.registry)}</td>
                         <td class="co2-value">${ship[co2Field].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>

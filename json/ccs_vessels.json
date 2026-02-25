@@ -1,0 +1,6 @@
+{
+  "description": "Vessels equipped with Carbon Capture Systems (CCS) for onboard CO2 capture",
+  "vessels": [
+    {"imo": "9665619", "name": "EVER TOP", "notes": "Evergreen container ship with onboard carbon capture system"}
+  ]
+}

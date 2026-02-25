@@ -72,6 +72,7 @@
         let vesselSpecs = null;
         let vesselSpecsLoaded = false;
         let meohVessels = new Set();
+        let ccsVessels = new Set();
         const EUA_AVG_2024 = 65.89; // 2024 average EUA price in EUR
         const ETS_SCOPE_2024 = 0.40; // 40% of emissions covered in 2024
 
@@ -80,6 +81,14 @@
             .then(response => response.json())
             .then(data => {
                 meohVessels = new Set(data.vessels.map(v => v.imo));
+            })
+            .catch(() => {});
+
+        // Load CCS-equipped vessels list
+        fetch('json/ccs_vessels.json')
+            .then(response => response.json())
+            .then(data => {
+                ccsVessels = new Set(data.vessels.map(v => v.imo));
             })
             .catch(() => {});
 
@@ -529,6 +538,7 @@
             });
 
             const isMeoh = meohVessels.has(imo);
+            const isCcs = ccsVessels.has(imo);
 
             // Build sparkline data
             const sparklineHtml = buildSparkline(emissionsHistory);
@@ -601,7 +611,7 @@
                             </div>
                             ${sparklineHtml}
                         </div>
-                        ${ciiRating || isMeoh ? `
+                        ${ciiRating || isMeoh || isCcs ? `
                         <div class="hero-badges">
                             ${ciiRating ? `
                             <div class="cii-badge">
@@ -614,6 +624,12 @@
                             <div class="meoh-badge">
                                 <div class="meoh-badge-icon">MeOH</div>
                                 <div class="meoh-badge-label">Methanol Capable</div>
+                            </div>
+                            ` : ''}
+                            ${isCcs ? `
+                            <div class="ccs-badge">
+                                <div class="ccs-badge-icon">CCS</div>
+                                <div class="ccs-badge-label">Carbon Capture</div>
                             </div>
                             ` : ''}
                         </div>
