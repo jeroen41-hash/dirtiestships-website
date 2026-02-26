@@ -10,5 +10,6 @@
     "cii_rating": "C",
     "cii_attained": 6.01,
     "cii_required": 5.836,
-    "cii_year": 2024
+    "cii_year": 2024,
+    "ccs": true
 }
