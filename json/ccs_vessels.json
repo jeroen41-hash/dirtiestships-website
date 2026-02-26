@@ -1,6 +1,22 @@
 {
   "description": "Vessels equipped with Carbon Capture Systems (CCS) for onboard CO2 capture",
   "vessels": [
-    {"imo": "9665619", "name": "EVER TOP", "notes": "Evergreen container ship with onboard carbon capture system"}
+    {"imo": "9484211", "name": "MV Endeavor",        "make": "Value Maritime", "type": "Amine-based (Filtree / CO2 Battery)"},
+    {"imo": "9484223", "name": "MV Energy",           "make": "Value Maritime", "type": "Amine-based (Filtree / CO2 Battery)"},
+    {"imo": "9312212", "name": "MV Enforcer",         "make": "Value Maritime", "type": "Amine-based (Filtree / CO2 Battery)"},
+    {"imo": "9312224", "name": "MV Endurance",        "make": "Value Maritime", "type": "Amine-based (Filtree / CO2 Battery)"},
+    {"imo": "9312236", "name": "MV Ensemble",         "make": "Value Maritime", "type": "Amine-based (Filtree / CO2 Battery)"},
+    {"imo": "9312248", "name": "MV Emotion",          "make": "Value Maritime", "type": "Amine-based (Filtree / CO2 Battery)"},
+    {"imo": "9312250", "name": "MV Empire",           "make": "Value Maritime", "type": "Amine-based (Filtree / CO2 Battery)"},
+    {"imo": "9312262", "name": "MV Elysee",           "make": "Value Maritime", "type": "Amine-based (Filtree / CO2 Battery)"},
+    {"imo": "9788617", "name": "Pacific Cobalt",      "make": "Value Maritime", "type": "Amine-based (Filtree / CO2 Battery)"},
+    {"imo": "9783942", "name": "Pacific Nickel",      "make": "Value Maritime", "type": "Amine-based (Filtree / CO2 Battery)"},
+    {"imo": "9534523", "name": "Nordica",             "make": "Value Maritime", "type": "Amine-based (Filtree / CO2 Battery)"},
+    {"imo": "9436214", "name": "Samskip Innovator",   "make": "Value Maritime", "type": "Amine-based (Filtree / CO2 Battery)"},
+    {"imo": "9436197", "name": "Samskip Endeavour",   "make": "Value Maritime", "type": "Amine-based (Filtree / CO2 Battery)"},
+    {"imo": "9665619", "name": "Ever Top",            "make": "SMDERI",         "type": "Chemical Absorption (Amine Scrubbing)"},
+    {"imo": "9834727", "name": "Clipper Eris",        "make": "W\u00e4rtsil\u00e4",       "type": "Amine-based (Post-combustion)"},
+    {"imo": "9946805", "name": "UBC Cork",            "make": "Seabound",       "type": "Calcium Looping (Mineralization)"},
+    {"imo": "9800647", "name": "Pacific Gold",        "make": "Value Maritime", "type": "Amine-based (Filtree / CO2 Battery)"}
   ]
 }

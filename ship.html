@@ -73,7 +73,7 @@
         let vesselSpecs = null;
         let vesselSpecsLoaded = false;
         let meohVessels = new Set();
-        let ccsVessels = new Set();
+        let ccsVessels = new Map();
         const EUA_AVG_2024 = 65.89; // 2024 average EUA price in EUR
         const ETS_SCOPE_2024 = 0.40; // 40% of emissions covered in 2024
 
@@ -89,7 +89,7 @@
         fetch('json/ccs_vessels.json')
             .then(response => response.json())
             .then(data => {
-                ccsVessels = new Set(data.vessels.map(v => v.imo));
+                data.vessels.forEach(v => ccsVessels.set(v.imo, {make: v.make, type: v.type}));
             })
             .catch(() => {});
 
@@ -539,7 +539,8 @@
             });
 
             const isMeoh = meohVessels.has(imo);
-            const isCcs = ccsVessels.has(imo);
+            const ccsInfo = ccsVessels.get(imo);
+            const isCcs = !!ccsInfo;
 
             // Build sparkline data
             const sparklineHtml = buildSparkline(emissionsHistory);
@@ -631,6 +632,8 @@
                             <div class="ccs-badge">
                                 <div class="ccs-badge-icon">CCS</div>
                                 <div class="ccs-badge-label">Carbon Capture</div>
+                                ${ccsInfo.make ? `<div class="ccs-badge-make">${escapeHtml(ccsInfo.make)}</div>` : ''}
+                                ${ccsInfo.type ? `<div class="ccs-badge-type">${escapeHtml(ccsInfo.type)}</div>` : ''}
                             </div>
                             ` : ''}
                         </div>
