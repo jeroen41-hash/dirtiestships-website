@@ -97,6 +97,14 @@
                     <option value="">All Ship Types</option>
                 </select>
             </div>
+            <div class="filter-box">
+                <select id="green-tech-filter">
+                    <option value="">All Technologies</option>
+                    <option value="lng">LNG Fuelled</option>
+                    <option value="meoh">Methanol (MeOH)</option>
+                    <option value="ccs">Carbon Capture (CCS)</option>
+                </select>
+            </div>
         </div>
 
         <div class="table-container">
@@ -331,13 +339,18 @@
         function applyFilters() {
             const searchTerm = document.getElementById('search').value.toLowerCase();
             const typeFilter = document.getElementById('ship-type-filter').value;
+            const greenTech  = document.getElementById('green-tech-filter').value;
 
             filteredShips = allShips.filter(ship => {
                 const matchesSearch = !searchTerm ||
                     ship.name.toLowerCase().includes(searchTerm) ||
                     ship.imo.includes(searchTerm);
                 const matchesType = !typeFilter || ship.type === typeFilter;
-                return matchesSearch && matchesType;
+                const matchesGreenTech = !greenTech ||
+                    (greenTech === 'lng'  && ship.c_factor >= 2.5 && ship.c_factor < 3.0) ||
+                    (greenTech === 'meoh' && meohVessels.has(ship.imo)) ||
+                    (greenTech === 'ccs'  && ccsVessels.has(ship.imo));
+                return matchesSearch && matchesType && matchesGreenTech;
             });
 
             sortShips();
@@ -580,6 +593,7 @@
         });
 
         document.getElementById('ship-type-filter').addEventListener('change', applyFilters);
+        document.getElementById('green-tech-filter').addEventListener('change', applyFilters);
 
         document.getElementById('prev-btn').addEventListener('click', () => {
             if (currentPage > 1) {
