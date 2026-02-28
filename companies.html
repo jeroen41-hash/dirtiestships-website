@@ -84,6 +84,12 @@
                 <div class="search-box">
                     <input type="text" id="company-search" placeholder="Search companies...">
                 </div>
+                <div class="search-box">
+                    <select id="wind-filter" style="background:#1a1a2e;color:#ccc;border:1px solid #333;padding:8px 12px;border-radius:4px;font-size:0.9rem;">
+                        <option value="">All technologies</option>
+                        <option value="wind">Wind-Assisted (WAPS) only</option>
+                    </select>
+                </div>
             </div>
             <div class="table-container">
                 <table id="company-table">
@@ -120,6 +126,7 @@
         let filteredCompanies = [];
         const ROWS_PER_PAGE = 50;
         let currentPage = 1;
+        let companyWindCount = {};
 
         function loadData(year) {
             const isNew = year === '2024';
@@ -232,18 +239,26 @@
         }
 
         function loadCompanyList() {
-            fetch('json/2024_companies_all.json')
-                .then(response => response.json())
-                .then(data => {
-                    allCompanies = data;
-                    filteredCompanies = data;
-                    currentPage = 1;
-                    renderCompanyTable();
-                })
-                .catch(error => {
-                    document.getElementById('company-tbody').innerHTML =
-                        '<tr><td colspan="4">Error loading company data.</td></tr>';
-                });
+            Promise.all([
+                fetch('json/2024_companies_all.json').then(r => r.json()),
+                fetch('json/2024_ships_data.json').then(r => r.json()),
+                fetch('json/wind_vessels.json').then(r => r.json()).catch(() => ({vessels:[]})),
+            ]).then(([companiesData, shipsData, windData]) => {
+                const windSet = new Set(windData.vessels.map(v => v.imo));
+                companyWindCount = {};
+                for (const ship of shipsData.ships) {
+                    if (windSet.has(ship.imo) && ship.company) {
+                        companyWindCount[ship.company] = (companyWindCount[ship.company] || 0) + 1;
+                    }
+                }
+                allCompanies = companiesData;
+                filteredCompanies = companiesData;
+                currentPage = 1;
+                renderCompanyTable();
+            }).catch(() => {
+                document.getElementById('company-tbody').innerHTML =
+                    '<tr><td colspan="4">Error loading company data.</td></tr>';
+            });
         }
 
         // European countries with annual CO2 emissions (2023 EEA data, in tonnes)
@@ -311,10 +326,12 @@
                 } else {
                     // Company row
                     const severityClass = getEmissionSeverity(item.rank);
+                    const wc = companyWindCount[item.company] || 0;
+                    const windTag = wc > 0 ? ` <span class="wind-tag" title="${wc} wind-assisted ship${wc > 1 ? 's' : ''}">${wc} wind</span>` : '';
                     return `
                         <tr class="${severityClass}" ${animDelay}>
                             <td class="rank">${item.rank}</td>
-                            <td>${escapeHtml(item.company)}</td>
+                            <td><a href="company.html?name=${encodeURIComponent(item.company)}" style="color:#4ecdc4;text-decoration:none;">${escapeHtml(item.company)}</a>${windTag}</td>
                             <td class="co2-value">${item.co2.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                             <td>${item.count}</td>
                         </tr>
@@ -361,19 +378,20 @@
             return div.innerHTML;
         }
 
-        // Search functionality
-        document.getElementById('company-search').addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            if (query === '') {
-                filteredCompanies = allCompanies;
-            } else {
-                filteredCompanies = allCompanies.filter(c =>
-                    c.company.toLowerCase().includes(query)
-                );
-            }
+        function applyFilters() {
+            const query = document.getElementById('company-search').value.toLowerCase();
+            const windOnly = document.getElementById('wind-filter').value === 'wind';
+            filteredCompanies = allCompanies.filter(c => {
+                if (query && !c.company.toLowerCase().includes(query)) return false;
+                if (windOnly && !companyWindCount[c.company]) return false;
+                return true;
+            });
             currentPage = 1;
             renderCompanyTable();
-        });
+        }
+
+        document.getElementById('company-search').addEventListener('input', applyFilters);
+        document.getElementById('wind-filter').addEventListener('change', applyFilters);
 
         document.getElementById('year-select').addEventListener('change', (e) => {
             loadData(e.target.value);
