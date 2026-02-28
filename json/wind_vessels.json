@@ -1,0 +1,24 @@
+{
+  "description": "Vessels fitted with wind-assisted propulsion systems (WAPS)",
+  "vessels": [
+    {"imo": "9798856", "name": "Pyxis Ocean",     "make": "BAR Technologies", "type": "WindWings (Rigid)",          "count": 2},
+    {"imo": "9750957", "name": "Berge Olympus",   "make": "BAR Technologies", "type": "WindWings (Rigid)",          "count": 4},
+    {"imo": "9924120", "name": "Canopée",          "make": "AYRO",             "type": "OceanWings (Suction)",       "count": 4},
+    {"imo": "9649196", "name": "Tharsis",          "make": "Econowind",        "type": "Ventifoils (Suction)",       "count": 2},
+    {"imo": "9331359", "name": "Ankie",            "make": "Econowind",        "type": "Ventifoils (Suction)",       "count": 2},
+    {"imo": "9938729", "name": "Vertom Patty",     "make": "Econowind",        "type": "Ventifoils (Suction)",       "count": 2},
+    {"imo": "9891000", "name": "Tern Vik",         "make": "Econowind",        "type": "Foldable Wings",             "count": 4},
+    {"imo": "9390214", "name": "Jutlandia Swan",   "make": "Econowind",        "type": "Ventifoils (Suction)",       "count": 4},
+    {"imo": "9210139", "name": "Scandina",         "make": "Econowind",        "type": "Ventifoils (Suction)",       "count": 2},
+    {"imo": "9534535", "name": "Frisian Sea",      "make": "Econowind",        "type": "Flatrack Ventifoils",        "count": 2},
+    {"imo": "9014872", "name": "Ankergracht",      "make": "Econowind",        "type": "Containerized Ventifoils",   "count": 2},
+    {"imo": "9218234", "name": "Eems Traveller",   "make": "bound4blue",       "type": "eSAILs (Suction)",           "count": 2},
+    {"imo": "9736858", "name": "Maersk Trieste",   "make": "bound4blue",       "type": "eSAILs (Suction)",           "count": 4},
+    {"imo": "9730816", "name": "Berge Meru",       "make": "Anemoi",           "type": "Rotor Sails",                "count": 4},
+    {"imo": "9944607", "name": "Shofu Maru",       "make": "MOL",              "type": "Wind Challenger (Rigid)",    "count": 1},
+    {"imo": "9587855", "name": "Copenhagen",       "make": "Norsepower",       "type": "Rotor Sail",                 "count": 1},
+    {"imo": "9131993", "name": "SC Connector",     "make": "Norsepower",       "type": "Hinged Rotor Sails",         "count": 2},
+    {"imo": "9865611", "name": "Sea Zhoushan",     "make": "Norsepower",       "type": "Hinged Rotor Sails",         "count": 5},
+    {"imo": "9982938", "name": "Anemos",           "make": "TOWT",             "type": "Automated Soft Sails",       "count": 2}
+  ]
+}

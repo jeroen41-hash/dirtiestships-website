@@ -1971,6 +1971,31 @@ footer a:hover {
     text-shadow: 0 1px 1px rgba(0,0,0,0.2);
 }
 
+.wind-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, #a8e063, #56ab2f);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 5px;
+    vertical-align: middle;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+}
+
+.wind-badge {
+    background: linear-gradient(135deg, #a8e063, #56ab2f);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 6px 0;
+    color: #fff;
+}
+.wind-badge-icon  { font-size: 14px; font-weight: 700; }
+.wind-badge-label { font-size: 11px; opacity: 0.9; margin-top: 2px; }
+.wind-badge-make  { font-size: 11px; opacity: 0.85; margin-top: 2px; }
+.wind-badge-type  { font-size: 10px; opacity: 0.75; }
+
 /* ============================================
    RESPONSIVE STYLES
    ============================================ */

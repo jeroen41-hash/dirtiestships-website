@@ -89,6 +89,12 @@
             `;
         }
 
+        let windVessels = new Map();
+        fetch('json/wind_vessels.json')
+            .then(r => r.json())
+            .then(d => d.vessels.forEach(v => windVessels.set(v.imo, {make: v.make, type: v.type, count: v.count})))
+            .catch(() => {});
+
         function loadCompanyData() {
             const companyName = getCompanyFromURL();
             if (!companyName) {
@@ -120,9 +126,11 @@
 
                     const shipsRows = ships.map((s, i) => {
                         const co2 = (s.co2eq || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        const _wi = windVessels.get(s.imo);
+                        const windTag = _wi ? ` <span class="wind-tag" title="${_wi.count}\u00d7 ${_wi.type} \u2013 ${_wi.make}">Wind</span>` : '';
                         return `<tr style="animation-delay: ${i * 0.02}s">
                             <td class="rank">${i + 1}</td>
-                            <td><a href="ship.html?id=${encodeId(s.imo)}" style="color: #4ecdc4; text-decoration: none;">${escapeHtml(s.name)}</a></td>
+                            <td><a href="ship.html?id=${encodeId(s.imo)}" style="color: #4ecdc4; text-decoration: none;">${escapeHtml(s.name)}</a>${windTag}</td>
                             <td>${escapeHtml(s.type || '')}</td>
                             <td class="co2-value">${co2}</td>
                             <td class="co2-value">${s.c_factor ? s.c_factor.toFixed(4) : '-'}</td>

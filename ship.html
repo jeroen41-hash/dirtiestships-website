@@ -74,6 +74,7 @@
         let vesselSpecsLoaded = false;
         let meohVessels = new Set();
         let ccsVessels = new Map();
+        let windVessels = new Map();
         const EUA_AVG_2024 = 65.89; // 2024 average EUA price in EUR
         const ETS_SCOPE_2024 = 0.40; // 40% of emissions covered in 2024
 
@@ -90,6 +91,14 @@
             .then(response => response.json())
             .then(data => {
                 data.vessels.forEach(v => ccsVessels.set(v.imo, {make: v.make, type: v.type}));
+            })
+            .catch(() => {});
+
+        // Load wind-assisted vessels list
+        fetch('json/wind_vessels.json')
+            .then(response => response.json())
+            .then(data => {
+                data.vessels.forEach(v => windVessels.set(v.imo, {make: v.make, type: v.type, count: v.count}));
             })
             .catch(() => {});
 
@@ -541,6 +550,8 @@
             const isMeoh = meohVessels.has(imo);
             const ccsInfo = ccsVessels.get(imo);
             const isCcs = !!ccsInfo;
+            const windInfo = windVessels.get(imo);
+            const isWind = !!windInfo;
 
             // Build sparkline data
             const sparklineHtml = buildSparkline(emissionsHistory);
@@ -634,6 +645,14 @@
                                 <div class="ccs-badge-label">Carbon Capture</div>
                                 ${ccsInfo.make ? `<div class="ccs-badge-make">${escapeHtml(ccsInfo.make)}</div>` : ''}
                                 ${ccsInfo.type ? `<div class="ccs-badge-type">${escapeHtml(ccsInfo.type)}</div>` : ''}
+                            </div>
+                            ` : ''}
+                            ${isWind ? `
+                            <div class="wind-badge">
+                                <div class="wind-badge-icon">Wind</div>
+                                <div class="wind-badge-label">Wind-Assisted Propulsion</div>
+                                ${windInfo.count ? `<div class="wind-badge-make">${windInfo.count}× ${escapeHtml(windInfo.type)}</div>` : ''}
+                                ${windInfo.make ? `<div class="wind-badge-type">${escapeHtml(windInfo.make)}</div>` : ''}
                             </div>
                             ` : ''}
                         </div>
