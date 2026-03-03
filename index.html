@@ -234,12 +234,12 @@
             .then(data => {
                 data.vessels.forEach(v => ccsVessels.set(v.imo, {make: v.make, type: v.type}));
             })
+            .catch(() => {});
         fetch('json/wind_vessels.json')
             .then(response => response.json())
             .then(data => {
                 data.vessels.forEach(v => windVessels.set(v.imo, {make: v.make, type: v.type, count: v.count}));
             })
-            .catch(() => {});
             .catch(() => {});
 
         function loadData(year) {
