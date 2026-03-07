@@ -506,6 +506,19 @@
       "featured_image": "https://www.ricardo.com/media/xksmbass/logo-on-navy-background.png?width=1200&amp;height=630&amp;v=1d90410d0ff7250",
       "scheduled": null,
       "created": "2026-03-07 10:00"
+    },
+    {
+      "slug": "us-merchant-marine",
+      "title": "U.S. Merchant Marine",
+      "date": "2026-03-05",
+      "excerpt": "The US Merchant Marine, currently the world's 22nd largest, comprises a mere 0.55% of global deadweight tonnage. US shipbuilding is virtually non-existent compared to China, South Korea and Japan. ...",
+      "author": "DirtiestShips",
+      "source_url": "https://www.heritage.org/military-strength/assessment-us-military-power/us-merchant-marine",
+      "source_name": "heritage.org",
+      "score": 157,
+      "featured_image": "https://www.heritage.org/sites/default/files/styles/facebook_optimized/public/images/2026-03/2026_US_Military_Strength_MERCHANTMARINE.jpg?itok=8S7i-AVl",
+      "scheduled": null,
+      "created": "2026-03-07 10:00"
     }
   ]
 }
