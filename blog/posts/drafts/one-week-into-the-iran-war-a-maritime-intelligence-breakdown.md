@@ -1,0 +1,27 @@
+The outbreak of conflict between the US/Israel and Iran has sent shockwaves through the maritime industry, leading to a near-total collapse of tanker traffic through the Strait of Hormuz and raising serious questions about shipping emissions in the region. The immediate consequence is disruption to maritime traffic in the Gulf of Oman and Arabian Gulf. With vessels diverting, idling, and potentially facing increased risk of attack, the implications for fuel consumption and CO2 output are significant, even if temporary.
+
+## Hormuz Traffic Plummets
+
+According to a report by hellenicshippingnews.com, commercial vessel behavior in the Strait of Hormuz shifted rapidly following the launch of Operation Epic Fury on February 28th. Within 48 hours, tanker traffic had effectively halted. The article notes that by March 2nd, only seven vessels crossed the corridor, a dramatic drop from the typical daily average of 70-80 crossings. This decline continued, with only four and five crossings recorded on March 3rd and 4th, respectively. The source cites a combination of factors driving this collapse: threats from the Islamic Revolutionary Guard Corps (IRGC), direct vessel strikes, the withdrawal of war-risk insurance, and a general lack of commercial confidence. This means that vessels will be forced to take longer routes around the cape to avoid this area. As we've explored previously on [DirtiestShips.com](/charts.html), longer voyages inevitably lead to increased fuel consumption and, therefore, higher CO2 emissions.
+
+## Insurance Market Fuels Disruption
+
+The insurance market's reaction further exacerbated the situation. The report states that P&I clubs, which cover third-party liabilities for a significant portion of the global merchant fleet (approximately 90%), issued 72-hour notices canceling certain war-risk extensions for vessels trading in the Middle East after reinsurers withdrew support. This action, coupled with the Lloyd's Joint War Committee expanding its list of high-risk waters and increased additional voyage premiums (from around 0.2% of vessel value to as much as 1%), effectively rendered many voyages commercially unviable. Without adequate war-risk cover, vessels cannot be chartered or financed.
+
+This situation has a complex relationship to emissions regulation. While owners may be incentivized to keep ships moving to fulfill obligations, the heightened insurance costs and risk create a strong disincentive. The need to balance safety and commercial viability will likely influence vessel speeds and routing decisions, potentially leading to less efficient operations.
+
+## Vessel Strikes and Safety Concerns
+
+The hellenicshippingnews.com report details specific instances of vessels being struck in the region. For instance, on March 5th, a tug operating near Khasab, Oman, was reportedly hit by missiles while attempting to tow a previously struck merchant vessel. The report also names several vessels that were reportedly struck, including the MKD Vyom, Skylight, and Hercules Star. UKMTO subsequently advised merchant vessels not to transit the Strait of Hormuz, recommending the designation of Safe Muster Points.
+
+These incidents highlight the immediate and tangible danger to seafarers and vessels, leading to increased caution and potential deviations from optimal routes. The safety directives issued may lead to vessels reducing speed or seeking shelter, which could impact their [CII ratings](/cii.html) as these ratings factor in operational efficiency. The potential for delays and disruptions also adds uncertainty to fuel consumption estimates.
+
+## Broader Emissions Implications
+
+While the immediate impact is regional, the disruption in the Strait of Hormuz could have wider repercussions for global shipping emissions. Any sustained rerouting of tankers and LNG carriers will inevitably lead to longer voyages, burning more fuel and releasing more CO2. The impact on specific shipping companies operating in the region will vary, and our [company rankings](/companies.html) may see shifts as a result of these operational changes. Furthermore, the increased costs associated with insurance and security could affect investment decisions in newer, more fuel-efficient vessels.
+
+The situation also introduces complexities regarding the EU Emissions Trading System (ETS). Vessels calling at EU ports after navigating the affected region may face higher carbon costs due to increased fuel consumption. The EU MRV data reported to EMSA could show a spike in emissions for certain voyages, impacting compliance and potentially triggering penalties. As this is a force majeure situation, the impact on [CII ratings](/cii.html) will need to be carefully assessed.
+
+## What this means for shipping emissions
+
+The conflict and resulting disruption in the Strait of Hormuz represent a significant, albeit potentially temporary, setback for efforts to reduce shipping emissions. The immediate impact is a sharp decline in traffic and a likely increase in fuel consumption due to rerouting and safety measures. The long-term effects will depend on the duration and intensity of the conflict, but the increased risk and uncertainty are likely to influence vessel operations and investment decisions, potentially hindering progress towards a more sustainable maritime industry.
