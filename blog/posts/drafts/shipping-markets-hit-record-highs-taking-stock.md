@@ -1,0 +1,23 @@
+Shipping Disruption in the Strait of Hormuz Sends Shockwaves Through Energy Markets and Emissions Considerations
+
+Geopolitical tensions in the Strait of Hormuz, a crucial chokepoint for global energy flows, have triggered significant disruptions to shipping traffic and energy markets. This turmoil not only impacts vessel operations and trade routes but also has potential repercussions for shipping emissions, particularly as the industry navigates increasingly stringent environmental regulations like the EU Emissions Trading System (ETS) and the [CII ratings](/cii.html) scheme.
+
+Reduced Transits and Increased Distances Impact Vessel Utilization
+
+According to hellenicshippingnews.com, vessel transits through the Strait of Hormuz plummeted by over 90% due to the recent escalation of conflict. This directly impacts vessel utilization and, consequently, emissions. While the article doesn't specify which vessel types are most affected, it does note that the Strait normally sees approximately 150 ship transits per day, carrying 30% of seaborne oil trade, 30% of seaborne LPG trade, and 20% of LNG. Additionally, 3% of the world’s seaborne dry bulk and container trade also passes through this route. This means that a significant portion of the global fleet now faces longer voyages to circumvent the area, leading to increased fuel consumption and higher CO2 output. Longer voyages translate directly to higher emissions and could negatively affect the [CII ratings](/cii.html) of affected vessels.
+
+Energy Market Volatility and the Role of Tanker Fleets
+
+The disruption in the Strait of Hormuz has also caused significant volatility in energy markets. Brent crude oil prices surged, and refined product prices, like European jet fuel, experienced even more substantial increases. The article highlights that Saudi Arabia is attempting to mitigate the impact by increasing oil flows through its East-West pipeline to the Red Sea, with approximately 15 Very Large Crude Carriers (VLCCs) now heading to Yanbu, tripling typical levels. This shift underscores the crucial role of tanker fleets in responding to energy supply disruptions. However, it also raises questions about the environmental impact of these longer voyages and the potential for increased emissions. If a company is having to reroute ships, these companies will have to factor in the increased carbon cost of operating these vessels now subject to [EU ETS carbon costs](https://dirtiestships.com).
+
+Infrastructure Vulnerability and Potential Long-Term Implications
+
+The article also points out the vulnerability of key shipping infrastructure in the Gulf, including major oil export facilities, the world’s largest LNG terminal, and the Jebel Ali container hub. Attacks on vessels and ports, as well as damage to energy infrastructure, can have long-lasting consequences for shipping routes and emissions. The potential halting of oil output due to storage constraints, as mentioned in the article, could lead to further supply shortages and economic instability. While the article suggests that energy markets are pricing in a disruption of "weeks" rather than "months," the long-term implications for shipping emissions remain uncertain.
+
+Emissions Data Considerations
+
+The reliance on alternative supply channels and increased vessel traffic in other regions may lead to a redistribution of emissions, potentially impacting the overall emissions profile of the shipping industry. Our [emissions data](/charts.html) tracks this over time. It is important to note that the EU MRV data, which forms the basis of our platform, may not fully capture the short-term impacts of these disruptions due to reporting lags. However, we will continue to monitor the data closely to identify any significant changes in emissions trends.
+
+What This Means for Shipping Emissions
+
+The disruption in the Strait of Hormuz serves as a stark reminder of the interconnectedness of global shipping, energy markets, and environmental regulations. The reduced vessel transits, increased distances, and reliance on alternative supply channels all contribute to higher fuel consumption and emissions. As the shipping industry faces increasing pressure to decarbonize, events like this highlight the need for greater resilience and diversification in shipping routes and energy sources. These costs ultimately affect the bottom line for individual [company rankings](/companies.html).
