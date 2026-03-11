@@ -1,0 +1,23 @@
+The escalating tensions around the Strait of Hormuz, with Iran’s recent actions and threats, are disrupting shipping and raising serious concerns about emissions transparency and regulatory compliance in the region. As ship traffic dwindles and "dark ships" proliferate, monitoring CO2 emissions and enforcing regulations like the EU ETS become significantly more challenging.
+
+## Shadow Fleets Dominate Strait Crossings
+
+A recent report by Sky News highlights a dramatic slowdown in shipping through the Strait of Hormuz following Iran’s actions, with many vessels turning off their tracking systems, a practice known as "going dark." Data from IMF Portwatch indicates a significant drop from the usual 82 ships transiting daily to just a handful. While the article focuses on security implications, the rise of these "dark ships" has a knock-on effect on our ability to track and verify shipping emissions in accordance with EU MRV regulations.
+
+Of the vessels identified crossing the Strait between March 2nd and 9th, a significant number were linked to Iran, China, or Russia, with some also having connections to Greece, India, the UAE, and Singapore. Notably, Lloyd's List Intelligence reported that eight out of 13 large oil and gas carriers crossing during that period were classified as part of the "shadow fleet" – tankers carrying sanctioned oil cargo from Iran, Russia, or Venezuela. These vessels are highly unlikely to be reporting emissions data accurately or participating in carbon offsetting schemes like the EU ETS.
+
+## Impact on Data Collection and Emissions Monitoring
+
+The intentional disabling of tracking systems by "dark ships" directly undermines the data collection process mandated by the EU Monitoring, Reporting, and Verification (MRV) regulation. This regulation is crucial for calculating the annual emissions of ships calling at EU ports and plays a vital role in the EU's strategy to reduce greenhouse gas emissions from the maritime sector. Without accurate tracking data, calculating a ship's [CII rating](/cii.html) becomes impossible. These ratings rely on detailed operational data to assess the carbon intensity of vessels.
+
+Moreover, the presence of shadow fleets raises concerns about unfair competition. Vessels operating outside the regulatory framework gain a cost advantage over compliant ships, as they avoid the expenses associated with emissions monitoring, reporting, and the purchase of EU Allowances (EUAs) under the EU ETS. This undermines the level playing field that the EU aims to establish within the shipping industry. The cost of carbon under the EU ETS can be significant, and avoiding these costs gives shadow fleet operators a competitive edge.
+
+## Maersk and MSC Suspend Middle East Shipping
+
+The disruptions have led major shipping lines, including Maersk and Mediterranean Shipping Company (MSC), which together control nearly 30% of global containerized shipping capacity, to suspend shipping to the Middle East as a precautionary measure. Tracking data from MarineTraffic confirms instances of ships rerouting to avoid the strait. This demonstrates the immediate impact of geopolitical instability on global shipping routes and supply chains.
+
+The rerouting of vessels to avoid the Strait of Hormuz is likely to increase voyage distances and fuel consumption, potentially leading to a short-term increase in overall shipping emissions. The extent of this increase depends on the duration of the disruptions and the alternative routes chosen by shipping companies.
+
+## What this means for shipping emissions
+
+The situation in the Strait of Hormuz highlights the vulnerabilities of maritime emissions monitoring and regulation in the face of geopolitical instability. The rise of "dark ships" and shadow fleets makes it increasingly difficult to accurately track and verify emissions data, undermining efforts to reduce greenhouse gas emissions from the shipping sector and creating an unlevel playing field for companies seeking to improve their [company rankings](/companies.html). Addressing this challenge requires international cooperation, enhanced monitoring technologies, and stronger enforcement mechanisms to ensure that all vessels operating in the region adhere to environmental regulations. The long-term impact will depend on the duration of the crisis and the ability of regulatory bodies to adapt to these evolving circumstances.
