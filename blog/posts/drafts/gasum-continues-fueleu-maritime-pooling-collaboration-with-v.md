@@ -1,0 +1,27 @@
+The upcoming FuelEU Maritime regulation, demanding significant cuts in greenhouse gas (GHG) emissions from shipping, is pushing operators to explore collaborative compliance strategies. Central to this is "pooling," where companies combine efforts to meet mandated carbon intensity reductions. Gasum, a Nordic energy company, is actively pursuing this approach, exemplified by its continued partnerships with Viking Line and Wallenius SOL, set to continue through 2026. These partnerships leverage the negative emissions of bio-LNG to generate compliance units within Gasum's FuelEU Maritime pool.
+
+## Bio-LNG and FuelEU Maritime: A Deep Dive
+
+According to the [news feed](/news.html), Viking Line and Wallenius SOL operate dual-fuel vessels capable of running on either conventional LNG or bio-LNG. The key here is bio-LNG, produced from livestock waste. Gasum claims this bio-LNG achieves "negative emissions," meaning GHG reductions exceeding 100 percent. This unusual claim suggests that the production and use of this specific bio-LNG process removes more GHGs than it emits, factoring in the avoided emissions from waste decomposition and the carbon absorbed during the biomass lifecycle.
+
+FuelEU Maritime, which came into force in 2025, sets limits on the carbon intensity of energy used by ships calling at EU ports. Companies failing to meet these targets face penalties. Pooling arrangements, like those facilitated by Gasum, provide a mechanism to redistribute compliance efforts. Vessels exceeding the required emissions reductions, typically through the use of alternative fuels like bio-LNG, can generate compliance units that can then be used by vessels struggling to meet their targets. This flexibility allows companies to manage their overall fleet emissions more efficiently and potentially reduce their exposure to penalties. The article cites the principals from all three companies on the benefits of this collaboration.
+
+## The Financial and Operational Implications
+
+Both Viking Line and Wallenius SOL emphasize the financial and operational advantages of partnering with Gasum. Viking Line's Mats Engblom states that "FuelEU Maritime compliance must go hand in hand with financial predictability," highlighting the importance of cost-effective compliance strategies. Wallenius SOL's Henrik Karle emphasizes the need for a "reliable and predictable framework for long-term regulatory compliance." The use of bio-LNG, while potentially more expensive than conventional fuels, provides a predictable pathway to compliance and reduces the risk of future penalties.
+
+However, the limited information available in the article prevents a detailed assessment of the financial implications. The cost of bio-LNG can vary significantly depending on production methods and feedstock availability. Furthermore, the actual impact on a vessel's [CII ratings](/cii.html) depends on a number of variables. Also, the carbon intensity reduction needed to meet FuelEU Maritime requirements depends on the vessel type, age and trading pattern, requiring detailed [emissions data](/charts.html) and comprehensive lifecycle emissions analysis.
+
+## Gasum's Role and Market Position
+
+Gasum positions itself as a key player in the FuelEU Maritime compliance market, emphasizing its reliability as a bio-LNG producer and supplier. Jacob Granqvist, VP Maritime, Gasum, notes that their "pooling offering is also uniquely reliable, because we produce and source the needed bio-LNG ourselves." This vertically integrated approach, from production to bunkering, could give Gasum a competitive advantage in the growing market for alternative fuels and compliance solutions. The article mentions that Gasum also uses bio-LNG in its own bunkering and transport fleet, further adding compliance units to its pool.
+
+However, the extent of Gasum's market share and the competitiveness of its bio-LNG pricing are not addressed in the article. Competition is likely to intensify as other companies develop alternative fuel technologies and compliance strategies. It would be valuable to compare Gasum's performance against other companies in the [company rankings](/companies.html) on DirtiestShips.com.
+
+## Bio-LNG Availability and Scalability
+
+A critical question surrounding bio-LNG is its scalability. While the fuel offers a potentially significant reduction in GHG emissions, its production depends on the availability of sustainable biomass feedstock. Widespread adoption of bio-LNG may be constrained by limited supplies of suitable waste materials and concerns about the sustainability of biomass production. The article mentions that the bio-LNG used in this case is produced using waste from livestock. However, it does not elaborate on the sustainability credentials or availability of this specific feedstock.
+
+## What this means for shipping emissions
+
+The Gasum partnerships highlight the increasing importance of collaborative approaches to meet the challenges of FuelEU Maritime. While bio-LNG offers a potential pathway to compliance and reduced emissions, its long-term viability depends on cost-effectiveness, scalability, and sustainability. Pooling arrangements provide flexibility for ship operators, but thorough monitoring and verification are essential to ensure the integrity of compliance unit transfers. As FuelEU Maritime implementation progresses, the industry must address the challenges of alternative fuel availability and develop transparent mechanisms for tracking and reporting emissions reductions.
