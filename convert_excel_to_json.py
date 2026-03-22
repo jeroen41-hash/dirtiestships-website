@@ -6,7 +6,7 @@ import openpyxl
 import sys
 from collections import defaultdict
 
-EXCEL_FILE   = 'data/2024-v173-07022026-EU MRV Publication of information.xlsx'
+EXCEL_FILE   = 'data/2024-v196-22032026-EU MRV Publication of information.xlsx'
 SHEET_FULL   = '2024 Full ERs'
 SHEET_PARTIAL = '2024 Partial ERs'
 HEADER_ROWS  = 3  # skip first 3 rows (headers)
