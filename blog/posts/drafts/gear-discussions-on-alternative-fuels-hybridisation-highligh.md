@@ -1,0 +1,27 @@
+The Asia Pacific Maritime (APM) conference, a major event in the maritime calendar, wrapped up its 19th edition in Singapore last week with a clear emphasis on shipping's decarbonization efforts. While the absence of concrete emissions figures makes direct impact assessment difficult, the discussions and partnerships forged around alternative fuels and hybrid technologies signal the industry's growing urgency to meet future regulatory demands, including potential expansion of the EU Emissions Trading System (ETS) and stricter [CII ratings](/cii.html).
+
+## Hybridization Gains Traction
+
+The APM conference saw several announcements related to hybrid and electric propulsion systems. VC Power initiated partnerships with Bureau Veritas, DNV, Chengrui Power Technology, and CATL to promote battery technology and develop marine battery training programs. Siemens Energy and Marco Polo Shipyard also entered into an agreement to advance hybrid-electric technology for offshore wind support vessels. These partnerships suggest a growing recognition of hybrid solutions as a viable pathway to reducing emissions, especially for specific vessel types and operational profiles. While the long-term impact on overall fleet emissions remains to be seen, increased adoption of hybrid systems could positively impact [CII ratings](/cii.html) for vessels implementing the technology, potentially lowering their EU ETS carbon costs if the system expands to include more vessel types.
+
+The unveiling of the world's first full-hybrid oil and gas crewboat, the "Pelican Peace," designed and built by Singapore's Penguin International, further underscores this trend. The 42-metre vessel utilizes a parallel hybrid architecture, automatically switching between operating modes to optimize fuel efficiency. The article does not contain data on the impact of this technology on emissions, but it is clear that there is strong interest.
+
+## Alternative Fuels Still a Hot Topic
+
+Despite the ongoing debate surrounding the long-term viability and scalability of alternative fuels, APM dedicated significant discussion to this area. The conference highlighted the need for a broader range of energy sources and more efficient solutions, particularly in light of geopolitical energy supply disruptions.
+
+Panels explored the potential of ammonia and LNG as marine fuels. The "Ammonia as a Marine Fuel: Unlocking Safety and Scale" panel debated the readiness of ammonia-capable engines and bunkering systems for commercial deployment, while the "Securing LNG's Long-Term Viability as a Shipping Fuel" panel discussed the renewed LNG uptake and its long-term competitiveness, especially with the emergence of bio-LNG and e-LNG.
+
+These discussions are crucial, as the industry grapples with choosing the right fuel pathways to meet decarbonization targets. However, the absence of specific technical details or cost analyses in the source material makes it difficult to assess the true potential and challenges associated with each fuel.
+
+## Electrification and Battery Technology Advancements
+
+The conference also featured discussions on the future of electrification in shipping, highlighting the increasing adoption of lithium iron phosphate batteries due to technological advancements and improved range. The potential for small modular nuclear reactors was also mentioned, though safety and design considerations remain paramount. The [EMSA MRV data](/charts.html) reveals a relatively slow uptake of battery-powered vessels in the global fleet, but this could change as technology matures and costs decrease. Broadening the EU ETS to include well-to-wake emissions accounting would further incentivize the adoption of zero-emission technologies like batteries, even if the initial investment is higher.
+
+## Focus on Asia
+
+The strong participation from Asian shipowners, particularly the Indonesian National Shipowners’ Association (INSA), highlights the region's growing role in maritime decarbonization. The INSA's delegation of 60 shipowners representing 20 shipping lines suggests a significant level of interest and commitment from Indonesian companies to explore and adopt sustainable solutions. As Asian shipping companies are increasingly included in regional and global regulations, such as the EU ETS, pressure to find solutions will likely rise. Our [company rankings](/companies.html) will be adjusted to reflect these changes.
+
+## What this means for shipping emissions
+
+The APM conference indicates a growing momentum towards decarbonization within the maritime industry. While the specifics of emissions reductions remain unclear due to the lack of concrete data in the source article, the focus on hybrid technology, alternative fuels, and electrification signals a proactive approach to meeting future regulatory requirements. The partnerships forged at the event could accelerate the development and adoption of these solutions, potentially influencing vessel [CII ratings](/cii.html) and ultimately reducing the overall carbon footprint of the global shipping fleet and, by extension, the costs assessed by the EU ETS. Further monitoring of technology uptake and emissions data will be crucial to assess the true impact of these developments.
