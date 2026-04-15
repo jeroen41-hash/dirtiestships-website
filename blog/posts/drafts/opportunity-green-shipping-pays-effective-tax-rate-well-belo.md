@@ -1,0 +1,25 @@
+The world's largest shipping companies are enjoying record profits, but a new report highlights a significant disparity between these earnings and the taxes they pay. This discrepancy raises questions about the industry's contribution to global decarbonization efforts, particularly as shipping faces increasing pressure to meet emissions targets under regulations like the EU Emissions Trading System (ETS).
+
+## Shipping's Effective Tax Rate Lags Behind
+
+A report by Opportunity Green reveals that major shipping companies paid an effective tax rate of just 11.91% in 2024, significantly lower than the global average corporate tax rate of 21.1% and the OECD's minimum benchmark of 15% ([source](https://safety4sea.com/opportunity-green-shipping-pays-effective-tax-rate-well-below-global-average/)). This gap is attributed to the widespread use of tonnage tax systems, where companies are taxed based on fleet size rather than profits. This system, prevalent in regions like the EU and Japan, allows companies to pay significantly less tax compared to standard corporate tax regimes.
+
+## Profits Surge, Taxes Remain Static
+
+The report, titled "Global shipping 2024: mega profits and micro taxes," emphasizes that rising profits are not proportionally reflected in increased tax contributions. Opportunity Green estimates that an additional $4.3 billion could have been collected if these companies were taxed at standard national rates ([source](https://safety4sea.com/opportunity-green-shipping-pays-effective-tax-rate-well-below-global-average/)). The report points to Denmark (via A.P. Møller – Mærsk A/S), Germany (Hapag-Lloyd AG), and France (CMA CGM SA) as European countries where these tax shortfalls are most pronounced. This builds on previous Opportunity Green research indicating that major shipping firms earned over $300 billion in profits between 2019 and 2023, paying only $30 billion in taxes—an effective rate below 10%. Understanding these tax discrepancies is crucial when evaluating [company rankings](/companies.html) on our site.
+
+## Market Concentration Fuels Profitability
+
+The report suggests that the concentrated nature of the shipping industry, where a few firms control a large share of global capacity, allows these companies to disproportionately benefit from external shocks. Events like conflicts or climate-related disruptions can drive up freight rates, leading to increased profits for the largest players ([source](https://safety4sea.com/opportunity-green-shipping-pays-effective-tax-rate-well-below-global-average/)). This suggests that recent profit increases are not primarily driven by technological innovation, but by the industry structure itself.
+
+## Decarbonization Investments Under Scrutiny
+
+A key concern is whether these substantial profits are being reinvested in decarbonization efforts. Opportunity Green examined disclosures from Mærsk and Hapag-Lloyd under the EU Taxonomy framework and found that while both companies report climate-aligned investments, the framework allows for the inclusion of spending on transitional fuels like liquefied natural gas (LNG). This makes it difficult to assess the true extent of investments genuinely aligned with long-term decarbonization goals ([source](https://safety4sea.com/opportunity-green-shipping-pays-effective-tax-rate-well-below-global-average/)). The EU Taxonomy framework, while intending to drive green investment, lacks the necessary granularity to ensure capital is channeled towards truly sustainable technologies. This also impacts [CII ratings](/cii.html) as ships using LNG may achieve better short-term ratings despite long-term emissions concerns.
+
+## IMO's Delayed Emissions Pricing Mechanism
+
+The report also notes the contrast between the industry's financial performance and its environmental impact, highlighting shipping's contribution to approximately 3% of global greenhouse gas emissions. The International Maritime Organization (IMO) is currently discussing a Net Zero Framework (NZF), including a proposed emissions pricing mechanism expected to generate $11–12 billion annually. However, the adoption of this framework has been delayed, creating uncertainty about its implementation. This delay impacts the industry's ability to meet its decarbonization targets and increases the pressure to implement effective measures within existing regulatory frameworks like the EU ETS.
+
+## What this means for shipping emissions
+
+The Opportunity Green report reveals a critical disconnect between the shipping industry's profits and its tax contributions, raising concerns about its commitment to decarbonization. With profits not necessarily translating to investments in truly sustainable technologies, and the IMO’s emissions pricing mechanism facing delays, the burden falls increasingly on regional regulations like the EU ETS to drive change. The report underscores the need for greater transparency and accountability in the industry's financial and environmental performance, which is central to the mission of DirtiestShips.com.
