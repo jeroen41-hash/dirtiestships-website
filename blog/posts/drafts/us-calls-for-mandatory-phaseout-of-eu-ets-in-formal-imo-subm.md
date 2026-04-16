@@ -1,0 +1,23 @@
+The United States has upped the ante in the global debate over shipping emissions regulations by formally demanding the dismantling of the EU Emissions Trading System (ETS) as a prerequisite for any future international framework. This move, detailed in a submission to the IMO's Marine Environment Protection Committee (MEPC) ahead of its 84th session, signals a major point of contention that could significantly impact the industry's efforts to decarbonize and navigate the rising costs of carbon.
+
+## US Rejects Carbon Pricing in Shipping
+
+According to the article from Ship & Bunker, the US submission, MEPC 84/7/41, explicitly calls for member states and regional organizations to terminate existing regional schemes like the EU ETS. The submission argues that these schemes create a "duplicative system of frameworks and agreements." Beyond simply phasing out the EU ETS, the US position also rejects any form of economic mechanism in a future global framework, including carbon taxes, financial penalties, or IMO-administered funds. This hard stance could significantly complicate negotiations at the IMO, where finding common ground on carbon pricing has already proven exceptionally difficult. This approach aligns with previous statements made by US officials.
+
+## "Energy-All" Approach and Acceptance Procedures
+
+The US proposal champions an "energy-all" approach, explicitly rejecting any restrictions on conventional fuels, LNG, nuclear, or biomass-based alternatives. This contrasts starkly with the EU's more prescriptive stance favoring specific green technologies and fuels. Furthermore, the submission advocates for the "explicit acceptance procedure" for any future regulation, requiring active approval from member states, a higher bar than the "tacit acceptance" approach commonly used. These conditions represent fundamental differences in approach that must be addressed to find consensus.
+
+## Implications for the EU ETS and Carbon Costs
+
+The US demand for the mandatory withdrawal of the EU ETS adds another layer of uncertainty for shipowners already grappling with the financial implications of the scheme. The EU ETS, which now includes maritime transport, forces shipowners to purchase carbon credits for emissions generated on voyages to, from, and within the EU. This directly impacts the operational costs of vessels calling at EU ports. For companies operating older, less efficient vessels, the costs associated with EU ETS compliance will be substantial and will likely affect their [CII ratings](/cii.html). Our [company rankings](/companies.html) will likely reflect these increasing costs.
+
+Without a global framework that incorporates carbon pricing, the EU ETS becomes a regional scheme with potentially limited impact. The lack of a global agreement could lead to "carbon leakage," where ships simply reroute to avoid calling at EU ports, thereby shifting emissions rather than reducing them. This would undermine the EU's environmental goals and potentially disadvantage shipowners who are investing in cleaner technologies and fuels to reduce their carbon footprint. The EU ETS costs are factored into our carbon cost modelling on [emissions data](/charts.html).
+
+## The Future of IMO Negotiations
+
+The article states that the IMO's Net-Zero Framework (NZF) proposal, approved in principle at MEPC 83, collapsed at a subsequent extraordinary session due to "severe divergence among Member States." The US is now actively discouraging the resumption of that session. The US position, spearheaded by Secretary of State Marco Rubio, threatens to rally opposition against any framework "substantially similar" to the NZF. Given the significant differences in opinion among member states and the US's firm stance, it is difficult to predict whether any meaningful progress can be made at the upcoming MEPC 84 session.
+
+## What this means for shipping emissions
+
+The US's call to dismantle the EU ETS throws a wrench into the ongoing efforts to reduce shipping emissions. While the EU has taken a proactive approach with its regional scheme, the lack of global consensus and the US's outright opposition creates significant uncertainty. This divergence hinders investment in decarbonization technologies, exacerbates the risk of carbon leakage, and ultimately jeopardizes the industry's ability to meet its climate goals. The industry will need to closely monitor the upcoming MEPC 84 session to assess the path forward.
