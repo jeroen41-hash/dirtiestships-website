@@ -1,0 +1,25 @@
+The escalating tensions in the Middle East, specifically disruptions around the Strait of Hormuz, are sending shockwaves through the global shipping industry, and early data suggests a significant, if potentially temporary, impact on vessel emissions. A near-total closure of the Strait in March triggered a sharp decline in tanker tonne-miles, highlighting the region's crucial role in global oil flows. This disruption creates a complex scenario with both short-term emission increases from rerouting and potential long-term demand shifts that could reshape shipping patterns.
+
+## Tanker Traffic Plummets After Strait Disruption
+
+According to [hellenicshippingnews.com](hellenicshippingnews.com), March saw a dramatic decrease in tonne-miles across key tanker segments. Total tonne miles for Aframax, Suezmax, and VLCC vessels fell by 13.7% year-on-year. When adjusted for the active fleet size, the decrease intensified to 16.4%. The article notes that the decline exceeded anything seen during the COVID-19 pandemic. The impact was most pronounced for VLCCs, which are the primary carriers of Persian Gulf crude oil. VLCC tonne miles dropped 20% YoY, with a staggering 27% reduction per vessel, indicating that a significant portion of the VLCC fleet was effectively idled. These changes could well influence the [company rankings](/companies.html) that we track, as lower utilization immediately hurts fuel efficiency metrics. It’s critical to remember that lower utilization hurts [CII ratings](/cii.html), since the formula punishes vessels which are slow steaming or idle.
+
+## Mixed Fortunes for Smaller Tankers
+
+While VLCCs suffered a major blow, Aframax tankers experienced a 7% YoY increase in tonne miles (3% per vessel). Suezmax tankers remained relatively stable, showing only a marginal 1% YoY increase (but a 5% per vessel decrease). This divergence suggests that trade routes outside the Persian Gulf continued to operate, with shorter and medium-haul voyages unaffected by the Hormuz closure. The article posits that the rise in Aframax tonne-miles may reflect increased activity in non-Gulf trades, though it offers no specifics about which trades were impacted. The EU's [emissions data](/charts.html) from EMSA MRV will likely reveal the precise shifts when Q1 figures are compiled.
+
+## Offshore Sector Crippled
+
+The conflict’s impact extends beyond tankers to the offshore sector. Major producers like Saudi Aramco and QatarEnergy curtailed or suspended production. Gulf oil exports fell by over 60% for the week ending March 15th. QatarEnergy halted all gas production at its North Field, leading to the force majeure declaration. The article states that roughly one in five of the world’s offshore vessels are based in the Persian Gulf region, encompassing 19% of the global OSV fleet, 18% of the global OCV fleet, and 27% of the global jack-up market. Such disruption will have a major near-term effect on company profitability in the offshore segment.
+
+## Dry Bulk Sees a Double-Edged Sword
+
+The dry bulk segment faces a more complex situation, with both potential benefits and drawbacks from the Middle East tensions. The closure of the Strait of Hormuz has disrupted approximately 3% of total dry bulk trade, including aggregates, iron ore, fertilizers, and cement. Sourcing these materials from alternative locations will introduce longer sailing distances and operational inefficiencies, which could lead to firmer freight rates and increased fuel consumption. Simultaneously, approximately 1.4% of the global dry bulk fleet is currently trapped within the Strait. Ongoing attacks in the Bab-el-Mandeb Strait further exacerbate the situation, leading to rerouting away from the Red Sea.
+
+## Adapting to Disruption: The Key Questions
+
+The future impact on shipping emissions hinges on how the industry adapts to these disruptions. The article notes that April data will provide crucial insights into whether Asian refiners are compensating for lost Gulf supply by sourcing crude from the Atlantic Basin. A recovery in VLCC tonne miles, particularly on longer-haul routes, would indicate a shift in trade patterns. Failure to recover could suggest either a lack of alternative supply or demand destruction.
+
+What this means for shipping emissions:
+
+The Strait of Hormuz disruptions serve as a stark reminder of the shipping industry's vulnerability to geopolitical events. While the immediate impact is a decrease in VLCC activity, potentially improving their [CII ratings](/cii.html), the longer-term effects are less clear. Rerouting and inefficiencies across multiple vessel classes are likely increasing overall emissions. The potential shift in supply chains could drive longer voyages and alter vessel utilization, further influencing the industry's carbon footprint. The [EU ETS](/ets.html) carbon costs associated with these longer voyages will also pressure companies to optimize routes and improve fuel efficiency. The data from our platform will be critical in tracking and understanding these evolving trends.
