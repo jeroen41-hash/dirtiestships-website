@@ -1,0 +1,23 @@
+The U.S. Treasury's latest sanctions targeting a Chinese refinery and nearly 40 vessels involved in Iran's "shadow fleet" underscore the ongoing complexities of maritime emissions and regulatory enforcement. These sanctions, aimed at disrupting Iran's oil trade, have a direct impact on the types of vessels operating, the routes they take, and, ultimately, the emissions they produce. This activity circumvents standard maritime regulations and reporting, making it difficult to track and mitigate the environmental impact.
+
+## Targeting the "Teapot Refineries"
+
+The sanctions specifically target Hengli Petrochemical (Dalian) Refinery Co., Ltd., a major "teapot" refinery in China that the U.S. Treasury identifies as a key purchaser of Iranian crude oil (hellenicshippingnews.com). These independent refineries play a crucial role in sustaining Iran's oil economy. The article states Hengli has received Iranian oil cargoes from sanctioned shadow fleet vessels since at least 2023, including BIG MAG (IMO 9263215), GALE (IMO 9294240), and ARES (IMO 9174397), which alone have delivered over five million barrels of Iranian crude oil. Previous sanctions have targeted four other teapot refineries. The reliance on these smaller, independent refineries highlights a challenge in controlling the global trade and emissions associated with sanctioned oil.
+
+## The Shadow Fleet and Its Environmental Footprint
+
+The U.S. Treasury is also sanctioning 19 shadow fleet vessels that are responsible for transporting billions of dollars’ worth of Iranian crude oil, LPG, and other petroleum products. These vessels often operate outside the purview of standard maritime regulations, which raises concerns about their environmental performance. Specifically, the article lists several vessels and their movements, including the LISBOA (IMO 9257711), which transported over 2.5 million barrels of Iranian naphtha to the UAE, and the LYNN (IMO 9352559), which engaged in ship-to-ship transfers of Iranian crude oil off the coast of Malaysia before delivering the cargo to China (hellenicshippingnews.com).
+
+Because these vessels often seek to conceal their activities, they may be less likely to invest in modern, fuel-efficient technologies or adhere to best practices for emissions reduction. This impacts their [CII ratings](/cii.html). Furthermore, they are unlikely to be accurately reporting emissions data through systems like the EU's MRV (Monitoring, Reporting, and Verification) program, making it harder to assess their environmental impact using [emissions data](/charts.html).
+
+## Implications for EU ETS and Carbon Costs
+
+The EU Emissions Trading System (ETS) is designed to put a price on carbon emissions from maritime transport within the EU. However, the shadow fleet's activities largely bypass this system. These vessels, often flagged in countries with lax enforcement, are less likely to comply with EU regulations or incur [EU ETS carbon costs](/ets.html). This creates an uneven playing field for shipping companies that are committed to reducing their emissions and complying with environmental regulations. The lack of transparency and accountability within the shadow fleet undermines the effectiveness of the EU ETS and its ability to drive down shipping emissions.
+
+## Challenges in Monitoring and Enforcement
+
+The sanctions highlight the challenges in monitoring and enforcing regulations on a global scale. The use of ship-to-ship transfers, flag-of-convenience registries, and complex ownership structures makes it difficult to track the movements of these vessels and hold them accountable for their environmental impact. EMSA's MRV data provides a valuable tool for monitoring emissions from ships calling at EU ports, but it is less effective in tracking the activities of vessels that actively seek to avoid detection. Enhanced international cooperation and data sharing are needed to improve monitoring and enforcement efforts. This data could be used to update our [company rankings](/companies.html).
+
+## What this means for shipping emissions
+
+The U.S. sanctions targeting Iran's oil trade and shadow fleet expose a critical gap in maritime emissions regulation. The lack of transparency and accountability within this segment of the shipping industry undermines global efforts to reduce greenhouse gas emissions. Addressing this issue requires greater international cooperation, enhanced monitoring and enforcement, and a commitment to holding all shipping companies accountable for their environmental impact, regardless of their location or activities.
