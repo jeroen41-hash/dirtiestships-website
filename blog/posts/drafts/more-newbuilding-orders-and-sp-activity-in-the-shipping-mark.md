@@ -1,0 +1,25 @@
+The latest wave of newbuilding orders signals the shipping industry's tentative steps toward decarbonization while highlighting the challenges of long lead times and fuel technology choices in a rapidly evolving regulatory landscape. With orders placed for dual-fuel vessels capable of running on methanol and LNG, the industry is hedging its bets as it grapples with impending regulations like the EU Emissions Trading System (ETS) and increasingly stringent [CII ratings](/cii.html).
+
+## Dual-Fuel Orders Dominate Newbuilding Activity
+
+A recent report from shipbroker Banchero Costa, as summarized by hellenicshippingnews.com, reveals a flurry of activity in the newbuilding market, with a clear emphasis on dual-fuel technology. China Merchants Energy Shipping placed an order for 4 x 1,800 TEU dual-fuel methanol-ready containerships, while Cosco Shipping Holdings ordered a 1 x 13,600 TEU LNG dual-fuel containership for operation under OOCL. These orders, with deliveries scheduled for 2028, illustrate the growing demand for vessels capable of utilizing alternative fuels, though they also underscore the long timeframe required for fleet renewal.
+
+The article does not provide specific details on the expected emissions reductions from these dual-fuel vessels. However, the selection of methanol and LNG reflects an effort to reduce greenhouse gas (GHG) emissions compared to conventional fuel oil. The effectiveness of these fuels in meeting future emissions targets remains a subject of debate within the industry, with concerns raised about methane slip from LNG engines and the lifecycle emissions associated with methanol production depending on its source. Our [emissions data](/charts.html) section provides tools for modelling the likely impact of using alternative fuels.
+
+## Bulk Carrier Orders and Retrofitting Implications
+
+While dual-fuel technology is prominent, conventional vessel orders persist. Seatankers Management ordered 4 x 210,000 DWT Newcastlemax bulk carriers, while Wisdom Marine Lines ordered 4 x 40,000 DWT bulk carriers. These orders, coupled with the sale and purchase (S&P) activity in the dry bulk market, as reported by Xclusiv, suggest a continued demand for traditional tonnage.
+
+The S&P market saw notable transactions, including the sale of the "BULK JOYANCE" (175K/2012) for USD 33 million and several Kamsarmax vessels in the USD 16-20 million range. These transactions highlight the value of existing vessels, but also raise questions about the pace of fleet turnover and the potential need for retrofitting to meet emissions regulations. Older vessels with poor [CII ratings](/cii.html) face increasing pressure to improve their performance or risk being phased out.
+
+## Tanker Sector Sees Methanol-Ready Investments
+
+The tanker sector also saw significant activity, with Yangzijiang Maritime ordering 6 x 50,000 DWT methanol-ready product tankers and 4 x 114,000 DWT crude oil carriers. The methanol-ready designation indicates a proactive approach to future fuel flexibility, aligning with the industry's broader efforts to explore alternative propulsion systems. These orders, however, do not guarantee that the vessels will ultimately operate on methanol. The availability and cost of green methanol will be crucial factors in determining its widespread adoption. The impact of methanol use on a company's [company rankings](/companies.html) is also a key consideration.
+
+## The EU ETS and Long-Term Investment Decisions
+
+The EU ETS is a major driver of these investment decisions. The inclusion of shipping in the ETS means that shipowners will be required to purchase carbon allowances for a portion of their emissions on voyages to, from, and within the EU. This creates a financial incentive to reduce emissions, either through operational improvements, retrofitting, or investing in new, more efficient vessels. The current carbon price and its projected trajectory over the lifespan of these newbuilds will significantly impact their economic viability. The order for conventional fueled ships may require carbon capture systems to be retrofitted in the future to comply with the [EU ETS](https://ec.europa.eu/clima/policies/ets/shipping_en).
+
+## What this means for shipping emissions
+
+The newbuilding orders reported by hellenicshippingnews.com showcase a mixed bag of strategies in response to growing emissions regulations. While dual-fuel vessels represent a move toward decarbonization, the continued ordering of conventional vessels suggests a cautious approach to technological adoption. The success of these investments in reducing overall shipping emissions will depend on the widespread availability of sustainable alternative fuels, the effectiveness of operational efficiency measures, and the evolving landscape of carbon pricing and regulatory enforcement, all of which are tracked via [EMSA MRV data](https://mrv.emsa.europa.eu/#public/home).
