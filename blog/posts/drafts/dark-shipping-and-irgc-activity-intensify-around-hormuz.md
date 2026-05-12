@@ -1,0 +1,21 @@
+The Strait of Hormuz, a vital artery for global oil and gas transport, is seeing a concerning rise in "dark shipping" practices, presenting a challenge to emissions tracking and regulation. Increased Iranian military activity combined with vessels operating under EMCON (emissions control) conditions, as reported by Windward.ai, makes it harder to get an accurate picture of the carbon footprint in this key region, hindering efforts to reduce maritime emissions.
+
+## Surge in Dark Shipping Practices
+
+Windward.ai's report highlights a worrying trend: commercial vessels are increasingly transiting the Strait of Hormuz under "dark" or EMCON conditions. This means they are either turning off their Automatic Identification System (AIS) transponders – making them invisible to tracking systems – or operating under strict emissions control, possibly masking their true operational status. The report identified nine commercial tanker transits on May 11th alone, including LPG and product tankers linked to the dark fleet, which are vessels often involved in sanctioned trade. Such activity directly undermines the EU's Monitoring, Reporting and Verification (MRV) system, a cornerstone of emissions data collection. The reliability of EMSA MRV data, which our site uses to calculate [company rankings](/companies.html) and [CII ratings](/cii.html), hinges on accurate vessel tracking. When ships go dark, this data becomes incomplete and potentially misleading.
+
+## IRGC Activity and Its Impact
+
+The intensification of Islamic Revolutionary Guard Corps (IRGC) fast craft activity in the Strait of Hormuz is another destabilizing factor. The report details instances of large formations of high-speed craft, sometimes exceeding 20 vessels, operating near commercial shipping lanes. These formations have been observed engaging in swarm-like maneuvers and potential escort-like behavior, raising concerns about safety and potential interference with legitimate maritime traffic. Windward observed one inbound bulk carrier transiting with a cluster of high-speed craft in formation on May 9th, suggesting a possible escort or pressure posture. While not directly related to emissions, this increased military presence exacerbates the likelihood of vessels operating under EMCON conditions to avoid unwanted attention, thus obscuring emissions data.
+
+## Kharg Island Export Constraints and Tanker Staging
+
+Iranian oil export operations via Kharg Island appear to be facing increased constraints. Windward.ai reported no confirmed tanker departures from Kharg Island after May 7th, while large concentrations of "dark tankers" have been observed near Larak, Qeshm, and Chabahar, indicating a growing bottleneck in Iranian oil exports. This suggests Iran is using these vessels as floating storage to buffer export capacity under blockade pressure. The presence of these stationary tankers raises questions about their emissions profile. Are they using onboard generators for power, and if so, what type of fuel are they burning? The opacity surrounding these operations makes it difficult to assess their true environmental impact.
+
+## LNG Transits and Regional Tensions
+
+Despite the turbulent environment, the report notes the resumption of Qatar LNG cargoes transiting Hormuz, marking the first successful transit since February. This highlights the importance of the Strait for global energy supply chains. However, any disruption to these LNG flows, whether due to military activity or other factors, could have significant repercussions for energy markets and potentially lead to increased reliance on alternative fuels with varying emissions profiles.
+
+## What this means for shipping emissions
+
+The increasing prevalence of dark shipping practices and heightened regional tensions in the Strait of Hormuz present a significant challenge to accurate emissions tracking and regulation. With vessels operating under EMCON conditions and engaging in potentially illicit activities, the reliability of emissions data collected through systems like EU MRV is compromised. This makes it harder to assess the true carbon footprint of the shipping industry and to effectively implement measures to reduce maritime emissions, which can be tracked using our site's [emissions data](/charts.html) and [news feed](/news.html).
