@@ -1,0 +1,11 @@
+{
+    "id": 1778911242,
+    "date": "2026-05-16",
+    "title": "State of Transport 2026: Shipping",
+    "summary": "Battery-electric vessel orders are increasing due to lower battery prices, but this primarily benefits short-sea shipping. China is experimenting with battery swapping for container ships, while Europe focuses on battery ferries. We will critically assess if electrification reduces overall well-to-wheel CO2e emissions, using MRV data and IMO methodologies, to avoid greenwashing.",
+    "content": "In the last few years, orders for battery-electric newbuilds and retrofits have increased markedly in number and size. Better technical specifications and rapidly falling prices for batteries have made electrification more and more attractive for short-sea shipping.\n\nEurope and China are the leaders when it comes to the number of battery - electric vessels operating and on order. Ferries represent the bulk of battery electric ships in Europe. At the same time, China is trialing swappable batteries for container ships, with a recent spike in new orders.\n\nSources:\n\nOverall WtW CO2e emissions are calculated by T&E based on the 2024 MRV data. We assumed emissions from smaller vessels comprise 19.6% of total EU-linked shipping emissions, based on previous T&E research.\n\nCO2 and CO2e emissions on voyages between countries are estimated by T&E using AIS data and the bottom-up methodology defined in the Fourth IMO Greenhouse Gas Study, applied to merchant vessels in 2024.\n\nPotential revenues raised from the ETS are calculated by T&E based on the estimated voyage-based GHG emissions above.\n\nGlobal maritime trade volume for 2024 is sourced from Clarksons. EU trade volume for 2024 is sourced from Eurostat.\n\nThe number of vessels operating with alternative fuels or batteries is sourced from Clarksons.",
+    "source_url": "https://www.transportenvironment.org/state-of-transport-2026/shipping",
+    "source": "transportenvironment.org",
+    "score": 104,
+    "top_image": "https://transforms.transportenvironment.org/production/images/TE_SoT2026_VenueSocial_NoTextWithYear_1920x1080_F.png?w=1200&h=630&q=82&auto=format&fit=crop&dm=1773415996&s=dfcf13fdad2aba8d2917ae9bf53fab11"
+}
