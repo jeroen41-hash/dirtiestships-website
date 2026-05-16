@@ -1,0 +1,25 @@
+The rise of battery-powered vessels offers a glimmer of hope in the ongoing effort to decarbonize the shipping industry, though the overall impact on emissions reductions remains to be seen. While the sector is still heavily reliant on fossil fuels, recent trends indicate a growing interest in electrification, particularly for short-sea routes and specific vessel types.
+
+## Electrification Gains Momentum in Short-Sea Shipping
+
+The *State of Transport 2026: Shipping* report from Transport & Environment (T&E) highlights a significant increase in orders for both battery-electric newbuilds and retrofits. This surge is attributed to improved battery technology and declining prices, making electrification increasingly attractive for short-sea operations. This trend aligns with our data showing that shorter voyages generally receive better [CII ratings](/cii.html) due to lower fuel consumption per nautical mile. The report emphasizes that Europe and China are at the forefront of this transition, leading in the number of battery-electric vessels in operation and on order.
+
+## Ferries and Swappable Batteries Lead the Charge
+
+In Europe, ferries constitute the majority of battery-electric ships, which makes sense given their predictable routes and port infrastructure. Meanwhile, China is experimenting with swappable batteries for container ships, experiencing a "recent spike" in new orders. Swappable battery technology could prove transformative for container shipping, addressing the challenges associated with long charging times and limited range. Whether these innovations will be sufficient to meet increasingly stringent regulations like the EU ETS, however, remains to be seen. The costs associated with carbon emissions under the EU ETS will likely drive further investment in alternative fuels and technologies. We will be closely watching how this affects [company rankings](/companies.html) as shipping lines adapt.
+
+## Emissions Data and Methodology
+
+The T&E report provides insights into its methodology for calculating emissions, noting that overall Well-to-Wake (WtW) CO2e emissions are based on 2024 MRV data. They estimate that emissions from smaller vessels account for 19.6% of total EU-linked shipping emissions, drawing on previous T&E research. This underscores the importance of accurately tracking emissions from all vessel sizes, a key focus of our platform using data from the European Maritime Safety Agency (EMSA). Voyage-based CO2 and CO2e emissions between countries are estimated using AIS data and a bottom-up methodology defined in the Fourth IMO Greenhouse Gas Study, applied to merchant vessels in 2024. Our [emissions data](/charts.html) also utilizes AIS data to provide a granular view of vessel emissions, complementing the MRV data.
+
+## ETS Revenue and Trade Volumes
+
+The report also touches upon potential revenues generated from the EU ETS, calculated based on estimated voyage-based GHG emissions. Global maritime trade volume for 2024 is sourced from Clarksons, while EU trade volume is sourced from Eurostat. While not the primary focus of electrification, the EU ETS presents a financial incentive for shipping companies to adopt cleaner technologies and reduce their carbon footprint. The funds generated from the ETS could, in theory, be reinvested into further decarbonization efforts within the shipping industry. The cost of EU Allowances (EUAs) will likely vary significantly depending on market demand, with this variance directly impacting the economic viability of transitioning to alternative fuel vessels.
+
+## Alternative Fuels and Battery Adoption Data
+
+The number of vessels operating with alternative fuels or batteries is sourced from Clarksons. While the report highlights the growth in battery-electric vessels, it acknowledges that alternative fuels also play a crucial role in decarbonizing the sector. A diverse approach, incorporating battery technology, alternative fuels, and operational efficiencies, is likely necessary to achieve significant emissions reductions.
+
+## What this means for shipping emissions
+
+While battery-powered vessels are gaining traction, particularly in short-sea shipping, their overall impact on reducing total shipping emissions remains limited. The technology is promising, especially for ferries and potentially container ships utilizing swappable batteries. However, significant investments in infrastructure, battery technology, and regulatory frameworks are needed to accelerate the transition and achieve substantial emissions reductions across the entire shipping industry. Furthermore, the economic incentives created by mechanisms like the EU ETS will play a crucial role in driving the adoption of these cleaner technologies and influencing the industry's move towards decarbonization. The adoption rate and effectiveness of these measures will determine whether the shipping industry can meet its ambitious climate goals. We will continue to monitor these trends closely and provide data-driven insights to our users.
