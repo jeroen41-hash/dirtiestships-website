@@ -1,0 +1,21 @@
+The UK Emissions Trading Scheme (ETS), designed to drive decarbonization in key sectors, is facing scrutiny regarding its limited scope in maritime shipping. While the expansion to include domestic shipping in 2026 is a step forward, it addresses only a fraction of the total emissions associated with UK-related voyages, potentially undermining the UK's ambitious net-zero target. Expanding the scope to include international voyages and smaller vessels is crucial to achieving meaningful emissions reductions and maximizing the scheme's effectiveness.
+
+## Limited Scope of the 2026 UK ETS
+
+Currently, the UK ETS covers emissions from vessels of 5,000 gross tonnage (GT) or more when at berth, at anchor, or traveling between UK ports. However, a recent analysis by the ICCT highlights the limited impact of this scope. In 2023, ships sailing on UK-related voyages emitted 16.4 million tonnes (Mt) of CO2e. The 2026 UK ETS scope only covers 2.5 Mt, representing a mere 15% of total emissions [Source: theicct.org]. This leaves a significant portion of emissions, particularly those from international voyages, unregulated. Our [emissions data](/charts.html) corroborates this trend, showing that international voyages consistently represent a substantial portion of overall shipping emissions.
+
+## The Case for Expanding Coverage
+
+The ICCT report advocates for a phased expansion of the UK ETS. Covering 50% of international voyages by ships 5,000 GT or more could triple the current emissions coverage. Further expanding the scheme to include vessels under 5,000 GT would quadruple the coverage compared to the 2026 scope [Source: theicct.org]. This expansion would significantly increase both the amount of regulated emissions and the revenue generated through the scheme, which could be reinvested in further decarbonization efforts. The UK ETS currently lacks coverage of ships below 5000 GT.
+
+## Revenue Potential and Carbon Leakage Risks
+
+The potential financial impact of expanding the UK ETS is substantial. The ICCT estimates that expanding coverage as described above could increase revenue from £138–£173 million to £570–£710 million annually [Source: theicct.org]. However, the report also warns of potential carbon leakage. Without a broader scope, operators may be incentivized to divert to non-covered ports or build smaller vessels to circumvent the size threshold, thereby undermining the scheme's overall effectiveness. This highlights the importance of aligning regulations with other jurisdictions, such as the EU ETS. Discussions are underway between the UK and EU to link their respective ETS schemes, a move that could harmonize carbon prices and expand coverage. This also could potentially reduce confusion regarding which ships and voyages are applicable to which scheme.
+
+## Connecting to EU MRV Data and Company Performance
+
+The UK ETS Authority can leverage data from the EU's Monitoring, Reporting, and Verification (MRV) system, and the EMSA, to inform its regulatory decisions and track the performance of shipping companies. The MRV data provides detailed information on CO2 emissions from individual vessels, allowing regulators to identify high-emitting ships and target specific interventions. This data, combined with the [CII ratings](/cii.html) assigned to vessels, can provide a comprehensive picture of a ship's environmental performance. Furthermore, the UK ETS Authority can use this information to assess the impact of the scheme on different shipping companies and track their progress towards decarbonization. Our [company rankings](/companies.html) can be used to compare relative company performance and highlight those lagging behind.
+
+## What this means for shipping emissions
+
+The future of the UK ETS hinges on expanding its scope to encompass a larger share of shipping emissions. The current plan to include only domestic shipping in 2026 leaves a significant portion of emissions unregulated and creates opportunities for carbon leakage. By expanding the scheme to include international voyages and smaller vessels, the UK can significantly increase its impact on shipping emissions, drive further decarbonization, and unlock substantial revenue that can be reinvested in green technologies and infrastructure. The UK ETS needs to cover as close to 100% of emissions as possible to be effective.
