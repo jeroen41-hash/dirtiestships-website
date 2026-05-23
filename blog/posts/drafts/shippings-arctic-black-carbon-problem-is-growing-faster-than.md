@@ -1,0 +1,25 @@
+Black carbon emissions from shipping in the Arctic are surging, outpacing regulatory efforts to curb them. New data reveals a dramatic increase in these emissions, raising concerns about the accelerated melting of Arctic ice and the limited effectiveness of current regulations. This poses a significant challenge to the shipping industry's environmental impact, particularly given the disproportionate warming potential of black carbon compared to CO2.
+
+## Arctic Black Carbon Emissions Soar
+
+According to data published by the Clean Arctic Alliance, black carbon emissions from shipping in the Polar Code area nearly tripled between 2019 and 2024, increasing from 259 to 759 metric tonnes. In the broader Arctic Monitoring and Assessment Programme (AMAP) geographic boundary, the increase was around 46%. (gCaptain) These are not projections but measured emissions, highlighting the immediate impact of increased shipping activity in newly accessible Arctic waters. The rise is attributed to the retreat of Arctic sea ice, opening new routes and attracting more bulk carriers, tankers, and cruise ships. The number of ships entering the Arctic rose by 37% between 2013 and 2024, while the total distance sailed more than doubled.
+
+## The Limited Impact of Fuel Switching
+
+While the industry focuses on fuel transitions, the impact of switching to cleaner fuels alone appears limited. An analysis by the Clean Arctic Alliance, along with research from the International Council on Clean Transportation, suggests that even full enforcement of the existing heavy fuel oil (HFO) ban in Arctic waters, combined with a complete switch to distillates, would only reduce black carbon emissions by 2% to 5%. This is because black carbon is primarily a product of incomplete combustion, influenced by factors beyond fuel type.
+
+## Combustion Quality is Key
+
+The source article emphasizes that engine condition, injector wear, atomisation quality, turbocharger efficiency, combustion temperatures, cylinder lubrication strategy, and transient load profiles all significantly influence particulate formation. A poorly maintained engine operating on cleaner fuel can still produce significant soot, while a well-maintained engine burning residual fuel efficiently will produce considerably less. This highlights the importance of operational practices and investment in engine maintenance for reducing black carbon emissions, aspects not directly addressed by current fuel-focused regulations. This also ties into the [CII ratings](/cii.html) system which, while focused on CO2, doesn't directly account for black carbon from these operational inefficiencies.
+
+## Regulatory Responses and Their Shortcomings
+
+MEPC 84 approved a new North-East Atlantic Emission Control Area, setting stricter sulphur oxide and nitrogen oxide limits for vessels operating within 200 nautical miles of several European coastlines, entering into force in 2027. While this is a positive step, the article notes that black carbon is not primarily a sulphur problem, making this regulation less effective in addressing the issue. The IMO's regulatory machinery has struggled to translate the nuances of combustion-related black carbon emissions into effective action, resulting in limited progress in curbing these emissions.
+
+## Black Carbon's Disproportionate Warming Effect
+
+Black carbon's impact extends beyond being "another line in an emissions inventory." When it settles on Arctic ice and snow, it darkens reflective surfaces and accelerates heat absorption. Per unit of mass, black carbon can have a warming potential up to 1,500 times that of carbon dioxide. In the Arctic, where the climate system is already under stress, this accelerated warming poses significant risks, making the reduction of black carbon emissions a critical priority. This disproportionate impact underscores the urgency of addressing black carbon, even if overall emission volumes are smaller compared to CO2. This also underlines the importance of considering black carbon when assessing [company emissions rankings](/companies.html), as current metrics primarily focus on CO2.
+
+## What this means for shipping emissions
+
+The escalating black carbon emissions in the Arctic demand a more comprehensive approach that goes beyond fuel switching. While future fuels remain crucial for long-term decarbonisation, immediate action is needed to improve combustion efficiency in existing engines. This requires investment in engine maintenance, optimization of operational practices, and potentially the adoption of technologies that promote cleaner combustion. The industry and regulators need to acknowledge and address the complexities of black carbon formation to effectively mitigate its impact on the Arctic environment. Current strategies such as the EU ETS and its associated carbon costs may not effectively disincentivize black carbon emissions specifically, as they are largely focused on CO2. More targeted measures are needed to address this critical aspect of shipping's environmental footprint.
