@@ -1,0 +1,21 @@
+The path to a global net-zero framework for shipping faces continued resistance, casting doubt on the timeline and stringency of future emissions regulations. While the desire for decarbonization remains strong among some nations, concerns about feasibility, cost, and the availability of low-carbon fuels are creating significant headwinds. This impasse threatens to delay the implementation of crucial measures designed to curb the industry's carbon footprint.
+
+## IMO's Net Zero Framework Stalled by Disagreement
+
+The article from hellenicshippingnews.com highlights the challenges encountered at the International Maritime Organization's (IMO) 84th Marine Environment Protection Committee (MEPC 84) session. Despite widespread anticipation, the Net Zero Framework (NZF), which includes a global carbon pricing mechanism, failed to gain traction. A coalition of countries, mirroring opposition seen at the previous extraordinary session, continues to resist the framework, citing concerns about its practicality and the reliance on fuels not yet readily available. This resistance underscores a fundamental divide within the IMO regarding the pace and approach to decarbonization. This is something we track closely in our [company rankings](/companies.html) by monitoring the official statements of companies on support for different policies.
+
+## Global Fuel Intensity Proposal Fails to Gain Traction
+
+Major flag states like Liberia and Panama, representing approximately 30% of the global fleet, proposed an alternative approach centered on a Global Fuel Intensity (GFI) target. This proposal sought to link GFI adjustments to the actual market uptake of low-carbon fuels, considering factors like technical feasibility, affordability, availability, and scalability. Crucially, it omitted the proposed IMO NZF fund, a point of contention for many nations. Japan also offered a revised proposal advocating for compliance deficits to be traded, allowing ships exceeding emissions targets to sell surplus units to those falling short. This would also allow for a more gradual GFI reduction trajectory from 2030 onward. However, both proposals ultimately failed to garner sufficient support, highlighting the difficulty in finding a consensus. This failure to agree on a GFI highlights the difficulty in setting realistic [CII ratings](/cii.html) targets.
+
+## Concerns Over Transition Fuels Like LNG
+
+Beyond cost and feasibility, the article notes that both the Liberian/Panamanian and Japanese proposals raised concerns about prematurely phasing out transition fuels like LNG. This highlights the ongoing debate about the role of LNG in the decarbonization pathway. While LNG offers immediate reductions in some pollutants compared to traditional heavy fuel oil, its methane slip (the release of unburned methane, a potent greenhouse gas) remains a significant concern. The future role of transition fuels will dramatically affect shipowners investment decisions.
+
+## Implications for EU ETS and Carbon Costs
+
+The delay in a global framework has direct implications for regional regulations like the EU Emissions Trading System (ETS), which now includes shipping. Without a global carbon price signal, the EU ETS becomes a relatively expensive regional measure, potentially creating competitive disadvantages for European shipping companies. The uncertainty surrounding a global carbon levy further complicates investment decisions, as shipowners struggle to assess the long-term financial impact of different fuel choices and efficiency measures. This uncertainty also impacts the effectiveness of tools like our [emissions data](/charts.html) which track the real-world effects of carbon costs.
+
+## What this means for shipping emissions
+
+The ongoing deadlock at the IMO signals a likely continuation of fragmented and potentially less ambitious emissions regulations for the shipping industry. While the EU ETS and other regional initiatives will continue to drive decarbonization in some areas, the absence of a unified global approach risks slowing overall progress and creating uneven playing fields. Further refinement of the Net Zero Framework may be underway, but whether this leads to effective action remains to be seen.
