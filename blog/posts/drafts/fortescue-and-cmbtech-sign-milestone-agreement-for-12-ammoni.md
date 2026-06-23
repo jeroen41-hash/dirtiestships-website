@@ -1,0 +1,27 @@
+The global shipping industry, under increasing pressure to decarbonize, has seen a significant development with the announcement that Fortescue will charter up to 12 ammonia-capable Newcastlemax bulkers from CMB.TECH. This agreement, detailed by hellenicshippingnews.com, represents a tangible step towards adopting alternative fuels, carrying substantial implications for CO2 emissions, regulatory compliance under the EU ETS, and future [CII ratings](/cii.html) across the maritime sector.
+
+## A Milestone in Ammonia Adoption
+
+The agreement between Fortescue and CMB.TECH involves the charter of up to 12 Newcastlemax vessels, each with a substantial 210,000 deadweight tonnage (dwt). Crucially, up to three of these vessels are slated for delivery with dual-fuel ammonia engines by the end of 2026, with the remaining nine designed as "ammonia-ready" for future conversion. This commitment to ammonia, a zero-carbon fuel when produced renewably, signals a growing industry acceptance of alternatives to conventional heavy fuel oil. As Fortescue Director Katie Charuga noted, "The shipping industry doesn’t need more talk. It needs action. Green ammonia is one of the clearest pathways to reducing carbon dioxide emissions from shipping..."
+
+## Emissions Reduction Potential and CII Impact
+
+The potential environmental impact of this fleet is significant. If these 12 vessels are fueled by green ammonia, they could collectively reduce carbon dioxide emissions by approximately 250,000 tonnes a year compared to operating on traditional marine fuels. For DirtiestShips.com, this figure is a critical metric. Our [emissions data](/charts.html), derived from sources like EU MRV, continually tracks such reductions.
+
+The transition to ammonia will have a profound effect on the vessels' [CII ratings](/cii.html). Conventional Newcastlemax bulkers typically face challenges in achieving favorable CII scores due to their size and operational profiles. However, switching to a zero-carbon fuel like green ammonia would drastically improve their operational carbon intensity, potentially elevating them to the coveted A or B ratings, provided the operational efficiency is maintained. This move by Fortescue and CMB.TECH could set a new benchmark for how large dry bulk carriers manage their environmental performance.
+
+## EU ETS Implications for Large Bulk Carriers
+
+The introduction of the EU Emissions Trading System (ETS) to shipping has placed a direct financial incentive on decarbonization, particularly for vessels regularly calling at EU ports. Newcastlemax bulkers, by virtue of their trade routes and fuel consumption, represent substantial CO2 liabilities under the ETS. A reduction of 250,000 tonnes of CO2 emissions annually, if fully realized through green ammonia, would translate into significant savings on EU Allowance (EUA) purchases. With EUA prices fluctuating but often exceeding €70 per tonne, this could represent an annual saving upwards of €17.5 million for this specific fleet, strengthening the business case for green fuel adoption beyond mere compliance.
+
+This strategic move by Fortescue, a major player in global commodity logistics, underscores a broader trend: companies are increasingly factoring carbon costs into their long-term fleet strategies. Such decisions will inevitably influence [company rankings](/companies.html) based on overall emissions performance.
+
+## The Green Ammonia Challenge and "Ammonia-Ready" Nuance
+
+While the agreement is a positive step, it's crucial to acknowledge the nuances. The potential emissions reduction is contingent on the availability and consistent supply of *green* ammonia – ammonia produced using renewable energy, ensuring a truly zero-carbon lifecycle. "Blue" or "grey" ammonia, produced using fossil fuels with or without carbon capture, would offer less dramatic or even negligible emissions benefits over the entire value chain.
+
+Furthermore, the distinction between "dual-fuel ammonia engines" (up to three vessels by 2026) and "ammonia-ready" (the remaining nine) is important. "Ammonia-ready" vessels possess the design flexibility to convert to ammonia in the future but will initially operate on conventional fuels, meaning their early operational emissions will still contribute to the overall carbon footprint until conversion and green ammonia bunkering become standard. Fortescue's "Green Pioneer" demonstration vessel shows the operational viability, but scaling the green ammonia supply chain remains the next significant hurdle for the industry.
+
+## What this means for shipping emissions
+
+This agreement signals a concrete, large-scale investment in future zero-emission shipping. It provides a real-world example of how major players are planning to reduce CO2 emissions, comply with evolving regulations like EU ETS, and improve their [CII ratings](/cii.html). However, the ultimate impact on global shipping emissions, as tracked by our EU MRV data and [emissions data](/charts.html), will depend on the rapid scaling of green ammonia production and bunkering infrastructure. This deal pushes the industry closer to that reality, but the path to truly zero-emission shipping remains complex, requiring sustained investment and verifiable green fuel sources.
