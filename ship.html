@@ -68,8 +68,9 @@
     <script>
         const shipData = {};
         let loadedYears = 0;
-        const years = ['2020', '2021', '2022', '2023', '2024'];
+        const years = ['2020', '2021', '2022', '2023', '2024', '2025'];
         let allShips2024 = [];
+        let allShips2025 = [];
         let peerComparisonChart = null;
         let vesselSpecs = null;
         let vesselSpecsLoaded = false;
@@ -78,6 +79,8 @@
         let windVessels = new Map();
         const EUA_AVG_2024 = 65.89; // 2024 average EUA price in EUR
         const ETS_SCOPE_2024 = 0.40; // 40% of emissions covered in 2024
+        const EUA_AVG_2025 = 65.00; // 2025 approximate average EUA price in EUR
+        const ETS_SCOPE_2025 = 0.70; // 70% of emissions covered in 2025
 
         // Load MeOH-capable vessels list
         fetch('json/meoh_vessels.json')
@@ -162,10 +165,9 @@
                 fetch(`json/${year}_ships_data.json`)
                     .then(response => response.json())
                     .then(data => {
-                        // Store all 2024 ships for peer comparison
-                        if (year === '2024') {
-                            allShips2024 = data.ships;
-                        }
+                        // Store ships for peer comparison (use most recent available year)
+                        if (year === '2024') { allShips2024 = data.ships; }
+                        if (year === '2025') { allShips2025 = data.ships; }
                         const ship = data.ships.find(s => s.imo === imo);
                         if (ship) {
                             shipData[year] = ship;
@@ -517,7 +519,7 @@
             }
 
             // Get most recent data for ship details
-            const latestYear = shipData['2024'] ? '2024' : (shipData['2023'] ? '2023' : '2022');
+            const latestYear = shipData['2025'] ? '2025' : (shipData['2024'] ? '2024' : (shipData['2023'] ? '2023' : '2022'));
             const ship = shipData[latestYear];
             const imo = getIMOFromURL();
 
@@ -532,9 +534,9 @@
                 if (data) {
                     return {
                         year: year,
-                        co2: year === '2024' ? data.co2eq : data.co2,
+                        co2: year >= '2024' ? data.co2eq : data.co2,
                         rank: data.rank,
-                        label: year === '2024' ? 'CO2-eq' : 'CO2'
+                        label: year >= '2024' ? 'CO2-eq' : 'CO2'
                     };
                 }
                 return null;
@@ -600,7 +602,7 @@
                                 </div>
                                 <div class="quick-stat">
                                     <div class="quick-stat-value">${co2Value}</div>
-                                    <div class="quick-stat-label">Tonnes ${latestYear === '2024' ? 'CO2-eq' : 'CO2'}</div>
+                                    <div class="quick-stat-label">Tonnes ${latestYear >= '2024' ? 'CO2-eq' : 'CO2'}</div>
                                 </div>
                                 ${ship.c_factor ? `
                                 <div class="quick-stat">
@@ -608,7 +610,14 @@
                                     <div class="quick-stat-label">C-Factor</div>
                                 </div>
                                 ` : ''}
-                                ${latestYear === '2024' && latestEmissions ? (() => {
+                                ${latestYear === '2025' && latestEmissions ? (() => {
+                                    const etsCost = EUA_AVG_2025 * ETS_SCOPE_2025 * latestEmissions.co2 / 1000;
+                                    return `
+                                <div class="quick-stat">
+                                    <div class="quick-stat-value">€${Math.round(etsCost).toLocaleString()}k</div>
+                                    <div class="quick-stat-label">Est. ETS Cost '25</div>
+                                </div>`;
+                                })() : latestYear === '2024' && latestEmissions ? (() => {
                                     const etsCost = EUA_AVG_2024 * ETS_SCOPE_2024 * latestEmissions.co2 / 1000;
                                     return `
                                 <div class="quick-stat">
@@ -695,8 +704,8 @@
                     </table>
 
                     <div class="comparison-note">
-                        <strong>Note:</strong> 2024 data uses CO2-equivalent (CO2-eq) which includes methane and other greenhouse gases,
-                        while 2022-2023 data shows CO2 only. Direct year-over-year comparisons should consider this methodology change.
+                        <strong>Note:</strong> 2024-2025 data uses CO2-equivalent (CO2-eq) which includes methane and other greenhouse gases,
+                        while 2020-2023 data shows CO2 only. Direct year-over-year comparisons should consider this methodology change.
                     </div>
                 </div>
 
@@ -768,7 +777,7 @@
             const result = { hasData: false, metric: null, data: [] };
 
             // Determine best metric based on ship type
-            const shipType = (shipData['2024'] || shipData['2023'] || shipData['2022'])?.type?.toLowerCase() || '';
+            const shipType = (shipData['2025'] || shipData['2024'] || shipData['2023'] || shipData['2022'])?.type?.toLowerCase() || '';
 
             // Priority order based on ship type
             let metricPriority;
@@ -829,8 +838,8 @@
         }
 
         function buildPeerComparisonSection() {
-            // Get the current ship from 2024 data (efficiency data only available in 2024)
-            const ship = shipData['2024'];
+            // Use most recent year with efficiency data for peer comparison
+            const ship = shipData['2025'] || shipData['2024'];
             if (!ship || !ship.efficiency) return '';
 
             const efficiency = parseEfficiency(ship.efficiency);
@@ -840,7 +849,8 @@
             const selectedActualEff = getTransportWorkValue(ship, metric);
 
             // Get all ships of the same type with ACTUAL efficiency data
-            const sameTypeShips = allShips2024
+            const allShipsLatest = allShips2025.length > 0 ? allShips2025 : allShips2024;
+            const sameTypeShips = allShipsLatest
                 .filter(s => s.type === ship.type)
                 .map(s => ({
                     ...s,

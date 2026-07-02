@@ -90,6 +90,7 @@
             <nav>
                 <div class="year-selector">
                     <select id="year-select">
+                        <option value="2025">2025</option>
                         <option value="2024">2024</option>
                         <option value="2023">2023</option>
                         <option value="2022">2022</option>
@@ -180,7 +181,7 @@
     <script>
         let chart = null;
         let currentView = 'type';
-        let currentYear = '2024';
+        let currentYear = '2025';
 
         // Company list state
         let allCompanies = [];
@@ -199,19 +200,19 @@
                 file: (year) => `json/${year}_ships_by_type.json`,
                 labelField: 'type',
                 title: (year, co2Label) => `${co2Label} Emissions by Ship Type (${year})`,
-                available: ['2024', '2023', '2022', '2021', '2020']
+                available: ['2025', '2024', '2023', '2022', '2021', '2020']
             },
             company: {
                 file: (year) => `json/${year}_companies_top15.json`,
                 labelField: 'company',
                 title: (year, co2Label) => `Top 15 Companies by ${co2Label} Emissions (${year})`,
-                available: ['2024']
+                available: ['2025', '2024']
             },
             country: {
                 file: (year) => `json/${year}_countries_top20.json`,
                 labelField: 'country',
                 title: (year, co2Label) => `Top 20 Countries by ${co2Label} Emissions (${year})`,
-                available: ['2024', '2023', '2022', '2021', '2020']
+                available: ['2025', '2024', '2023', '2022', '2021', '2020']
             }
         };
 
@@ -253,13 +254,13 @@
 
         function loadChart() {
             const config = viewConfig[currentView];
-            const isNew = currentYear === '2024';
+            const isNew = currentYear >= '2024';
             const co2Field = isNew ? 'co2eq' : 'co2';
             const co2Label = isNew ? 'CO2-eq' : 'CO2';
 
             // Show/hide list sections based on current view
             document.getElementById('company-list-container').style.display =
-                (currentView === 'company' && currentYear === '2024') ? 'block' : 'none';
+                (currentView === 'company' && currentYear >= '2024') ? 'block' : 'none';
             document.getElementById('country-list-container').style.display =
                 (currentView === 'country') ? 'block' : 'none';
 
@@ -346,7 +347,7 @@
                 });
 
             // Load list data for company/country views
-            if (currentView === 'company' && currentYear === '2024') {
+            if (currentView === 'company' && currentYear >= '2024') {
                 loadCompanyList();
             }
             if (currentView === 'country') {
@@ -356,7 +357,7 @@
 
         // ---- Company list ----
         function loadCompanyList() {
-            fetch('json/2024_companies_all.json')
+            fetch(`json/${currentYear}_companies_all.json`)
                 .then(response => response.json())
                 .then(data => {
                     allCompanies = data;
@@ -464,7 +465,7 @@
 
         // ---- Country list ----
         function loadCountryList() {
-            const isNew = currentYear === '2024';
+            const isNew = currentYear >= '2024';
             const co2Field = isNew ? 'co2eq' : 'co2';
             const co2Label = isNew ? 'CO2-eq' : 'CO2';
 

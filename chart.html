@@ -47,6 +47,7 @@
             <nav>
                 <div class="year-selector">
                     <select id="year-select">
+                        <option value="2025">2025</option>
                         <option value="2024">2024</option>
                         <option value="2023">2023</option>
                         <option value="2022">2022</option>
@@ -90,7 +91,7 @@
         let chart = null;
 
         function loadData(year) {
-            const isNew = year === '2024';
+            const isNew = year >= '2024';
             const co2Field = isNew ? 'co2eq' : 'co2';
             const co2Label = isNew ? 'CO2-eq' : 'CO2';
 
@@ -186,7 +187,7 @@
             loadData(e.target.value);
         });
 
-        loadData('2024');
+        loadData('2025');
     </script>
 </body>
 </html>

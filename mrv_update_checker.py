@@ -31,7 +31,7 @@ DOWNLOAD_URL = "https://mrv.emsa.europa.eu/api/public-emission-report/reporting-
 BASE_DIR = Path(__file__).parent
 STATE_FILE = BASE_DIR / "json" / "mrv_versions.json"
 DOWNLOAD_DIR = BASE_DIR / "data"  # Set to None to skip downloading
-YEARS_TO_TRACK = [2020, 2021, 2022, 2023, 2024]
+YEARS_TO_TRACK = [2020, 2021, 2022, 2023, 2024, 2025]
 
 
 def load_state():

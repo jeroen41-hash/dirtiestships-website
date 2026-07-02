@@ -47,6 +47,7 @@
             <nav>
                 <div class="year-selector">
                     <select id="year-select">
+                        <option value="2025">2025</option>
                         <option value="2024">2024</option>
                         <option value="2023">2023</option>
                         <option value="2022">2022</option>
@@ -156,18 +157,18 @@
     <div class="trend-overlay" id="trend-overlay">
         <div class="trend-popup">
             <button class="trend-close" id="trend-close">&times;</button>
-            <h3 class="trend-title">Total Emissions Trend (2020-2024)</h3>
+            <h3 class="trend-title">Total Emissions Trend (2020-2025)</h3>
             <div class="trend-chart-wrapper">
                 <canvas id="trendChart"></canvas>
             </div>
-            <p class="trend-note">Note: 2024 uses CO2-eq (includes methane etc.), 2020-2023 use CO2 only.</p>
+            <p class="trend-note">Note: 2024-2025 use CO2-eq (includes methane etc.), 2020-2023 use CO2 only.</p>
         </div>
     </div>
 
     <div class="trend-overlay" id="ships-trend-overlay">
         <div class="trend-popup">
             <button class="trend-close" id="ships-trend-close">&times;</button>
-            <h3 class="trend-title">Ships Tracked (2020-2024)</h3>
+            <h3 class="trend-title">Ships Tracked (2020-2025)</h3>
             <div class="trend-chart-wrapper">
                 <canvas id="shipsTrendChart"></canvas>
             </div>
@@ -182,7 +183,7 @@
         const perPage = 50;
         let sortColumn = 'rank';
         let sortDirection = 'asc';
-        let currentYear = '2024';
+        let currentYear = '2025';
         let meohVessels = new Set();
         let ccsVessels = new Map();
         let windVessels = new Map();
@@ -205,7 +206,7 @@
                     document.getElementById('eua-label').textContent = `EUA Price ${dd}-${mm}-${yy}`;
                 }
                 // Recalculate projected ETS if data already loaded
-                if (allShips.length > 0 && currentYear === '2024') {
+                if (allShips.length > 0 && currentYear >= '2024') {
                     updateProjectedEts();
                 }
             })
@@ -244,7 +245,7 @@
 
         function loadData(year) {
             currentYear = year;
-            const isNew = year === '2024';
+            const isNew = year >= '2024';
             const co2Field = isNew ? 'co2eq' : 'co2';
             const co2Label = isNew ? 'CO2-eq' : 'CO2';
 
@@ -271,11 +272,14 @@
                     const totalEmissions = isNew ? data.total_co2eq : data.total_co2;
                     document.getElementById('total-co2').textContent = (totalEmissions / 1000000).toFixed(2);
 
-                    // Calculate EU ETS 2024: 40% scope * €65/tonne (historical)
+                    // ETS calculation: 2024 = 40% scope at historical €65/t; 2025 = 70% scope at current EUA price
                     if (year === '2024') {
-                        const euEts2024 = 0.4 * totalEmissions * 65;
-                        document.getElementById('total-ets').textContent = (euEts2024 / 1000000000).toFixed(1);
-                        // Calculate 2026 projected: 100% scope * current EUA price
+                        const euEts = 0.4 * totalEmissions * 65;
+                        document.getElementById('total-ets').textContent = (euEts / 1000000000).toFixed(1);
+                        updateProjectedEts();
+                    } else if (year === '2025') {
+                        const euEts = 0.7 * totalEmissions * euaPrice;
+                        document.getElementById('total-ets').textContent = (euEts / 1000000000).toFixed(1);
                         updateProjectedEts();
                     } else {
                         document.getElementById('total-ets').textContent = 'N/A';
@@ -308,7 +312,7 @@
             const start = (currentPage - 1) * perPage;
             const end = start + perPage;
             const pageShips = filteredShips.slice(start, end);
-            const isNew = currentYear === '2024';
+            const isNew = currentYear >= '2024';
             const co2Field = isNew ? 'co2eq' : 'co2';
 
             if (pageShips.length === 0) {
@@ -370,7 +374,7 @@
         }
 
         function sortShips() {
-            const isNew = currentYear === '2024';
+            const isNew = currentYear >= '2024';
             const co2Field = isNew ? 'co2eq' : 'co2';
 
             filteredShips.sort((a, b) => {
@@ -651,14 +655,14 @@
         const yearlyTotals = {};
 
         // Pre-load totals from all years for the trend chart
-        ['2020', '2021', '2022', '2023', '2024'].forEach(year => {
+        ['2020', '2021', '2022', '2023', '2024', '2025'].forEach(year => {
             fetch(`json/${year}_ships_data.json?v=2`)
                 .then(r => r.json())
                 .then(data => {
                     yearlyTotals[year] = {
-                        emissions: year === '2024' ? data.total_co2eq : data.total_co2,
+                        emissions: year >= '2024' ? data.total_co2eq : data.total_co2,
                         ships: data.total_ships,
-                        label: year === '2024' ? 'CO2-eq' : 'CO2'
+                        label: year >= '2024' ? 'CO2-eq' : 'CO2'
                     };
                 })
                 .catch(() => {});
@@ -668,12 +672,12 @@
             const overlay = document.getElementById('trend-overlay');
             overlay.classList.add('visible');
 
-            const years = ['2020', '2021', '2022', '2023', '2024'];
+            const years = ['2020', '2021', '2022', '2023', '2024', '2025'];
             const data = years.map(y => yearlyTotals[y]).filter(Boolean);
             if (data.length === 0) return;
 
             const emissions = years.map(y => yearlyTotals[y] ? yearlyTotals[y].emissions / 1000000 : null);
-            const labels = years.map(y => yearlyTotals[y] ? `${y}${y === '2024' ? ' (CO2-eq)' : ''}` : y);
+            const labels = years.map(y => yearlyTotals[y] ? `${y}${y >= '2024' ? ' (CO2-eq)' : ''}` : y);
 
             const barColors = emissions.map((val, i) => {
                 if (i === 0 || val === null) return '#4ecdc4';
@@ -754,7 +758,7 @@
             const overlay = document.getElementById('ships-trend-overlay');
             overlay.classList.add('visible');
 
-            const years = ['2020', '2021', '2022', '2023', '2024'];
+            const years = ['2020', '2021', '2022', '2023', '2024', '2025'];
             const ships = years.map(y => yearlyTotals[y] ? yearlyTotals[y].ships : null);
 
             const barColors = ships.map((val, i) => {
@@ -827,7 +831,7 @@
         });
 
         // Initial load
-        loadData('2024');
+        loadData('2025');
     </script>
 </body>
 </html>

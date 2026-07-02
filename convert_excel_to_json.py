@@ -1,14 +1,33 @@
 #!/usr/bin/env python3
-"""Convert EMSA MRV Excel file to website JSON files."""
+"""Convert EMSA MRV Excel file to website JSON files.
+
+Usage:
+  python3 convert_excel_to_json.py [year] [excel_file]
+
+  year       - reporting year (default: 2024)
+  excel_file - path to Excel file (default: auto-detected from data/ dir)
+"""
 
 import json
 import openpyxl
 import sys
+import glob
 from collections import defaultdict
 
-EXCEL_FILE   = 'data/2024-v219-23052026-EU MRV Publication of information.xlsx'
-SHEET_FULL   = '2024 Full ERs'
-SHEET_PARTIAL = '2024 Partial ERs'
+YEAR = int(sys.argv[1]) if len(sys.argv) > 1 else 2024
+
+if len(sys.argv) > 2:
+    EXCEL_FILE = sys.argv[2]
+else:
+    pattern = f'data/{YEAR}-v*.xlsx'
+    matches = sorted(glob.glob(pattern))
+    if not matches:
+        print(f"ERROR: No Excel file found matching {pattern}")
+        sys.exit(1)
+    EXCEL_FILE = matches[-1]  # use latest version
+
+SHEET_FULL   = f'{YEAR} Full ERs'
+SHEET_PARTIAL = f'{YEAR} Partial ERs'
 HEADER_ROWS  = 3  # skip first 3 rows (headers)
 
 # Column indices (0-based)
@@ -177,9 +196,9 @@ def main():
         'total_co2eq': total_co2eq,
         'ships': ships_output,
     }
-    with open('json/2024_ships_data.json', 'w') as f:
+    with open(f'json/{YEAR}_ships_data.json', 'w') as f:
         json.dump(ships_data, f, separators=(',', ':'))
-    print(f"Wrote json/2024_ships_data.json: {len(ships)} ships, {total_co2eq:,.2f} total CO2eq")
+    print(f"Wrote json/{YEAR}_ships_data.json: {len(ships)} ships, {total_co2eq:,.2f} total CO2eq")
 
     # 2. Ships by type
     type_agg = defaultdict(lambda: {'co2eq': 0.0, 'count': 0})
@@ -193,9 +212,9 @@ def main():
          for t, d in type_agg.items()],
         key=lambda x: x['co2eq'], reverse=True
     )
-    with open('json/2024_ships_by_type.json', 'w') as f:
+    with open(f'json/{YEAR}_ships_by_type.json', 'w') as f:
         json.dump(ships_by_type, f, separators=(',', ':'))
-    print(f"Wrote json/2024_ships_by_type.json: {len(ships_by_type)} types")
+    print(f"Wrote json/{YEAR}_ships_by_type.json: {len(ships_by_type)} types")
 
     # 3. Countries top 20
     country_agg = defaultdict(lambda: {'co2eq': 0.0, 'count': 0})
@@ -210,9 +229,9 @@ def main():
          for c, d in country_agg.items()],
         key=lambda x: x['co2eq'], reverse=True
     )
-    with open('json/2024_countries_top20.json', 'w') as f:
+    with open(f'json/{YEAR}_countries_top20.json', 'w') as f:
         json.dump(countries_all[:20], f, separators=(',', ':'))
-    print(f"Wrote json/2024_countries_top20.json")
+    print(f"Wrote json/{YEAR}_countries_top20.json")
 
     # 4. Companies top 15 (grouped by company IMO, then by exact name)
     company_imo_lookup = build_company_imo_lookup()
@@ -255,13 +274,13 @@ def main():
     )
     companies_top = companies_all[:15]
 
-    with open('json/2024_companies_top15.json', 'w') as f:
+    with open(f'json/{YEAR}_companies_top15.json', 'w') as f:
         json.dump(companies_top, f, separators=(',', ':'))
-    print(f"Wrote json/2024_companies_top15.json")
+    print(f"Wrote json/{YEAR}_companies_top15.json")
 
-    with open('json/2024_companies_all.json', 'w') as f:
+    with open(f'json/{YEAR}_companies_all.json', 'w') as f:
         json.dump(companies_all, f, separators=(',', ':'))
-    print(f"Wrote json/2024_companies_all.json ({len(companies_all)} companies)")
+    print(f"Wrote json/{YEAR}_companies_all.json ({len(companies_all)} companies)")
 
     # Verification: check top 3 ships
     print("\nTop 3 ships:")

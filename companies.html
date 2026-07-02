@@ -47,6 +47,7 @@
             <nav>
                 <div class="year-selector">
                     <select id="year-select">
+                        <option value="2025">2025</option>
                         <option value="2024">2024</option>
                         <option value="2023">2023</option>
                         <option value="2022">2022</option>
@@ -129,19 +130,20 @@
         let companyWindCount = {};
 
         function loadData(year) {
-            const isNew = year === '2024';
+            currentYear = year;
+            const isNew = year >= '2024';
             const co2Label = isNew ? 'CO2-eq' : 'CO2';
 
             document.getElementById('subtitle').textContent = `Top 15 Companies by ${co2Label} Emissions (${year})`;
 
-            // Only 2024 has company data
-            if (year !== '2024') {
+            // Only 2024+ has company data
+            if (year < '2024') {
                 if (chart) {
                     chart.destroy();
                     chart = null;
                 }
                 document.querySelector('.chart-wrapper').innerHTML =
-                    '<p class="loading">Company data is only available for 2024.<br>The 2022 and 2023 datasets do not include company information.</p>';
+                    '<p class="loading">Company data is only available for 2024 and 2025.<br>The 2022 and 2023 datasets do not include company information.</p>';
                 document.getElementById('note').style.display = 'none';
                 document.getElementById('company-list-container').style.display = 'none';
                 return;
@@ -238,10 +240,12 @@
             loadCompanyList();
         }
 
+        let currentYear = '2025';
+
         function loadCompanyList() {
             Promise.all([
-                fetch('json/2024_companies_all.json').then(r => r.json()),
-                fetch('json/2024_ships_data.json').then(r => r.json()),
+                fetch(`json/${currentYear}_companies_all.json`).then(r => r.json()),
+                fetch(`json/${currentYear}_ships_data.json`).then(r => r.json()),
                 fetch('json/wind_vessels.json').then(r => r.json()).catch(() => ({vessels:[]})),
             ]).then(([companiesData, shipsData, windData]) => {
                 const windSet = new Set(windData.vessels.map(v => v.imo));
@@ -397,7 +401,7 @@
             loadData(e.target.value);
         });
 
-        loadData('2024');
+        loadData('2025');
     </script>
 </body>
 </html>

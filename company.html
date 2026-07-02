@@ -107,7 +107,7 @@
             document.querySelector('meta[name="description"]').content =
                 `View CO2 emissions data for ${companyName}. See all ships and total emissions from EU MRV data.`;
 
-            fetch('json/2024_ships_data.json')
+            fetch('json/2025_ships_data.json')
                 .then(response => response.json())
                 .then(data => {
                     const ships = (data.ships || data)
@@ -115,7 +115,7 @@
                         .sort((a, b) => (b.co2eq || 0) - (a.co2eq || 0));
 
                     if (ships.length === 0) {
-                        showNotFound(`No ships found for "${companyName}" in the 2024 dataset.`);
+                        showNotFound(`No ships found for "${companyName}" in the 2025 dataset.`);
                         return;
                     }
 
