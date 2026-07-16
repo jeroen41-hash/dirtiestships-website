@@ -3431,6 +3431,19 @@
       "featured_image": "",
       "scheduled": null,
       "created": "2026-07-13 10:00"
+    },
+    {
+      "slug": "greenhouse-gas-emissions-from-transport-in-2024",
+      "title": "Greenhouse gas emissions from transport in 2024",
+      "date": "2026-07-16",
+      "excerpt": "The UK's reported 8% reduction in combined international aviation and shipping emissions from 2019 to 2024 is misleading, primarily reflecting post-pandemic activity rather than genuine decarboniza...",
+      "author": "DirtiestShips",
+      "source_url": "https://www.gov.uk/government/statistics/transport-and-environment-statistics-2024--2/greenhouse-gas-emissions-from-transport-in-2024",
+      "source_name": "gov.uk",
+      "score": 135,
+      "featured_image": "https://www.gov.uk/assets/frontend/govuk-opengraph-image-4196a4d6333cf92aaf720047f56cfd91b3532d7635fc21ebcf0d5897df6b5f77.png",
+      "scheduled": null,
+      "created": "2026-07-16 10:00"
     }
   ]
 }
