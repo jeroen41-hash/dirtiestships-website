@@ -1,0 +1,29 @@
+The European Union’s Emissions Trading System (ETS) for maritime, a cornerstone of its "Fit for 55" package, represents a critical stride towards decarbonizing global shipping. Yet, as the European Commission refines its ETS revision proposal, a significant challenge persists: preventing carbon leakage through port evasion, a threat that could undermine the very environmental goals the system aims to achieve and distort the integrity of emissions data.
+
+## The Carbon Leakage Challenge: Initial ETS Design and Evasion Risks
+
+Since its inception in July 2021 and full implementation in May 2023, the EU ETS has extended carbon pricing to shipping emissions from voyages between EU and non-EU ports. This design, while ambitious, immediately raised concerns from industry bodies like FEPORT (Federation of European Private Port Companies and Terminals) about its potential to negatively impact the competitiveness of EU ports. The core issue: shipping companies could reduce ETS costs by strategically avoiding calls at EU ports, opting instead for nearby non-EU hubs to tranship cargo before it enters the EU. This practice, termed "port evasion" or "carbon leakage," means emissions still occur, but outside the ETS's direct financial incentive, effectively sidestepping the regulatory intent.
+
+The directive already recognized this risk by excluding two major competitors, Tanger Med and East Port Said, from the definition of "port of call." This meant vessels calling at these ports would still incur full ETS costs upon their subsequent arrival at an EU port.
+
+## Mitigating Evasion: New Proposals and Lingering Concerns
+
+The latest proposal from the European Commission introduces new criteria for including additional ports in the list of "neighbouring container transhipment ports." This aims to further close loopholes by considering reduced transhipment thresholds and assessing ports' capacity to handle transhipment traffic, thereby expanding the scope of ports where an additional stop won't reduce ETS obligations for an EU leg.
+
+However, FEPORT Secretary General Lamia Kerdjoudj notes that "it is however unlikely though that this proposal will be able to combat all forms of evasion, including transhipment and relay evasion that could pass through an EU port but where both the origin and the destination of the cargo is outside the EU" (hellenicshippingnews.com). This highlights a persistent vulnerability: the potential for vessels to manipulate their routes to minimize ETS exposure, even if it means longer voyages or more complex logistics. Such evasion strategies would not only reduce the effectiveness of the ETS as a decarbonisation driver but could also negatively impact a vessel's operational efficiency, potentially worsening its [CII ratings](/cii.html) due to increased fuel consumption from extended routes.
+
+## Distorting the Decarbonisation Signal: ETS Costs and Data Integrity
+
+The fundamental purpose of the EU ETS is to create a financial incentive for shipping companies to reduce their CO2 emissions. If significant portions of emissions can be strategically routed around the system, the carbon price signal weakens, and the drive for genuine decarbonisation falters. This directly affects the accuracy of our [emissions data](/charts.html) and the validity of [company rankings](/companies.html) which rely on reported emissions within the EU's regulatory framework.
+
+EMSA MRV data forms the backbone of ETS compliance and our understanding of sector emissions. If evasion leads to a misleading decrease in *reported* EU-related emissions without a corresponding *actual* global reduction, it creates a data blind spot. Companies might appear to be performing better under ETS, while their overall carbon footprint remains unchanged or even increases due to circuitous routing, hindering accurate performance assessment.
+
+## Funding the Transition: Ports as Key Decarbonisation Enablers
+
+Beyond evasion, FEPORT also critiques the proposal for overlooking the crucial role of ports in the wider decarbonisation effort. The organization argues that targeted funding support for alternative fuels infrastructure and green port equipment could bolster competitiveness *and* encourage decarbonisation. Furthermore, FEPORT "regrets that the support envisaged in the proposal to the maritime sector fails to recognise the role of ports and terminals in supporting decarbonisation... Allowances should also be earmarked for the port sector" (hellenicshippingnews.com), given its indirect impact from ETS and increasing electrification needs.
+
+This highlights a broader point: the transition to low-carbon shipping is an ecosystem challenge. While the ETS focuses on vessel emissions, ports are vital facilitators for shore power, alternative bunkering, and efficient logistics. Neglecting their financial needs could hinder the holistic decarbonisation agenda, regardless of how robust the ETS anti-evasion measures become.
+
+### What this means for shipping emissions
+
+The ongoing debate surrounding ETS port evasion underscores a fundamental challenge in climate policy: balancing ambitious decarbonisation targets with economic competitiveness. While the EU Commission's latest proposal attempts to plug some evasion gaps, industry concerns persist about its comprehensiveness. For DirtiestShips.com, this means continued scrutiny of reported emissions data and a critical eye on the actual impact of ETS on global shipping's carbon footprint. Effective decarbonisation demands a robust regulatory framework that not only prices carbon but also prevents leakage, ensures data integrity, and supports the entire maritime ecosystem – ports included – in making the necessary green transition. Without addressing these complexities, the ETS risks becoming a system of shifting emissions, rather than truly reducing them.
