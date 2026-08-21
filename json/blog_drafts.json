@@ -4302,6 +4302,19 @@
       "featured_image": "https://www.kcl.ac.uk/newimages/sspp/Security/ws/maritime-series-thumbnail.x38d3dced.jpg?w=780&amp;h=520&amp;crop=780,440,0,40",
       "scheduled": null,
       "created": "2026-08-20 10:00"
+    },
+    {
+      "slug": "federal-maritime-commission",
+      "title": "Federal Maritime Commission",
+      "date": "2026-08-21",
+      "excerpt": "The Federal Maritime Commission (FMC) is pushing back on the IMO's Net-Zero Framework, advocating for \"market forces\" over regulation and a wider range of \"alternate fuel\" options. This position, h...",
+      "author": "DirtiestShips",
+      "source_url": "https://www.fmc.gov/ftdo/chairman-dibella-statement-on-net-zero-framework/",
+      "source_name": "fmc.gov",
+      "score": 145,
+      "featured_image": "https://www.fmc.gov/wp-content/uploads/2024/06/seal_final_sm.jpg",
+      "scheduled": null,
+      "created": "2026-08-21 10:00"
     }
   ]
 }
