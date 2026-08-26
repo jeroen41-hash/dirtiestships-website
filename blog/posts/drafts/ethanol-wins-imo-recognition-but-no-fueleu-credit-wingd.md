@@ -1,0 +1,27 @@
+The global shipping industry's decarbonization journey is riddled with complex regulatory landscapes, and the recent development concerning ethanol as a marine fuel perfectly illustrates this challenge. While the International Maritime Organization (IMO) has officially recognized ethanol with approved greenhouse gas emission factors, the European Union's FuelEU Maritime regulation currently offers no credit for its use by ships calling at European ports. This split ruling, as highlighted by engine designer WinGD, creates a significant dichotomy for shipowners navigating future compliance, directly impacting their carbon intensity metrics, EU ETS costs, and overall decarbonization strategies.
+
+## IMO's Green Light: A Milestone for Biofuels
+
+The Marine Environment Protection Committee (MEPC) marked a significant milestone by approving emission factors for Brazilian "second growth" corn ethanol within its Lifecycle Analysis Guidelines for Marine Fuels in April. This landmark decision rates the fuel at 20.8 gCO2eq/MJ, which Andrea Lazzaro of WinGD notes is more than four times lower than VLSFO. This IMO recognition provides a crucial standardized metric, paving the way for ethanol's broader adoption as a lower-emission fuel. For companies tracking their carbon footprint, this factor is vital for calculating emissions and improving their position in [company rankings](/companies.html).
+
+## FuelEU Maritime's Food Crop Conundrum
+
+Despite the IMO's endorsement, ethanol faces a significant hurdle under FuelEU Maritime. The EU regulation currently withholds emissions reduction credit from any biofuel derived from food crops or their byproducts. This stance is a contentious point, with fuel suppliers actively petitioning against it, arguing that contemporary production methods do not compromise food security.
+
+The practical implication for the approximately 20% of the global merchant fleet exposed to European emissions legislation is stark: ships burning ethanol receive no emissions credit under FuelEU Maritime until this policy is potentially revised. This creates a challenging scenario for owners looking to comply with FuelEU's escalating GHG intensity reduction targets, even as they invest in fuels with demonstrably lower lifecycle emissions.
+
+## EU ETS vs. FuelEU: A Tale of Two Regulations
+
+The divergence between the EU's own regulations adds another layer of complexity. While FuelEU Maritime penalizes ethanol's food-crop origin, the EU Emissions Trading System (ETS) offers a different perspective. As Lazzaro points out, ethanol *does* deliver savings under the EU ETS. This is because the ETS focuses on direct emissions reported, and a lower-carbon fuel like ethanol reduces the total reported CO2, thereby reducing the number of EU Allowances (EUAs) a vessel operator needs to surrender.
+
+For vessels operating within the scope of the ETS, the economic incentive to adopt ethanol remains, offering a tangible reduction in [EU ETS carbon costs](/news.html). This distinction is critical for financial planning and for understanding the true cost of compliance for different fuel pathways. It underscores the fragmented nature of global and regional emissions regulations and the need for greater alignment.
+
+## Ethanol and Methanol: A Flexible Pathway
+
+WinGD, a key player in engine technology, champions a pragmatic approach: the combined use of ethanol and green methanol. With WinGD engines capable of running on a blend of alcohol fuels, owners committed to green methanol but grappling with limited supply or high prices could utilize ethanol as an interim or complementary fuel. This strategy allows for immediate emissions reductions while maintaining flexibility to transition to green methanol as its availability improves and carbon pricing incentivizes its use further.
+
+Green methanol, capable of qualifying as a zero or near-zero emissions (ZNZ) fuel below the IMO's draft Net Zero Framework threshold of 14 gCO2eq/MJ, is a highly desirable long-term solution but remains significantly more expensive and less available than alternatives. The ability to modify existing methanol-ready engines for ethanol with "very simple" adjustments, as demonstrated by vessels like the *Terma Maersk*, presents an agile solution for fleet decarbonization. This dual-fuel flexibility could be a game-changer for companies aiming to improve their [CII ratings](/cii.html) and meet long-term decarbonization goals without being fully reliant on a single, nascent fuel supply chain.
+
+## What this means for shipping emissions
+
+The IMO's recognition of ethanol is a positive step towards diversifying the portfolio of recognized low-carbon marine fuels, providing a clear emission factor that will feed into global reporting frameworks and contribute to overall transparency in [emissions data](/charts.html). However, the EU's split regulatory treatment – crediting ethanol under ETS but not FuelEU Maritime – highlights critical policy misalignments that complicate shipowners' decarbonization efforts. This scenario forces operators to weigh direct operational emissions reductions and ETS cost savings against the absence of FuelEU Maritime credits, potentially slowing the adoption of viable lower-carbon fuels within the European trade. Moving forward, greater regulatory harmony is essential to provide clarity and accelerate the industry's transition to a truly low-carbon future.
