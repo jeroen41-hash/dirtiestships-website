@@ -1,0 +1,25 @@
+The global push for maritime decarbonization faces a significant headwind as recent market data reveals a widening cost gap between conventional bunker fuels and their cleaner alternatives. New analysis from hellenicshippingnews.com indicates that biofuels like B100 and liquefied biomethane (LBM) are rapidly losing their price advantage, threatening to undermine compliance efforts under stringent regulations such as EU ETS and FuelEU Maritime, and potentially stalling progress toward critical emissions reduction targets.
+
+## The Cost Conundrum of Green Fuels
+
+The recent surge in prices for alternative marine fuels paints a challenging picture for operators striving to lower their carbon footprint. According to the report, B100’s premium over VLSFO in Rotterdam has expanded dramatically to $67/mt, after narrowing to a mere $10/mt just last week. A similar trend is observed in Singapore, where the B100 premium has increased by $28/mt to $326/mt.
+
+Liquefied biomethane (LBM) presents an even starker reversal. For vessels with diesel slow-speed (SS) engines on EU-EU voyages, LBM has flipped from a $6/mt discount to HSFO last week to a substantial $117/mt premium. Otto medium-speed (MS) engines face an even larger premium, widening by $121/mt to $284/mt. Against VLSFO, LBM's discount for diesel SS vessels has shrunk by $89/mt to just $14/mt, while its premium for Otto MS vessels widened by $87/mt to $153/mt.
+
+Conversely, conventional bunker fuel prices in Rotterdam have dropped by $13-58/mt, and in Singapore by $37-56/mt. This divergence directly disincentivizes the adoption of cleaner fuels, even when accounting for EU ETS costs and FuelEU Maritime penalties which are integrated into the reported bunker prices.
+
+## Regulatory Pressures and Market Response
+
+The EU ETS and FuelEU Maritime initiatives are designed to create an economic imperative for decarbonization by penalizing emissions and incentivizing cleaner fuels. However, if the cost of compliant fuels significantly outstrips the cost of conventional fuels plus compliance, the desired market shift can be undermined. The OceanScore FuelEU Pooling Index, reflecting the cost of compliance surpluses, only inched up by €0.60/mtCO2e to €119.50/mtCO2e this past week, indicating "subdued activity" during the summer period.
+
+While the Dutch ZRE A price, another indicator of compliance costs, gained €22.50/mtCO2e over the past week to €152.50/mtCO2e, this increase might not be sufficient to offset the soaring premiums of B100 and LBM. The underlying economic logic is simple: if buying green fuel is significantly more expensive than paying for conventional fuel *plus* carbon allowances, operators will likely default to the cheaper option. This decision-making, driven by immediate operational costs, directly impacts a vessel's operational carbon intensity, influencing its [CII ratings](/cii.html) and ultimately affecting [company rankings](/companies.html) based on EU MRV data.
+
+## Supply Chain Fragility and Future Outlook
+
+Compounding the price issue are persistent supply chain challenges. The ARA region is experiencing tight prompt bunker supplies, with recommended lead times of 5-7 days. Singapore, a crucial bunkering hub, faces even tighter VLSFO availability, with lead times ranging from 7 to an alarming 19 days, attributed to reduced supply and shortages of blending components. While the article notes that B100 declined by a smaller $9/mt in Singapore, and LBM and LNG prices also gained ($74-76/mt and $46-48/mt respectively), the overall tightness suggests underlying instability in the supply infrastructure for both conventional and alternative fuels.
+
+This instability, especially concerning the availability and consistent pricing of alternative fuels, highlights a critical bottleneck in the transition to a low-carbon shipping industry. Without reliable and cost-competitive supply, even the most ambitious regulatory frameworks struggle to drive real-world change. The current market dynamics underscore the fragility of the alternative fuel supply chain and its susceptibility to price fluctuations and availability issues, which can impede the consistent adoption necessary for widespread decarbonization.
+
+## What this means for shipping emissions
+
+The latest fuel market snapshot sends a clear warning signal: the economic viability of green fuels is under threat from volatile pricing and supply constraints. For companies striving to improve their [CII ratings](/cii.html) and climb up our [company rankings](/companies.html) based on EU MRV data, these developments present a significant challenge. If alternative fuels remain prohibitively expensive, the shipping industry risks slowing its decarbonization trajectory, potentially leading to higher overall emissions and increased costs for operators under the EU ETS. DirtiestShips.com will continue to monitor these trends, providing data-driven insights on how market dynamics and regulatory frameworks intersect with actual shipping emissions. Stay updated with our [emissions data](/charts.html) and [news feed](/news.html) for the latest developments.
