@@ -4705,6 +4705,19 @@
       "featured_image": "https://gcaptain.com/wp-content/uploads/2018/07/shutterstock_1067219444.jpg",
       "scheduled": null,
       "created": "2026-09-05 10:00"
+    },
+    {
+      "slug": "maritime-cybersecurity-threats-defenses-and-regulations",
+      "title": "Maritime Cybersecurity: Threats, Defenses, and Regulations",
+      "date": "2026-09-05",
+      "excerpt": "Maritime cyber incidents surged by 103 percent in 2025, exposing critical vulnerabilities across the sector's rapidly digitized infrastructure. This escalating threat, capable of halting ports and ...",
+      "author": "DirtiestShips",
+      "source_url": "https://www.cloudsek.com/knowledge-base/maritime-cybersecurity",
+      "source_name": "cloudsek.com",
+      "score": 130,
+      "featured_image": "https://cdn.prod.website-files.com/635e632477408d12d1811a64/6a9b1140c12cbdd5dfb1dc8f_cybersecurity-in-maritime.jpg",
+      "scheduled": null,
+      "created": "2026-09-05 10:01"
     }
   ]
 }
