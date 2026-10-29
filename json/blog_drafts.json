@@ -6408,6 +6408,19 @@
       "featured_image": "",
       "scheduled": null,
       "created": "2026-10-28 10:00"
+    },
+    {
+      "slug": "how-big-data-is-being-used-to-reduce-maritime-emissions",
+      "title": "How big data is being used to reduce maritime emissions",
+      "date": "2026-10-29",
+      "excerpt": "Shipping lines are leveraging \"big data\" from systems like Mitsubishi's MiPoLin to optimize ship design and operational efficiency. While presented as a decarbonization driver, this data primarily ...",
+      "author": "DirtiestShips",
+      "source_url": "https://spectra.mhi.com/energy-transition/how-big-data-is-being-used-to-reduce-maritime-emissions",
+      "source_name": "spectra.mhi.com",
+      "score": 126,
+      "featured_image": "https://spectra.mhi.com/sites/g/files/jwhtju2216/files/styles/crop_freeform/public/How-big-data-is-being-used-to-reduce-maritime-emissions.jpeg?itok=9htzqZyA",
+      "scheduled": null,
+      "created": "2026-10-29 10:00"
     }
   ]
 }
