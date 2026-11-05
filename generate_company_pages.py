@@ -127,6 +127,15 @@ def main() -> None:
     with open(TEMPLATE_FILE, encoding="utf-8") as f:
         template = f.read()
 
+    # Pages live one directory down (companies/<slug>.html), so every relative
+    # URL in the template (css/, images/, json/ fetches, nav hrefs) would
+    # otherwise resolve against companies/ instead of the site root. A <base>
+    # tag fixes all of them at once without rewriting each reference.
+    old_doctype_head = "<head>\n    <!-- Google tag (gtag.js) -->\n"
+    assert old_doctype_head in template, "company.html <head> opening changed - update old_doctype_head"
+    new_doctype_head = f'<head>\n    <base href="{SITE}/">\n    <!-- Google tag (gtag.js) -->\n'
+    template = template.replace(old_doctype_head, new_doctype_head, 1)
+
     old_head = (
         '    <meta name="description" content="View CO2 emissions data for this shipping company. '
         'See all ships and total emissions from EU MRV data.">\n'

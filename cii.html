@@ -364,6 +364,17 @@
         let chart = null;
         let allShips = [];
 
+        let shipSlugs = {};
+        fetch('json/ship_slugs.json')
+            .then(r => r.json())
+            .then(data => { shipSlugs = data; })
+            .catch(() => {});
+
+        function shipUrl(imo) {
+            if (shipSlugs[imo]) return `ships/${shipSlugs[imo]}.html`;
+            return `ship.html?id=${btoa(imo).replace(/=/g, '')}`;
+        }
+
         const RATING_COLORS = {
             'A': '#22c55e',
             'B': '#84cc16',
@@ -532,8 +543,7 @@
                     onClick: (event, elements) => {
                         if (elements.length > 0) {
                             const ship = elements[0].element.$context.raw.ship;
-                            const encodedImo = btoa(ship.imo).replace(/=/g, '');
-                            window.open(`ship.html?id=${encodedImo}`, '_blank');
+                            window.open(shipUrl(ship.imo), '_blank');
                         }
                     }
                 }

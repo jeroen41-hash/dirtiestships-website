@@ -198,6 +198,16 @@
             return btoa(imo).replace(/=+$/, '');
         }
 
+        let shipSlugs = {};
+        fetch('json/ship_slugs.json')
+            .then(r => r.json())
+            .then(data => { shipSlugs = data; })
+            .catch(() => {});
+
+        function shipUrl(imo) {
+            return shipSlugs[imo] ? `ships/${shipSlugs[imo]}.html` : `ship.html?id=${encodeId(imo)}`;
+        }
+
         // Decode unpadded Base64
         function decodeId(encoded) {
             // Add padding back if needed
@@ -406,12 +416,12 @@
             document.getElementById('extremesSection').innerHTML = `
                 <div class="extreme-box best">
                     <div class="extreme-title">Most Efficient ${escapeHtml(ship.type)}</div>
-                    <div class="extreme-ship-name"><a href="ship.html?id=${encodeId(bestShip.imo)}">${escapeHtml(bestShip.name)}</a></div>
+                    <div class="extreme-ship-name"><a href="${shipUrl(bestShip.imo)}">${escapeHtml(bestShip.name)}</a></div>
                     <div class="extreme-value">${bestShip.efficiencyValue.toFixed(2)} gCO2/t-nm</div>
                 </div>
                 <div class="extreme-box worst">
                     <div class="extreme-title">Least Efficient ${escapeHtml(ship.type)}</div>
-                    <div class="extreme-ship-name"><a href="ship.html?id=${encodeId(worstShip.imo)}">${escapeHtml(worstShip.name)}</a></div>
+                    <div class="extreme-ship-name"><a href="${shipUrl(worstShip.imo)}">${escapeHtml(worstShip.name)}</a></div>
                     <div class="extreme-value">${worstShip.efficiencyValue.toFixed(2)} gCO2/t-nm</div>
                 </div>
             `;
@@ -668,7 +678,7 @@
                 return `
                     <tr class="${rowClass}">
                         <td class="rank-cell">#${s[displayRank]}</td>
-                        <td class="ship-name-cell"><a href="ship.html?id=${encodeId(s.imo)}">${escapeHtml(s.name)}</a>${meohTag}</td>
+                        <td class="ship-name-cell"><a href="${shipUrl(s.imo)}">${escapeHtml(s.name)}</a>${meohTag}</td>
                         <td>${escapeHtml(s.registry)}</td>
                         <td class="efficiency-cell">${effDisplay}</td>
                     </tr>

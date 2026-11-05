@@ -195,6 +195,16 @@
             return btoa(imo).replace(/=+$/, '');
         }
 
+        let shipSlugs = {};
+        fetch('json/ship_slugs.json')
+            .then(r => r.json())
+            .then(data => { shipSlugs = data; })
+            .catch(() => {});
+
+        function shipUrl(imo) {
+            return shipSlugs[imo] ? `ships/${shipSlugs[imo]}.html` : `ship.html?id=${encodeId(imo)}`;
+        }
+
         // Load EUA price
         fetch('json/eua_price.json')
             .then(response => response.json())
@@ -329,7 +339,7 @@
                     return `
                     <tr ${animDelay}>
                         <td class="rank ${ship.rank <= 3 ? 'rank-' + ship.rank : ''}">#${ship.rank}</td>
-                        <td class="ship-name"><a href="ship.html?id=${encodeId(ship.imo)}" class="ship-link">${escapeHtml(ship.name)}</a>${meohTag}${ccsTag}${windTag}</td>
+                        <td class="ship-name"><a href="${shipUrl(ship.imo)}" class="ship-link">${escapeHtml(ship.name)}</a>${meohTag}${ccsTag}${windTag}</td>
                         <td class="ship-type">${escapeHtml(ship.type)}</td>
                         <td>${escapeHtml(ship.registry)}</td>
                         <td class="co2-value">${ship[co2Field].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
@@ -557,7 +567,7 @@
             const ship = allShips.find(s => s.imo === imo);
             if (ship) {
                 saveRecentSearch(ship);
-                window.location.href = `ship.html?id=${encodeId(imo)}`;
+                window.location.href = shipUrl(imo);
             }
         }
 
