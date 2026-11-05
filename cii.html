@@ -3,10 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CII (Carbon Intensity Indicator) ratings visualization for ships operating in European waters.">
+    <meta name="description" content="What CII (Carbon Intensity Indicator) ratings mean, how the A-E bands are calculated, and a live scatter-plot visualization of actual CII ratings for over 12,000 ships - including more than 3,200 oil and chemical tankers - trading in European waters.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://dirtiestships.com/cii.html">
-    <title>CII Ratings Scatter Plot | DirtiestShips</title>
+    <title>CII Ratings Explained: Carbon Intensity Indicator for Ships | DirtiestShips</title>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a CII rating?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The Carbon Intensity Indicator (CII) is an IMO regulation, in force since January 2023, that measures how much CO2 a ship emits relative to the cargo it carries and the distance it sails - expressed in grams of CO2 per deadweight-tonne-mile (gCO2/t-nm). Every ship above 5,000 GT trading internationally is rated annually on a scale from A to E." }
+        },
+        {
+          "@type": "Question",
+          "name": "What do CII rating letters A to E mean?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A and B mean a ship is beating its required carbon intensity by a meaningful margin - superior and lower carbon intensity respectively. C is moderate, roughly in line with the requirement. D (upper) and E (inferior) mean a ship is missing its required carbon intensity, with E the worst band." }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens if a ship gets a D or E CII rating?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A ship rated D for three consecutive years, or E for even one year, must submit a corrective action plan as part of its Ship Energy Efficiency Management Plan (SEEMP), showing how it will reach a C rating or better. CII carries no direct fine, but a poor rating increasingly affects charter rates and financing." }
+        },
+        {
+          "@type": "Question",
+          "name": "How does CII benchmark energy efficiency in tanker fleets?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Oil and chemical tankers make up roughly a quarter of ships tracked under EU MRV data. Their CII rating distribution skews slightly better than the fleet-wide average, with a larger share of A and B ratings than bulk carriers and container ships." }
+        },
+        {
+          "@type": "Question",
+          "name": "How is the CII rating calculated?",
+          "acceptedAnswer": { "@type": "Answer", "text": "IMO calculates each ship's attained CII from its reported annual fuel consumption and distance sailed, using a formula specific to its ship type. That figure is compared against a required CII - a reference line that tightens year by year through 2030 - and the ratio between the two determines the A-E band." }
+        }
+      ]
+    }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="css/styles.css">
     <style>
@@ -221,6 +254,71 @@
                 <strong>About CII:</strong> The Carbon Intensity Indicator measures grams of CO₂ emitted per cargo-carrying capacity and nautical mile traveled.
                 IMO requires ships rated D for 3 consecutive years or E for 1 year to submit a corrective action plan.
                 Ratings are calculated using the <a href="https://www.imo.org/en/MediaCentre/HotTopics/Pages/EEXI-CII-FAQ.aspx" target="_blank" style="color: #4ecdc4;">IMO CII framework</a>.
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="faq-item">
+                <p class="question">What is a CII rating?</p>
+                <p>
+                    The <strong>Carbon Intensity Indicator (CII)</strong> is an IMO regulation, in force since
+                    January 2023, that measures how much CO₂ a ship emits relative to the cargo it carries and
+                    the distance it sails — expressed in grams of CO₂ per deadweight-tonne-mile (gCO₂/t·nm).
+                    Every ship above 5,000 GT trading internationally is rated annually on a scale from A to E,
+                    based on its actual emissions against an IMO-set reference line for its ship type and size.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <p class="question">What do CII rating letters (A-E) mean?</p>
+                <p>
+                    <span class="rating-A" style="font-weight:bold;">A</span> and
+                    <span class="rating-B" style="font-weight:bold;">B</span> mean a ship is beating its required
+                    carbon intensity by a meaningful margin — "superior" and "lower" carbon intensity respectively.
+                    <span class="rating-C" style="font-weight:bold;">C</span> is "moderate," roughly in line with
+                    the requirement.
+                    <span class="rating-D" style="font-weight:bold;">D</span> ("upper") and
+                    <span class="rating-E" style="font-weight:bold;">E</span> ("inferior") mean a ship is missing
+                    its required carbon intensity, with E the worst band. Across the 12,474 ships in this dataset,
+                    37.3% rate A, 23.5% B, 22.7% C, 10.2% D, and 6.3% E.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <p class="question">What happens if a ship gets a D or E CII rating?</p>
+                <p>
+                    A ship rated D for three consecutive years, or E for even one year, must submit a corrective
+                    action plan as part of its Ship Energy Efficiency Management Plan (SEEMP) to the flag
+                    administration or a recognised organisation, showing how it will reach a C rating or better.
+                    CII itself carries no direct fine, but a poor rating increasingly affects charter rates and
+                    financing — charterers and banks use it as a due-diligence signal, which is where the
+                    commercial pressure actually comes from.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <p class="question">How does CII benchmark energy efficiency in tanker fleets specifically?</p>
+                <p>
+                    Oil and chemical tankers make up 3,239 of the 12,474 ships tracked here — about a quarter of
+                    the fleet. Their rating distribution is close to the fleet-wide average but skews slightly
+                    better: 38.9% A, 25.8% B, 20.3% C, 10.2% D, and 4.8% E. Use the <strong>Ship Type</strong>
+                    filter above, set to "Oil tanker" or "Chemical tanker," to see this segment plotted against
+                    deadweight on the chart directly, or visit <a href="compare.html">Peer Compare</a> to benchmark
+                    one specific tanker against others of its type.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <p class="question">How is the CII rating actually calculated?</p>
+                <p>
+                    IMO calculates each ship's <strong>attained CII</strong> from its reported annual fuel
+                    consumption and distance sailed, using a formula specific to its ship type. That figure is
+                    compared against a <strong>required CII</strong> — a reference line that tightens year by
+                    year through 2030 — and the ratio between the two determines the A-E band. The scatter plot
+                    above plots attained CII (or the attained/required ratio, via the Y-Axis selector) against
+                    deadweight, so you can see exactly how close any ship sits to its own threshold rather than
+                    just its letter grade.
+                </p>
             </div>
         </div>
 
