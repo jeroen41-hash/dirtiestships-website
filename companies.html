@@ -242,13 +242,21 @@
         }
 
         let currentYear = '2025';
+        let companySlugs = {};
+
+        function companyUrl(name) {
+            const slug = companySlugs[name];
+            return slug ? `companies/${slug}.html` : `company.html?name=${encodeURIComponent(name)}`;
+        }
 
         function loadCompanyList() {
             Promise.all([
                 fetch(`json/${currentYear}_companies_all.json`).then(r => r.json()),
                 fetch(`json/${currentYear}_ships_data.json`).then(r => r.json()),
                 fetch('json/wind_vessels.json').then(r => r.json()).catch(() => ({vessels:[]})),
-            ]).then(([companiesData, shipsData, windData]) => {
+                fetch('json/company_slugs.json').then(r => r.json()).catch(() => ({})),
+            ]).then(([companiesData, shipsData, windData, slugsData]) => {
+                companySlugs = slugsData;
                 const windSet = new Set(windData.vessels.map(v => v.imo));
                 companyWindCount = {};
                 for (const ship of shipsData.ships) {
@@ -336,7 +344,7 @@
                     return `
                         <tr class="${severityClass}" ${animDelay}>
                             <td class="rank">${item.rank}</td>
-                            <td><a href="company.html?name=${encodeURIComponent(item.company)}" style="color:#4ecdc4;text-decoration:none;">${escapeHtml(item.company)}</a>${windTag}</td>
+                            <td><a href="${companyUrl(item.company)}" style="color:#4ecdc4;text-decoration:none;">${escapeHtml(item.company)}</a>${windTag}</td>
                             <td class="co2-value">${item.co2.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                             <td>${item.count}</td>
                         </tr>

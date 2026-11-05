@@ -357,10 +357,20 @@
         }
 
         // ---- Company list ----
+        let companySlugs = {};
+
+        function companyUrl(name) {
+            const slug = companySlugs[name];
+            return slug ? `companies/${slug}.html` : `company.html?name=${encodeURIComponent(name)}`;
+        }
+
         function loadCompanyList() {
-            fetch(`json/${currentYear}_companies_all.json`)
-                .then(response => response.json())
-                .then(data => {
+            Promise.all([
+                fetch(`json/${currentYear}_companies_all.json`).then(r => r.json()),
+                fetch('json/company_slugs.json').then(r => r.json()).catch(() => ({})),
+            ])
+                .then(([data, slugsData]) => {
+                    companySlugs = slugsData;
                     allCompanies = data;
                     filteredCompanies = data;
                     companyPage = 1;
@@ -410,7 +420,7 @@
                     return `
                         <tr class="${severityClass}" ${animDelay}>
                             <td class="rank">${item.rank}</td>
-                            <td><a href="company.html?name=${encodeURIComponent(item.company)}" class="company-link">${escapeHtml(item.company)}</a></td>
+                            <td><a href="${companyUrl(item.company)}" class="company-link">${escapeHtml(item.company)}</a></td>
                             <td class="co2-value">${item.co2.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                             <td class="co2-value">${item.c_factor ? item.c_factor.toFixed(4) : '-'}</td>
                             <td>${item.count}</td>
