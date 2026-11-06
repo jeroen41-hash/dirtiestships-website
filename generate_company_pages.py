@@ -145,9 +145,13 @@ def main() -> None:
         "    <!-- Open Graph / Facebook -->\n"
         '    <meta property="og:type" content="website">\n'
         '    <meta property="og:site_name" content="Dirtiest Ships">\n'
+        '    <meta property="og:image" content="https://dirtiestships.com/images/og-image.png">\n'
+        '    <meta property="og:image:width" content="1200">\n'
+        '    <meta property="og:image:height" content="630">\n'
         "\n"
         "    <!-- Twitter -->\n"
         '    <meta name="twitter:card" content="summary_large_image">\n'
+        '    <meta name="twitter:image" content="https://dirtiestships.com/images/og-image.png">\n'
         "\n"
         '    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9641573711172527"\n'
         '     crossorigin="anonymous"></script>\n'
@@ -196,12 +200,16 @@ def main() -> None:
             f'    <meta property="og:title" content="{og_title}">\n'
             f'    <meta property="og:description" content="{description}">\n'
             '    <meta property="og:site_name" content="Dirtiest Ships">\n'
+            '    <meta property="og:image" content="https://dirtiestships.com/images/og-image.png">\n'
+            '    <meta property="og:image:width" content="1200">\n'
+            '    <meta property="og:image:height" content="630">\n'
             "\n"
             "    <!-- Twitter -->\n"
             '    <meta name="twitter:card" content="summary_large_image">\n'
             f'    <meta name="twitter:url" content="{canonical}">\n'
             f'    <meta name="twitter:title" content="{og_title}">\n'
             f'    <meta name="twitter:description" content="{description}">\n'
+            '    <meta name="twitter:image" content="https://dirtiestships.com/images/og-image.png">\n'
             "\n"
             '    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9641573711172527"\n'
             '     crossorigin="anonymous"></script>\n'
