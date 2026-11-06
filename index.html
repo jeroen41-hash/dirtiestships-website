@@ -24,12 +24,16 @@
     <meta property="og:title" content="Dirtiest Ships in Europe – CO₂ Emissions Ranking">
     <meta property="og:description" content="Independent ranking of the highest CO₂-emitting ships operating in Europe, based on verified emissions data.">
     <meta property="og:site_name" content="Dirtiest Ships">
+    <meta property="og:image" content="https://dirtiestships.com/images/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://dirtiestships.com/">
     <meta name="twitter:title" content="Dirtiest Ships in Europe – CO₂ Emissions Ranking">
     <meta name="twitter:description" content="Independent ranking of the highest CO₂-emitting ships operating in Europe, based on verified emissions data.">
+    <meta name="twitter:image" content="https://dirtiestships.com/images/og-image.png">
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9641573711172527"
      crossorigin="anonymous"></script>
@@ -195,6 +199,16 @@
             return btoa(imo).replace(/=+$/, '');
         }
 
+        let shipSlugs = {};
+        fetch('json/ship_slugs.json')
+            .then(r => r.json())
+            .then(data => { shipSlugs = data; })
+            .catch(() => {});
+
+        function shipUrl(imo) {
+            return shipSlugs[imo] ? `ships/${shipSlugs[imo]}.html` : `ship.html?id=${encodeId(imo)}`;
+        }
+
         // Load EUA price
         fetch('json/eua_price.json')
             .then(response => response.json())
@@ -329,7 +343,7 @@
                     return `
                     <tr ${animDelay}>
                         <td class="rank ${ship.rank <= 3 ? 'rank-' + ship.rank : ''}">#${ship.rank}</td>
-                        <td class="ship-name"><a href="ship.html?id=${encodeId(ship.imo)}" class="ship-link">${escapeHtml(ship.name)}</a>${meohTag}${ccsTag}${windTag}</td>
+                        <td class="ship-name"><a href="${shipUrl(ship.imo)}" class="ship-link">${escapeHtml(ship.name)}</a>${meohTag}${ccsTag}${windTag}</td>
                         <td class="ship-type">${escapeHtml(ship.type)}</td>
                         <td>${escapeHtml(ship.registry)}</td>
                         <td class="co2-value">${ship[co2Field].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
@@ -557,7 +571,7 @@
             const ship = allShips.find(s => s.imo === imo);
             if (ship) {
                 saveRecentSearch(ship);
-                window.location.href = `ship.html?id=${encodeId(imo)}`;
+                window.location.href = shipUrl(imo);
             }
         }
 

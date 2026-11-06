@@ -19,9 +19,13 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Dirtiest Ships">
+    <meta property="og:image" content="https://dirtiestships.com/images/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://dirtiestships.com/images/og-image.png">
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9641573711172527"
      crossorigin="anonymous"></script>
@@ -110,6 +114,16 @@
         // Unpadded Base64 encoding (removes trailing =)
         function encodeId(imo) {
             return btoa(imo).replace(/=+$/, '');
+        }
+
+        let shipSlugs = {};
+        fetch('json/ship_slugs.json')
+            .then(r => r.json())
+            .then(data => { shipSlugs = data; })
+            .catch(() => {});
+
+        function shipUrl(imo) {
+            return shipSlugs[imo] ? `ships/${shipSlugs[imo]}.html` : `ship.html?id=${encodeId(imo)}`;
         }
 
         // Decode unpadded Base64
@@ -936,12 +950,12 @@
                     <div class="extremes-section">
                         <div class="extreme-box best">
                             <div class="extreme-title">Most Efficient ${escapeHtml(ship.type)}</div>
-                            <div class="extreme-ship-name"><a href="ship.html?id=${encodeId(bestShip.imo)}">${escapeHtml(bestShip.name)}</a></div>
+                            <div class="extreme-ship-name"><a href="${shipUrl(bestShip.imo)}">${escapeHtml(bestShip.name)}</a></div>
                             <div class="extreme-value">${bestEff}</div>
                         </div>
                         <div class="extreme-box worst">
                             <div class="extreme-title">Least Efficient ${escapeHtml(ship.type)}</div>
-                            <div class="extreme-ship-name"><a href="ship.html?id=${encodeId(worstShip.imo)}">${escapeHtml(worstShip.name)}</a></div>
+                            <div class="extreme-ship-name"><a href="${shipUrl(worstShip.imo)}">${escapeHtml(worstShip.name)}</a></div>
                             <div class="extreme-value">${worstEff}</div>
                         </div>
                     </div>

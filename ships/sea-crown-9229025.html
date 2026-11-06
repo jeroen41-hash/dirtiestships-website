@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="https://dirtiestships.com/">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VWX5EMQSLM"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-VWX5EMQSLM');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View CO2 emissions data for SEA CROWN (IMO: 9229025). Chemical tanker registered in AVATIU.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://dirtiestships.com/ships/sea-crown-9229025.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dirtiestships.com/ships/sea-crown-9229025.html">
+    <meta property="og:title" content="SEA CROWN - CO2 Emissions">
+    <meta property="og:description" content="View CO2 emissions data for SEA CROWN (IMO: 9229025). Chemical tanker registered in AVATIU.">
+    <meta property="og:site_name" content="Dirtiest Ships">
+    <meta property="og:image" content="https://dirtiestships.com/images/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://dirtiestships.com/ships/sea-crown-9229025.html">
+    <meta name="twitter:title" content="SEA CROWN - CO2 Emissions">
+    <meta name="twitter:description" content="View CO2 emissions data for SEA CROWN (IMO: 9229025). Chemical tanker registered in AVATIU.">
+    <meta name="twitter:image" content="https://dirtiestships.com/images/og-image.png">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9641573711172527"
+     crossorigin="anonymous"></script>
+    <title>SEA CROWN - CO2 Emissions - Dirtiest Ships</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="images/ship-smoke-left.jpg" alt="" class="header-img header-img-left">
+            <img src="images/ship-smoke-right.jpg" alt="" class="header-img header-img-right">
+            <h1>Dirtiest Ships <span style="font-size: 0.5em; font-weight: normal;">(in Europe)</span></h1>
+            <p class="subtitle">Ship Emissions Profile</p>
+            <nav>
+                <a href="index.html">Rankings</a>
+                <a href="charts.html">Charts</a>
+                <a href="compare.html">Compare</a>
+                <a href="cii.html">CII Ratings</a>
+                <a href="news.html">News</a>
+                <a href="blog.html">Blog</a>
+                <a href="FAQ.html">Why?</a>
+                <a href="https://cleanestships.com" target="_blank" rel="noopener" class="nav-sister">↗ CleanestShips</a>
+                <a href="https://voyagedistance.com" target="_blank" rel="noopener" class="nav-sister">↗ VoyageDistance</a>
+            </nav>
+        </header>
+
+        <div id="content">
+            <div class="loading">Loading ship data...</div>
+        </div>
+
+        <footer>
+            <div class="footer-links">
+                <a href="FAQ.html">FAQ</a>
+                <a href="rules.html">Regulations</a>
+                <a href="disclaimer.html">Disclaimer</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="mailto:hello@dirtiestships.com">hello@dirtiestships.com</a>
+            </div>
+            <p>Data source: <a href="https://mrv.emsa.europa.eu/" target="_blank">EU MRV Regulation</a></p>
+            <p>This data shows annual CO2 emissions from ships calling at EU/EEA ports.</p>
+        </footer>
+    </div>
+
+    <script>
+        const shipData = {};
+        let loadedYears = 0;
+        const years = ['2020', '2021', '2022', '2023', '2024', '2025'];
+        let allShips2024 = [];
+        let allShips2025 = [];
+        let peerComparisonChart = null;
+        let vesselSpecs = null;
+        let vesselSpecsLoaded = false;
+        let meohVessels = new Set();
+        let ccsVessels = new Map();
+        let windVessels = new Map();
+        const EUA_AVG_2024 = 65.89; // 2024 average EUA price in EUR
+        const ETS_SCOPE_2024 = 0.40; // 40% of emissions covered in 2024
+        const EUA_AVG_2025 = 65.00; // 2025 approximate average EUA price in EUR
+        const ETS_SCOPE_2025 = 0.70; // 70% of emissions covered in 2025
+
+        // Load MeOH-capable vessels list
+        fetch('json/meoh_vessels.json')
+            .then(response => response.json())
+            .then(data => {
+                meohVessels = new Set(data.vessels.map(v => v.imo));
+            })
+            .catch(() => {});
+
+        // Load CCS-equipped vessels list
+        fetch('json/ccs_vessels.json')
+            .then(response => response.json())
+            .then(data => {
+                data.vessels.forEach(v => ccsVessels.set(v.imo, {make: v.make, type: v.type}));
+            })
+            .catch(() => {});
+
+        // Load wind-assisted vessels list
+        fetch('json/wind_vessels.json')
+            .then(response => response.json())
+            .then(data => {
+                data.vessels.forEach(v => windVessels.set(v.imo, {make: v.make, type: v.type, count: v.count}));
+            })
+            .catch(() => {});
+
+        // Unpadded Base64 encoding (removes trailing =)
+        function encodeId(imo) {
+            return btoa(imo).replace(/=+$/, '');
+        }
+
+        let shipSlugs = {};
+        fetch('json/ship_slugs.json')
+            .then(r => r.json())
+            .then(data => { shipSlugs = data; })
+            .catch(() => {});
+
+        function shipUrl(imo) {
+            return shipSlugs[imo] ? `ships/${shipSlugs[imo]}.html` : `ship.html?id=${encodeId(imo)}`;
+        }
+
+        // Decode unpadded Base64
+        function decodeId(encoded) {
+            // Add padding back if needed
+            const padded = encoded + '==='.slice(0, (4 - encoded.length % 4) % 4);
+            try {
+                return atob(padded);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function loadVesselSpecs(imo) {
+            const encoded = encodeId(imo);
+            return fetch(`json/ship/${encoded}.json`)
+                .then(response => response.ok ? response.json() : null)
+                .catch(() => null);
+        }
+
+        // Parse efficiency value from string like "EEDI (5.41 gCO₂/t·nm)"
+        function parseEfficiency(efficiencyStr) {
+            if (!efficiencyStr) return null;
+            const match = efficiencyStr.match(/\((\d+\.?\d*)\s*gCO/);
+            if (match) {
+                return parseFloat(match[1]);
+            }
+            return null;
+        }
+
+        function getIMOFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            const encoded = params.get('id');
+            return encoded ? decodeId(encoded) : "9229025";
+        }
+
+        function loadAllData() {
+            const imo = getIMOFromURL();
+            if (!imo) {
+                showNotFound('No IMO number provided');
+                return;
+            }
+
+            // Load vessel specs alongside yearly data
+            loadVesselSpecs(imo).then(specs => {
+                vesselSpecs = specs;
+                vesselSpecsLoaded = true;
+                if (loadedYears === years.length) {
+                    renderShipPage();
+                }
+            });
+
+            years.forEach(year => {
+                fetch(`json/${year}_ships_data.json`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Store ships for peer comparison (use most recent available year)
+                        if (year === '2024') { allShips2024 = data.ships; }
+                        if (year === '2025') { allShips2025 = data.ships; }
+                        const ship = data.ships.find(s => s.imo === imo);
+                        if (ship) {
+                            shipData[year] = ship;
+                        }
+                        loadedYears++;
+                        if (loadedYears === years.length && vesselSpecsLoaded) {
+                            renderShipPage();
+                        }
+                    })
+                    .catch(error => {
+                        console.error(`Error loading ${year} data:`, error);
+                        loadedYears++;
+                        if (loadedYears === years.length && vesselSpecsLoaded) {
+                            renderShipPage();
+                        }
+                    });
+            });
+        }
+
+        function showNotFound(message) {
+            document.getElementById('content').innerHTML = `
+                <div class="not-found">
+                    <h2>Ship Not Found</h2>
+                    <p>${message}</p>
+                    <p style="margin-top: 20px;"><a href="index.html" style="color: #4ecdc4;">Back to Ship Rankings</a></p>
+                </div>
+            `;
+        }
+
+        function getShipTypeIcon(shipType) {
+            // Generic ship SVG icon
+            return `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 21c-1.39 0-2.78-.47-4-1.32-2.44 1.71-5.56 1.71-8 0C6.78 20.53 5.39 21 4 21H2v2h2c1.38 0 2.74-.35 4-.99 2.52 1.29 5.48 1.29 8 0 1.26.65 2.62.99 4 .99h2v-2h-2zM3.95 19H4c1.6 0 3.02-.88 4-2 .98 1.12 2.4 2 4 2s3.02-.88 4-2c.98 1.12 2.4 2 4 2h.05l1.89-6.68c.08-.26.06-.54-.06-.78s-.34-.42-.6-.5L20 10.62V6c0-1.1-.9-2-2-2h-3V1H9v3H6c-1.1 0-2 .9-2 2v4.62l-1.29.42c-.26.08-.48.26-.6.5s-.15.52-.06.78L3.95 19zM6 6h12v3.97L12 8 6 9.97V6z"/>
+            </svg>`;
+        }
+
+        function buildSparkline(emissionsHistory) {
+            if (!emissionsHistory || emissionsHistory.length < 2) return '';
+
+            const maxCo2 = Math.max(...emissionsHistory.map(e => e.co2));
+            const minCo2 = Math.min(...emissionsHistory.map(e => e.co2));
+            const range = maxCo2 - minCo2 || 1;
+
+            // Calculate overall trend
+            const first = emissionsHistory[0].co2;
+            const last = emissionsHistory[emissionsHistory.length - 1].co2;
+            const trendPct = ((last - first) / first * 100).toFixed(0);
+            const trendClass = trendPct > 0 ? 'up' : 'down';
+            const trendSign = trendPct > 0 ? '+' : '';
+
+            const bars = emissionsHistory.map((item, i) => {
+                const height = 20 + ((item.co2 - minCo2) / range) * 80; // 20-100% height
+                const isUp = i > 0 && item.co2 > emissionsHistory[i - 1].co2;
+                return `<div class="sparkline-bar ${isUp ? 'up' : ''}" style="height: ${height}%;" title="${item.year}: ${Math.round(item.co2).toLocaleString()}t"></div>`;
+            }).join('');
+
+            return `
+                <div class="sparkline-container">
+                    <span class="sparkline-label">${emissionsHistory.length}yr trend:</span>
+                    <div class="sparkline">${bars}</div>
+                    <div class="trend-indicator ${trendClass}">${trendSign}${trendPct}% since ${emissionsHistory[0].year}</div>
+                </div>
+            `;
+        }
+
+        function buildLiveLocationSection() {
+            if (!vesselSpecs || !vesselSpecs.mmsi) return '';
+
+            return `
+                <div class="live-location">
+                    <div class="chart-title">Live Ship Location</div>
+                    <iframe
+                        src="https://www.marinetraffic.com/en/ais/embed/mmsi:${vesselSpecs.mmsi}/zoom:8/maptype:0/shownames:true/showmenu:false"
+                        width="100%"
+                        height="400"
+                        frameborder="0"
+                        loading="lazy"
+                        referrerpolicy="no-referrer"
+                        allowfullscreen
+                    ></iframe>
+                </div>
+            `;
+        }
+
+        function buildVesselSpecsSection() {
+            if (!vesselSpecs) return '';
+
+            return `
+                <div class="vessel-specs">
+                    <div class="specs-title">Vessel Specifications</div>
+                    <div class="specs-grid">
+                        ${vesselSpecs.mmsi ? `<div class="spec-item"><span class="spec-label">MMSI</span><span class="spec-value">${vesselSpecs.mmsi}</span></div>` : ''}
+                        ${vesselSpecs.year_of_build ? `<div class="spec-item"><span class="spec-label">Year Built</span><span class="spec-value">${vesselSpecs.year_of_build}</span></div>` : ''}
+                        ${vesselSpecs.length_overall ? `<div class="spec-item"><span class="spec-label">Length</span><span class="spec-value">${vesselSpecs.length_overall} m</span></div>` : ''}
+                        ${vesselSpecs.beam ? `<div class="spec-item"><span class="spec-label">Beam</span><span class="spec-value">${vesselSpecs.beam} m</span></div>` : ''}
+                        ${vesselSpecs.gross_tonnage ? `<div class="spec-item"><span class="spec-label">Gross Tonnage</span><span class="spec-value">${parseInt(vesselSpecs.gross_tonnage).toLocaleString()}</span></div>` : ''}
+                        ${vesselSpecs.deadweight ? `<div class="spec-item"><span class="spec-label">Deadweight</span><span class="spec-value">${parseInt(vesselSpecs.deadweight).toLocaleString()} t</span></div>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function getCFactorFuel(cf) {
+            if (cf < 1.5) return { fuel: 'Methanol', color: '#2ecc71' };
+            if (cf < 2.2) return { fuel: 'Ethanol / low-carbon blend', color: '#27ae60' };
+            if (cf < 2.9) return { fuel: 'LNG', color: '#3498db' };
+            if (cf < 3.05) return { fuel: 'LPG / LNG mix', color: '#9b59b6' };
+            if (cf < 3.15) return { fuel: 'HFO', color: '#e67e22' };
+            if (cf < 3.25) return { fuel: 'MDO / MGO', color: '#e74c3c' };
+            return { fuel: 'Unknown mix', color: '#e74c3c' };
+        }
+
+        function buildCFactorSection() {
+            // Collect C-Factor data across all years
+            const cFactorHistory = years.map(year => {
+                const data = shipData[year];
+                if (data && data.c_factor) {
+                    return { year, cf: data.c_factor };
+                }
+                return null;
+            }).filter(d => d !== null);
+
+            if (cFactorHistory.length === 0) return '';
+
+            const latest = cFactorHistory[cFactorHistory.length - 1];
+            const fuelInfo = getCFactorFuel(latest.cf);
+
+            // Previous year comparison
+            let prevYear = null;
+            if (cFactorHistory.length > 1) {
+                prevYear = cFactorHistory[cFactorHistory.length - 2];
+            }
+            const yoyChange = prevYear ? ((latest.cf - prevYear.cf) / prevYear.cf * 100) : null;
+
+            // Fleet average (from 2024 data)
+            let fleetAvg = null;
+            if (allShips2024.length > 0) {
+                const withCf = allShips2024.filter(s => s.c_factor && s.c_factor > 0);
+                if (withCf.length > 0) {
+                    fleetAvg = withCf.reduce((sum, s) => sum + s.c_factor, 0) / withCf.length;
+                }
+            }
+            const fleetDiff = fleetAvg ? ((latest.cf - fleetAvg) / fleetAvg * 100) : null;
+
+            return `
+                <div class="vessel-specs">
+                    <div class="specs-title">C-Factor (${latest.year})</div>
+                    <div class="specs-grid">
+                        <div class="spec-item"><span class="spec-label">C-Factor</span><span class="spec-value">${latest.cf.toFixed(4)}</span></div>
+                        <div class="spec-item"><span class="spec-label">Likely Fuel</span><span class="spec-value" style="color: ${fuelInfo.color}">${fuelInfo.fuel}</span></div>
+                        ${prevYear ? `<div class="spec-item"><span class="spec-label">vs ${prevYear.year}</span><span class="spec-value ${yoyChange > 0 ? 'cii-over' : 'cii-under'}">${yoyChange > 0 ? '+' : ''}${yoyChange.toFixed(1)}% <span style="color: #888; font-weight: normal">(${prevYear.cf.toFixed(4)})</span></span></div>` : ''}
+                        ${fleetAvg ? `<div class="spec-item"><span class="spec-label">vs Fleet Avg</span><span class="spec-value ${fleetDiff > 0 ? 'cii-over' : 'cii-under'}">${fleetDiff > 0 ? '+' : ''}${fleetDiff.toFixed(1)}% <span style="color: #888; font-weight: normal">(${fleetAvg.toFixed(3)})</span></span></div>` : ''}
+                    </div>
+                    <div class="comparison-note" style="margin-top: 15px;">
+                        <strong>What is C-Factor?</strong> The ratio of CO2 emissions to fuel consumed (tonnes CO2 / tonnes fuel).
+                        Each fuel has a characteristic value: HFO ~3.114, LNG ~2.750, methanol ~1.375.
+                        The C-Factor reveals what fuel a ship primarily burns.
+                    </div>
+                </div>
+            `;
+        }
+
+        // CII rating boundaries (ratio of attained/required)
+        const CII_BOUNDARIES = {
+            A: 0.83,  // A: ratio ≤ 0.83
+            B: 0.94,  // B: 0.83 < ratio ≤ 0.94
+            C: 1.06,  // C: 0.94 < ratio ≤ 1.06
+            D: 1.19,  // D: 1.06 < ratio ≤ 1.19
+            E: Infinity // E: ratio > 1.19
+        };
+
+        function buildCiiImprovementSection() {
+            if (!vesselSpecs || !vesselSpecs.cii_rating) return '';
+
+            const rating = vesselSpecs.cii_rating;
+            const attained = vesselSpecs.cii_attained;
+            const required = vesselSpecs.cii_required;
+
+            // Only show improvement section for D and E ratings
+            if (!['D', 'E'].includes(rating) || !attained || !required) return '';
+
+            const currentRatio = attained / required;
+
+            // Calculate target for next rating
+            let targetRating, targetRatio, targetAttained;
+            if (rating === 'E') {
+                targetRating = 'D';
+                targetRatio = CII_BOUNDARIES.D;
+            } else if (rating === 'D') {
+                targetRating = 'C';
+                targetRatio = CII_BOUNDARIES.C;
+            }
+
+            targetAttained = required * targetRatio;
+            const reductionNeeded = attained - targetAttained;
+            const reductionPct = (reductionNeeded / attained * 100);
+
+            // Get 2024 emissions for calculating absolute CO2 reduction
+            const ship2024 = shipData['2024'];
+            const totalCO2 = ship2024 ? ship2024.co2eq : null;
+            const co2Reduction = totalCO2 ? (totalCO2 * reductionPct / 100) : null;
+
+            // Calculate practical measures
+            // Speed reduction: fuel consumption ∝ speed³, so 10% speed → ~27% fuel savings
+            // To save X%, need to reduce speed by approximately (1 - (1-X)^(1/3)) * 100%
+            const speedReduction = (1 - Math.pow(1 - reductionPct/100, 1/3)) * 100;
+
+            // Biofuels: ~80% lifecycle CO2 reduction vs HFO for B100
+            // So 10% biofuel blend = ~8% CO2 reduction
+            const biofuelBlend = Math.min(100, reductionPct / 0.8);
+
+            // Also calculate what it takes to reach C (regulatory threshold)
+            let toC_reductionPct = null;
+            let toC_co2Reduction = null;
+            if (rating === 'E') {
+                const toC_targetAttained = required * CII_BOUNDARIES.C;
+                const toC_reductionNeeded = attained - toC_targetAttained;
+                toC_reductionPct = (toC_reductionNeeded / attained * 100);
+                toC_co2Reduction = totalCO2 ? (totalCO2 * toC_reductionPct / 100) : null;
+            }
+
+            return `
+                <div class="vessel-specs cii-improvement-section">
+                    <div class="specs-title">CII Improvement Pathway</div>
+                    <div class="improvement-intro">
+                        This ship currently has a <strong class="cii-rating-${rating.toLowerCase()}">${rating}</strong> rating.
+                        IMO regulations require ships with D/E ratings to submit corrective action plans.
+                        ${rating === 'E' ? ' Ships with E rating for 3 consecutive years face operational restrictions.' : ''}
+                    </div>
+
+                    <div class="improvement-targets">
+                        <div class="improvement-target">
+                            <div class="target-header">
+                                <span class="target-from cii-rating-${rating.toLowerCase()}">${rating}</span>
+                                <span class="target-arrow">→</span>
+                                <span class="target-to cii-rating-${targetRating.toLowerCase()}">${targetRating}</span>
+                            </div>
+                            <div class="target-stats">
+                                <div class="target-stat">
+                                    <span class="target-value">${reductionPct.toFixed(1)}%</span>
+                                    <span class="target-label">CII Reduction Needed</span>
+                                </div>
+                                ${co2Reduction ? `
+                                <div class="target-stat">
+                                    <span class="target-value">${Math.round(co2Reduction).toLocaleString()}</span>
+                                    <span class="target-label">Tonnes CO2-eq to Save</span>
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+
+                        ${rating === 'E' && toC_reductionPct ? `
+                        <div class="improvement-target target-compliance">
+                            <div class="target-header">
+                                <span class="target-from cii-rating-e">E</span>
+                                <span class="target-arrow">→</span>
+                                <span class="target-to cii-rating-c">C</span>
+                                <span class="compliance-badge">Compliance</span>
+                            </div>
+                            <div class="target-stats">
+                                <div class="target-stat">
+                                    <span class="target-value">${toC_reductionPct.toFixed(1)}%</span>
+                                    <span class="target-label">CII Reduction Needed</span>
+                                </div>
+                                ${toC_co2Reduction ? `
+                                <div class="target-stat">
+                                    <span class="target-value">${Math.round(toC_co2Reduction).toLocaleString()}</span>
+                                    <span class="target-label">Tonnes CO2-eq to Save</span>
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="improvement-measures">
+                        <div class="measures-title">Potential Measures to Achieve ${targetRating} Rating</div>
+                        <div class="measures-grid">
+                            <div class="measure-item">
+                                <div class="measure-icon">⚓</div>
+                                <div class="measure-content">
+                                    <div class="measure-name">Speed Reduction</div>
+                                    <div class="measure-value">${speedReduction.toFixed(1)}% slower cruising</div>
+                                    <div class="measure-note">Fuel use scales with speed³</div>
+                                </div>
+                            </div>
+                            <div class="measure-item">
+                                <div class="measure-icon">🌱</div>
+                                <div class="measure-content">
+                                    <div class="measure-name">Biofuel Blend</div>
+                                    <div class="measure-value">${biofuelBlend.toFixed(0)}% biofuel (B${Math.round(biofuelBlend)})</div>
+                                    <div class="measure-note">~80% CO2 reduction for B100</div>
+                                </div>
+                            </div>
+                            <div class="measure-item">
+                                <div class="measure-icon">🔧</div>
+                                <div class="measure-content">
+                                    <div class="measure-name">Hull & Propeller</div>
+                                    <div class="measure-value">3-10% improvement possible</div>
+                                    <div class="measure-note">Regular cleaning & coating</div>
+                                </div>
+                            </div>
+                            <div class="measure-item">
+                                <div class="measure-icon">🗺️</div>
+                                <div class="measure-content">
+                                    <div class="measure-name">Route Optimization</div>
+                                    <div class="measure-value">5-10% improvement possible</div>
+                                    <div class="measure-note">Weather routing, port efficiency</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="improvement-note">
+                        <strong>Note:</strong> These are estimates based on industry averages. Actual improvements depend on
+                        ship-specific factors including age, design, operating profile, and trade routes.
+                        Multiple measures can be combined for greater effect.
+                    </div>
+                </div>
+            `;
+        }
+
+        function buildCiiSection() {
+            if (!vesselSpecs || !vesselSpecs.cii_rating) return '';
+
+            const rating = vesselSpecs.cii_rating;
+            const attained = vesselSpecs.cii_attained;
+            const required = vesselSpecs.cii_required;
+            const ratio = attained && required ? (attained / required * 100).toFixed(1) : null;
+
+            return `
+                <div class="vessel-specs">
+                    <div class="specs-title">Carbon Intensity Indicator (CII) - ${vesselSpecs.cii_year || 2024}</div>
+                    <div class="specs-grid">
+                        <div class="spec-item"><span class="spec-label">Rating</span><span class="spec-value cii-rating-${rating.toLowerCase()}">${rating}</span></div>
+                        ${attained ? `<div class="spec-item"><span class="spec-label">Attained CII</span><span class="spec-value">${attained.toFixed(2)}</span></div>` : ''}
+                        ${required ? `<div class="spec-item"><span class="spec-label">Required CII</span><span class="spec-value">${required.toFixed(2)}</span></div>` : ''}
+                        ${ratio ? `<div class="spec-item"><span class="spec-label">Ratio</span><span class="spec-value ${ratio > 100 ? 'cii-over' : 'cii-under'}">${ratio}%</span></div>` : ''}
+                    </div>
+                </div>
+                ${buildCiiImprovementSection()}
+            `;
+        }
+
+        function renderShipPage() {
+            if (Object.keys(shipData).length === 0) {
+                showNotFound('No data found for this IMO number');
+                return;
+            }
+
+            // Get most recent data for ship details
+            const latestYear = shipData['2025'] ? '2025' : (shipData['2024'] ? '2024' : (shipData['2023'] ? '2023' : '2022'));
+            const ship = shipData[latestYear];
+            const imo = getIMOFromURL();
+
+            // Update page title and meta
+            document.title = `${ship.name} - CO2 Emissions - Dirtiest Ships`;
+            document.querySelector('meta[name="description"]').content =
+                `View CO2 emissions data for ${ship.name} (IMO: ${imo}). ${ship.type} registered in ${ship.country || ship.registry}.`;
+
+            // Build emissions history
+            const emissionsHistory = years.map(year => {
+                const data = shipData[year];
+                if (data) {
+                    return {
+                        year: year,
+                        co2: year >= '2024' ? data.co2eq : data.co2,
+                        rank: data.rank,
+                        label: year >= '2024' ? 'CO2-eq' : 'CO2'
+                    };
+                }
+                return null;
+            }).filter(d => d !== null);
+
+            // Calculate year-over-year changes
+            emissionsHistory.forEach((item, index) => {
+                if (index > 0) {
+                    const prev = emissionsHistory[index - 1];
+                    item.change = ((item.co2 - prev.co2) / prev.co2 * 100).toFixed(1);
+                }
+            });
+
+            const isMeoh = meohVessels.has(imo);
+            const ccsInfo = ccsVessels.get(imo);
+            const isCcs = !!ccsInfo;
+            const windInfo = windVessels.get(imo);
+            const isWind = !!windInfo;
+
+            // Build sparkline data
+            const sparklineHtml = buildSparkline(emissionsHistory);
+
+            // Get latest emissions for quick stats
+            const latestEmissions = emissionsHistory[emissionsHistory.length - 1];
+            const co2Value = latestEmissions ? Math.round(latestEmissions.co2).toLocaleString() : 'N/A';
+
+            // CII data
+            const ciiRating = vesselSpecs?.cii_rating || null;
+            const ciiAttained = vesselSpecs?.cii_attained;
+            const ciiRequired = vesselSpecs?.cii_required;
+            const ciiRatio = ciiAttained && ciiRequired ? (ciiAttained / ciiRequired * 100).toFixed(1) : null;
+
+            // Vessel specs for meta
+            const yearBuilt = vesselSpecs?.year_of_build || '';
+            const length = vesselSpecs?.length_overall || '';
+            const beam = vesselSpecs?.beam || '';
+            const gt = vesselSpecs?.gross_tonnage ? parseInt(vesselSpecs.gross_tonnage).toLocaleString() : '';
+            const dwt = vesselSpecs?.deadweight ? parseInt(vesselSpecs.deadweight).toLocaleString() : '';
+
+            let html = `
+                <div class="ship-hero">
+                    <div class="ship-hero-bg" style="background-image: url('images/ship-smoke-left.jpg');"></div>
+                    <div class="ship-hero-content">
+                        <div class="ship-type-icon">
+                            ${getShipTypeIcon(ship.type)}
+                        </div>
+                        <div class="ship-hero-info">
+                            <h1 class="ship-hero-name">${escapeHtml(ship.name)}</h1>
+                            <div class="ship-hero-meta">
+                                <span><span class="label">IMO:</span> <span class="value">${imo}</span></span>
+                                <span><span class="label">Type:</span> <span class="value">${escapeHtml(ship.type)}</span></span>
+                                <span><span class="label">Flag:</span> <span class="value">${escapeHtml(ship.country || ship.registry)}</span></span>
+                                ${yearBuilt ? `<span><span class="label">Built:</span> <span class="value">${yearBuilt}</span></span>` : ''}
+                                ${length ? `<span><span class="label">Length:</span> <span class="value">${length} m</span></span>` : ''}
+                                ${beam ? `<span><span class="label">Beam:</span> <span class="value">${beam} m</span></span>` : ''}
+                                ${dwt ? `<span><span class="label">DWT:</span> <span class="value">${dwt} t</span></span>` : ''}
+                                ${gt ? `<span><span class="label">GT:</span> <span class="value">${gt}</span></span>` : ''}
+                            </div>
+                            <div class="quick-stats">
+                                <div class="quick-stat">
+                                    <div class="quick-stat-value ${ship.rank <= 100 ? 'rank-high' : ''}">#${ship.rank}</div>
+                                    <div class="quick-stat-label">${latestYear} Rank</div>
+                                </div>
+                                <div class="quick-stat">
+                                    <div class="quick-stat-value">${co2Value}</div>
+                                    <div class="quick-stat-label">Tonnes ${latestYear >= '2024' ? 'CO2-eq' : 'CO2'}</div>
+                                </div>
+                                ${ship.c_factor ? `
+                                <div class="quick-stat">
+                                    <div class="quick-stat-value">${ship.c_factor.toFixed(2)}</div>
+                                    <div class="quick-stat-label">C-Factor</div>
+                                </div>
+                                ` : ''}
+                                ${latestYear === '2025' && latestEmissions ? (() => {
+                                    const etsCost = EUA_AVG_2025 * ETS_SCOPE_2025 * latestEmissions.co2 / 1000;
+                                    return `
+                                <div class="quick-stat">
+                                    <div class="quick-stat-value">€${Math.round(etsCost).toLocaleString()}k</div>
+                                    <div class="quick-stat-label">Est. ETS Cost '25</div>
+                                </div>`;
+                                })() : latestYear === '2024' && latestEmissions ? (() => {
+                                    const etsCost = EUA_AVG_2024 * ETS_SCOPE_2024 * latestEmissions.co2 / 1000;
+                                    return `
+                                <div class="quick-stat">
+                                    <div class="quick-stat-value">€${Math.round(etsCost).toLocaleString()}k</div>
+                                    <div class="quick-stat-label">Est. ETS Cost '24</div>
+                                </div>`;
+                                })() : ''}
+                                ${ship.company ? `
+                                <div class="quick-stat quick-stat-wide">
+                                    <div class="quick-stat-value quick-stat-company">${escapeHtml(ship.company)}</div>
+                                    <div class="quick-stat-label">Company</div>
+                                </div>
+                                ` : ''}
+                            </div>
+                            ${sparklineHtml}
+                        </div>
+                        ${ciiRating || isMeoh || isCcs ? `
+                        <div class="hero-badges">
+                            ${ciiRating ? `
+                            <div class="cii-badge">
+                                <div class="cii-badge-letter cii-${ciiRating.toLowerCase()}">${ciiRating}</div>
+                                <div class="cii-badge-label">CII ${vesselSpecs?.cii_year || '2024'}</div>
+                                ${ciiRatio ? `<div class="cii-badge-ratio">${ciiRatio}% of required</div>` : ''}
+                            </div>
+                            ` : ''}
+                            ${isMeoh ? `
+                            <div class="meoh-badge">
+                                <div class="meoh-badge-icon">MeOH</div>
+                                <div class="meoh-badge-label">Methanol Capable</div>
+                            </div>
+                            ` : ''}
+                            ${isCcs ? `
+                            <div class="ccs-badge">
+                                <div class="ccs-badge-icon">CCS</div>
+                                <div class="ccs-badge-label">Carbon Capture</div>
+                                ${ccsInfo.make ? `<div class="ccs-badge-make">${escapeHtml(ccsInfo.make)}</div>` : ''}
+                                ${ccsInfo.type ? `<div class="ccs-badge-type">${escapeHtml(ccsInfo.type)}</div>` : ''}
+                            </div>
+                            ` : ''}
+                            ${isWind ? `
+                            <div class="wind-badge">
+                                <div class="wind-badge-icon">Wind</div>
+                                <div class="wind-badge-label">Wind-Assisted Propulsion</div>
+                                ${windInfo.count ? `<div class="wind-badge-make">${windInfo.count}× ${escapeHtml(windInfo.type)}</div>` : ''}
+                                ${windInfo.make ? `<div class="wind-badge-type">${escapeHtml(windInfo.make)}</div>` : ''}
+                            </div>
+                            ` : ''}
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Annual Emissions History</div>
+                    ${emissionsHistory.length > 1 ? `
+                    <div class="chart-wrapper">
+                        <canvas id="emissionsChart"></canvas>
+                    </div>
+                    ` : '<p style="color: #888;">Only one year of data available for this ship.</p>'}
+
+                    <table class="emissions-table">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Emissions (tonnes)</th>
+                                <th>Metric</th>
+                                <th>Rank</th>
+                                <th>Change</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${emissionsHistory.map(item => `
+                            <tr>
+                                <td>${item.year}</td>
+                                <td class="co2-value">${item.co2.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                                <td>${item.label}</td>
+                                <td>#${item.rank}</td>
+                                <td class="${item.change ? (parseFloat(item.change) > 0 ? 'change-positive' : 'change-negative') : ''}">
+                                    ${item.change ? (parseFloat(item.change) > 0 ? '+' : '') + item.change + '%' : '-'}
+                                </td>
+                            </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+
+                    <div class="comparison-note">
+                        <strong>Note:</strong> 2024-2025 data uses CO2-equivalent (CO2-eq) which includes methane and other greenhouse gases,
+                        while 2020-2023 data shows CO2 only. Direct year-over-year comparisons should consider this methodology change.
+                    </div>
+                </div>
+
+                ${buildVesselSpecsSection()}
+
+                ${buildCFactorSection()}
+
+                ${vesselSpecs?.cii_rating ? buildCiiSection() : ''}
+
+                ${buildTransportWorkSection()}
+
+                ${buildPeerComparisonSection()}
+
+                ${buildLiveLocationSection()}
+            `;
+
+            document.getElementById('content').innerHTML = html;
+
+            // Render chart if we have multiple years
+            if (emissionsHistory.length > 1) {
+                renderChart(emissionsHistory);
+            }
+
+            // Render transport work chart
+            renderTransportWorkChart();
+
+            // Render peer comparison chart
+            renderPeerComparisonChart();
+        }
+
+        function buildTransportWorkSection() {
+            // Collect transport work data across years
+            const transportData = getTransportWorkData();
+            if (!transportData.hasData) return '';
+
+            return `
+                <div class="chart-container">
+                    <div class="chart-title">Fuel Consumption per Transport Work</div>
+                    <div class="chart-wrapper">
+                        <canvas id="transportChart"></canvas>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <table class="emissions-table">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Metric</th>
+                                    <th>Value</th>
+                                    <th>Change</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transportTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="comparison-note">
+                        <strong>Note:</strong> Lower values indicate better fuel efficiency. The metric shown depends on ship type:
+                        <br>• <strong>pax</strong>: Passenger ships (g fuel / passenger · nautical mile)
+                        <br>• <strong>freight</strong>: Freight vessels (g fuel / m tonnes · nautical mile)
+                        <br>• <strong>mass</strong>: Cargo by mass (g fuel / m tonnes · nautical mile)
+                        <br>• <strong>volume</strong>: Cargo by volume (g fuel / m³ · nautical mile)
+                        <br>• <strong>dwt</strong>: Deadweight tonnage (g fuel / dwt · nautical mile)
+                    </div>
+                </div>
+            `;
+        }
+
+        function getTransportWorkData() {
+            const result = { hasData: false, metric: null, data: [] };
+
+            // Determine best metric based on ship type
+            const shipType = (shipData['2025'] || shipData['2024'] || shipData['2023'] || shipData['2022'])?.type?.toLowerCase() || '';
+
+            // Priority order based on ship type
+            let metricPriority;
+            if (shipType.includes('passenger') || shipType.includes('cruise') || shipType.includes('ro-pax')) {
+                metricPriority = ['pax', 'freight', 'mass', 'volume', 'dwt'];
+            } else if (shipType.includes('container') || shipType.includes('cargo') || shipType.includes('bulk')) {
+                metricPriority = ['freight', 'mass', 'dwt', 'volume', 'pax'];
+            } else if (shipType.includes('tanker') || shipType.includes('lng') || shipType.includes('lpg')) {
+                metricPriority = ['volume', 'mass', 'dwt', 'freight', 'pax'];
+            } else {
+                metricPriority = ['mass', 'dwt', 'volume', 'freight', 'pax'];
+            }
+
+            // Find first metric with data across years
+            for (const metric of metricPriority) {
+                const yearData = [];
+                for (const year of years) {
+                    if (shipData[year]?.fuel_per_transport?.[metric]) {
+                        yearData.push({
+                            year: year,
+                            value: shipData[year].fuel_per_transport[metric]
+                        });
+                    }
+                }
+                if (yearData.length > 0) {
+                    result.hasData = true;
+                    result.metric = metric;
+                    result.data = yearData;
+                    break;
+                }
+            }
+
+            return result;
+        }
+
+        // Get appropriate transport metric based on ship type
+        function getTransportMetric(shipType) {
+            const type = (shipType || '').toLowerCase();
+            if (type.includes('passenger') || type.includes('cruise') || type.includes('ro-pax')) {
+                return { key: 'pax', label: 'g CO₂ / passenger · n mile', desc: 'Per Passenger' };
+            } else if (type.includes('container') || type.includes('cargo') || type.includes('bulk')) {
+                return { key: 'freight', label: 'g CO₂ / m tonnes · n mile', desc: 'Per Freight Tonne', fallback: 'mass' };
+            } else if (type.includes('tanker') || type.includes('lng') || type.includes('lpg')) {
+                return { key: 'volume', label: 'g CO₂ / m³ · n mile', desc: 'Per Volume', fallback: 'mass' };
+            } else {
+                return { key: 'mass', label: 'g CO₂ / m tonnes · n mile', desc: 'Per Mass', fallback: 'dwt' };
+            }
+        }
+
+        // Get transport work value for a ship
+        function getTransportWorkValue(ship, metric) {
+            if (!ship.fuel_per_transport) return null;
+            let value = ship.fuel_per_transport[metric.key];
+            if (value == null && metric.fallback) {
+                value = ship.fuel_per_transport[metric.fallback];
+            }
+            return value != null ? parseFloat(value) : null;
+        }
+
+        function buildPeerComparisonSection() {
+            // Use most recent year with efficiency data for peer comparison
+            const ship = shipData['2025'] || shipData['2024'];
+            if (!ship || !ship.efficiency) return '';
+
+            const efficiency = parseEfficiency(ship.efficiency);
+            if (!efficiency) return '';
+
+            const metric = getTransportMetric(ship.type);
+            const selectedActualEff = getTransportWorkValue(ship, metric);
+
+            // Get all ships of the same type with ACTUAL efficiency data
+            const allShipsLatest = allShips2025.length > 0 ? allShips2025 : allShips2024;
+            const sameTypeShips = allShipsLatest
+                .filter(s => s.type === ship.type)
+                .map(s => ({
+                    ...s,
+                    efficiencyValue: parseEfficiency(s.efficiency),
+                    actualEfficiency: getTransportWorkValue(s, metric)
+                }))
+                .filter(s => s.actualEfficiency !== null) // Only ships with actual efficiency
+                .sort((a, b) => a.actualEfficiency - b.actualEfficiency); // Lower is better
+
+            if (sameTypeShips.length < 3) return '';
+
+            // Find selected ship's position and add type rank
+            sameTypeShips.forEach((s, idx) => {
+                s.typeRank = idx + 1;
+            });
+
+            const selectedIndex = sameTypeShips.findIndex(s => s.imo === ship.imo);
+
+            // If selected ship doesn't have efficiency data, skip peer comparison
+            if (selectedIndex === -1) return '';
+
+            const selectedShipData = sameTypeShips[selectedIndex];
+            const totalInType = sameTypeShips.length;
+
+            // Best and worst performers
+            const bestShip = sameTypeShips[0];
+            const worstShip = sameTypeShips[sameTypeShips.length - 1];
+
+            // Build peer list: 7 above, selected, 7 below
+            let peerShips = [];
+            const startIdx = Math.max(0, selectedIndex - 7);
+            const endIdx = Math.min(sameTypeShips.length, selectedIndex + 8);
+
+            for (let i = startIdx; i < endIdx; i++) {
+                peerShips.push(sameTypeShips[i]);
+            }
+
+            // Ensure we have up to 15 ships if possible
+            if (peerShips.length < 15) {
+                if (startIdx === 0 && endIdx < sameTypeShips.length) {
+                    const need = Math.min(15 - peerShips.length, sameTypeShips.length - endIdx);
+                    for (let i = 0; i < need; i++) {
+                        peerShips.push(sameTypeShips[endIdx + i]);
+                    }
+                } else if (endIdx === sameTypeShips.length && startIdx > 0) {
+                    const need = Math.min(15 - peerShips.length, startIdx);
+                    for (let i = need; i > 0; i--) {
+                        peerShips.unshift(sameTypeShips[startIdx - i]);
+                    }
+                }
+            }
+
+            // Store peer ships for chart rendering
+            window.peerShipsData = { ships: peerShips, selectedImo: ship.imo, selectedEfficiency: efficiency, metric: metric, selectedActualEff: selectedActualEff };
+
+            // Display actual efficiency values
+            const displayEff = selectedActualEff != null ? selectedActualEff.toFixed(2) : 'N/A';
+            const displayLabel = 'Actual Efficiency';
+            const displayUnit = metric.label;
+
+            const bestEff = bestShip.actualEfficiency.toFixed(2);
+            const worstEff = worstShip.actualEfficiency.toFixed(2);
+
+            return `
+                <div class="chart-container">
+                    <div class="chart-title">Peer Efficiency Comparison (Actual)</div>
+                    <div class="efficiency-summary">
+                        <div class="efficiency-box">
+                            <div class="efficiency-label">${displayLabel}</div>
+                            <div class="efficiency-value">${displayEff}</div>
+                        </div>
+                        <div class="efficiency-box">
+                            <div class="efficiency-label">Rank in ${escapeHtml(ship.type)}</div>
+                            <div class="efficiency-value">#${selectedShipData.typeRank} of ${totalInType}</div>
+                        </div>
+                        <div class="efficiency-box">
+                            <div class="efficiency-label">Percentile</div>
+                            <div class="efficiency-value">${((selectedShipData.typeRank / totalInType) * 100).toFixed(1)}%</div>
+                        </div>
+                    </div>
+
+                    <div class="extremes-section">
+                        <div class="extreme-box best">
+                            <div class="extreme-title">Most Efficient ${escapeHtml(ship.type)}</div>
+                            <div class="extreme-ship-name"><a href="${shipUrl(bestShip.imo)}">${escapeHtml(bestShip.name)}</a></div>
+                            <div class="extreme-value">${bestEff}</div>
+                        </div>
+                        <div class="extreme-box worst">
+                            <div class="extreme-title">Least Efficient ${escapeHtml(ship.type)}</div>
+                            <div class="extreme-ship-name"><a href="${shipUrl(worstShip.imo)}">${escapeHtml(worstShip.name)}</a></div>
+                            <div class="extreme-value">${worstEff}</div>
+                        </div>
+                    </div>
+
+                    <div class="peer-chart-wrapper">
+                        <canvas id="peerComparisonChart"></canvas>
+                    </div>
+
+                    <div class="comparison-note">
+                        <strong>Note:</strong> Ships are ranked by actual efficiency (CO₂ per transport work) - lower values indicate better fuel efficiency.
+                        Only ships with reported transport work data are shown.
+                        <a href="compare.html?id=${encodeId(ship.imo)}" style="color: #4ecdc4;">View full peer comparison →</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderPeerComparisonChart() {
+            const ctx = document.getElementById('peerComparisonChart');
+            if (!ctx || !window.peerShipsData) return;
+
+            const { ships, selectedImo, selectedEfficiency, metric, selectedActualEff } = window.peerShipsData;
+
+            if (peerComparisonChart) {
+                peerComparisonChart.destroy();
+            }
+
+            const labels = ships.map(s => s.name.length > 20 ? s.name.substring(0, 20) + '...' : s.name);
+            // Use actual efficiency only
+            const data = ships.map(s => s.actualEfficiency);
+            const colors = ships.map(s => s.imo === selectedImo ? '#4ecdc4' : 'rgba(255, 107, 107, 0.7)');
+            const borderColors = ships.map(s => s.imo === selectedImo ? '#4ecdc4' : '#ff6b6b');
+
+            const axisLabel = `${metric.label} - Lower is Better`;
+
+            peerComparisonChart = new Chart(ctx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Efficiency',
+                        data: data,
+                        backgroundColor: colors,
+                        borderColor: borderColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const ship = ships[context.dataIndex];
+                                    return `${ship.actualEfficiency.toFixed(2)} - Rank #${ship.typeRank}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: { color: '#888' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            title: {
+                                display: true,
+                                text: axisLabel,
+                                color: '#888'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#888',
+                                font: { size: 11 }
+                            },
+                            grid: { color: 'rgba(255,255,255,0.05)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function getMetricLabel(metric) {
+            const labels = {
+                'pax': 'g / pax · n mile',
+                'freight': 'g / m tonnes · n mile',
+                'mass': 'g / m tonnes · n mile',
+                'volume': 'g / m³ · n mile',
+                'dwt': 'g / dwt · n mile'
+            };
+            return labels[metric] || metric;
+        }
+
+        function getMetricDescription(metric) {
+            const descriptions = {
+                'pax': 'Per Passenger',
+                'freight': 'Per Freight Tonne',
+                'mass': 'Per Mass',
+                'volume': 'Per Volume',
+                'dwt': 'Per DWT'
+            };
+            return descriptions[metric] || metric;
+        }
+
+        function renderTransportWorkChart() {
+            const ctx = document.getElementById('transportChart');
+            if (!ctx) return;
+
+            const transportData = getTransportWorkData();
+            if (!transportData.hasData) return;
+
+            const data = transportData.data;
+            const metric = transportData.metric;
+
+            // Calculate changes and populate table
+            const tableBody = document.getElementById('transportTableBody');
+            if (tableBody) {
+                let tableHtml = '';
+                data.forEach((item, i) => {
+                    let change = '-';
+                    let changeClass = '';
+                    if (i > 0) {
+                        const pct = ((item.value - data[i-1].value) / data[i-1].value * 100).toFixed(1);
+                        change = (parseFloat(pct) > 0 ? '+' : '') + pct + '%';
+                        changeClass = parseFloat(pct) > 0 ? 'change-positive' : 'change-negative';
+                    }
+                    tableHtml += `
+                        <tr>
+                            <td>${item.year}</td>
+                            <td>${getMetricDescription(metric)}</td>
+                            <td class="co2-value">${item.value.toFixed(2)}</td>
+                            <td class="${changeClass}">${change}</td>
+                        </tr>
+                    `;
+                });
+                tableBody.innerHTML = tableHtml;
+            }
+
+            // Color bars based on trend (improvement = green, worsening = red)
+            const colors = data.map((d, i) => {
+                if (i === 0) return '#4ecdc4';
+                return d.value < data[i-1].value ? '#4ecdc4' : '#ff6b6b';
+            });
+
+            new Chart(ctx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.year),
+                    datasets: [{
+                        label: getMetricLabel(metric),
+                        data: data.map(d => d.value),
+                        backgroundColor: colors,
+                        borderColor: colors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${getMetricDescription(metric)}: ${context.raw.toFixed(2)} ${getMetricLabel(metric)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#888' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#888' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            title: {
+                                display: true,
+                                text: getMetricLabel(metric) + ' (lower is better)',
+                                color: '#888'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderChart(data) {
+            const ctx = document.getElementById('emissionsChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.year),
+                    datasets: [{
+                        label: 'Emissions (tonnes)',
+                        data: data.map(d => d.co2),
+                        backgroundColor: data.map((d, i) => {
+                            if (i === 0) return '#4ecdc4';
+                            const prev = data[i-1].co2;
+                            return d.co2 > prev ? '#ff6b6b' : '#4ecdc4';
+                        }),
+                        borderColor: data.map((d, i) => {
+                            if (i === 0) return '#4ecdc4';
+                            const prev = data[i-1].co2;
+                            return d.co2 > prev ? '#ff6b6b' : '#4ecdc4';
+                        }),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const item = data[context.dataIndex];
+                                    return `${item.label}: ${item.co2.toLocaleString(undefined, {minimumFractionDigits: 2})} tonnes`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#888' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                color: '#888',
+                                callback: function(value) {
+                                    return (value / 1000).toFixed(0) + 'k';
+                                }
+                            },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            title: {
+                                display: true,
+                                text: 'Tonnes CO2/CO2-eq',
+                                color: '#888'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Load data on page load
+        loadAllData();
+    </script>
+</body>
+</html>
