@@ -41,6 +41,7 @@ COL_COMPANY = 9
 COL_FUEL  = 23       # Total fuel consumption [m tonnes]
 COL_CO2   = 28       # Total CO₂ emissions [m tonnes]
 COL_CO2EQ = 58       # Total CO2eq emissions [m tonnes]
+COL_CO2EQ_ETS = 67   # CO2eq emissions to be reported under Directive 2003/87/EC [m tonnes]
 COL_FPT_MASS = 74    # Fuel consumption per transport work (mass)
 COL_FPT_VOLUME = 76  # (volume)
 COL_FPT_DWT = 78     # (dwt)
@@ -136,6 +137,13 @@ def load_sheet(ws, registry_map, seen_imos=None):
         co2   = parse_float(row[COL_CO2])
         c_factor = round(co2 / fuel, 4) if (fuel and fuel > 0 and co2 and co2 > 0) else None
 
+        # CO2eq emissions to be reported under Directive 2003/87/EC (EU ETS) -
+        # EMSA already applies the intra/extra-EU voyage-counting rules here,
+        # so this is the correct ETS-scope tonnage, not total co2eq. Column
+        # only exists from the 2024 schema onward; defaults to 0 for ships
+        # with no EU/EEA-touching voyages.
+        co2eq_ets = parse_float(row[COL_CO2EQ_ETS]) if len(row) > COL_CO2EQ_ETS else None
+
         ship = {
             'imo': imo,
             'name': parse_str(row[COL_NAME]),
@@ -145,6 +153,7 @@ def load_sheet(ws, registry_map, seen_imos=None):
             'company': parse_str(row[COL_COMPANY]),
             'company_imo': parse_str(row[COL_COMPANY_IMO]),
             'co2eq': round(co2eq, 2),
+            'co2eq_ets': round(co2eq_ets, 2) if co2eq_ets else 0,
             'country': country,
             'fuel_per_transport': fpt,
         }
@@ -237,10 +246,11 @@ def main():
     company_imo_lookup = build_company_imo_lookup()
 
     # First pass: aggregate by company IMO
-    cimo_agg = defaultdict(lambda: {'co2eq': 0.0, 'fuel': 0.0, 'count': 0, 'names': defaultdict(int)})
+    cimo_agg = defaultdict(lambda: {'co2eq': 0.0, 'co2eq_ets': 0.0, 'fuel': 0.0, 'count': 0, 'names': defaultdict(int)})
     for ship in ships:
         cimo = ship['company_imo']
         cimo_agg[cimo]['co2eq'] += ship['co2eq']
+        cimo_agg[cimo]['co2eq_ets'] += ship.get('co2eq_ets', 0)
         cimo_agg[cimo]['count'] += 1
         cimo_agg[cimo]['names'][ship['company']] += 1
         cf = ship.get('c_factor', 0) or 0
@@ -248,22 +258,24 @@ def main():
             cimo_agg[cimo]['fuel'] += ship['co2eq'] / cf
 
     # Second pass: merge grouped company IMOs, keep others as-is
-    group_agg = defaultdict(lambda: {'co2eq': 0.0, 'fuel': 0.0, 'count': 0})
+    group_agg = defaultdict(lambda: {'co2eq': 0.0, 'co2eq_ets': 0.0, 'fuel': 0.0, 'count': 0})
     for cimo, data in cimo_agg.items():
         group = company_imo_lookup.get(cimo)
         if group:
             group_agg[group]['co2eq'] += data['co2eq']
+            group_agg[group]['co2eq_ets'] += data['co2eq_ets']
             group_agg[group]['fuel'] += data['fuel']
             group_agg[group]['count'] += data['count']
         else:
             # Use the most common company name for this IMO
             label = max(data['names'], key=data['names'].get)
             group_agg[label]['co2eq'] += data['co2eq']
+            group_agg[label]['co2eq_ets'] += data['co2eq_ets']
             group_agg[label]['fuel'] += data['fuel']
             group_agg[label]['count'] += data['count']
 
     def make_company(g, d):
-        entry = {'company': g, 'co2eq': round(d['co2eq'], 2), 'count': d['count']}
+        entry = {'company': g, 'co2eq': round(d['co2eq'], 2), 'co2eq_ets': round(d['co2eq_ets'], 2), 'count': d['count']}
         if d['fuel'] > 0:
             entry['c_factor'] = round(d['co2eq'] / d['fuel'], 4)
         return entry
