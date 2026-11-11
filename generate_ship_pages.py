@@ -49,6 +49,13 @@ def js_string(value: str) -> str:
     return json.dumps(value)
 
 
+def ld_json(obj) -> str:
+    """JSON for a <script type="application/ld+json"> tag, safe against a
+    literal '</script' sequence inside a ship/company name breaking out of
+    the script element."""
+    return json.dumps(obj, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+
+
 def main() -> None:
     # by_year[year][imo] = ship dict, so we can pick the latest year with
     # data for each IMO, exactly like ship.html's own latestYear logic.
@@ -119,6 +126,7 @@ def main() -> None:
         '    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9641573711172527"\n'
         '     crossorigin="anonymous"></script>\n'
         "    <title>Ship Details - Dirtiest Ships</title>\n"
+        '    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://dirtiestships.com/"},{"@type":"ListItem","position":2,"name":"Ships","item":"https://dirtiestships.com/"},{"@type":"ListItem","position":3,"name":"Ship Details"}]}</script>\n'
     )
     assert old_head in template, "ship.html head block changed - update the generator's old_head string"
 
@@ -146,6 +154,15 @@ def main() -> None:
         canonical = f"{SITE}/ships/{slug}.html"
         title = html.escape(f"{name} - CO2 Emissions - Dirtiest Ships", quote=True)
         og_title = html.escape(f"{name} - CO2 Emissions", quote=True)
+        breadcrumb = ld_json({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{SITE}/"},
+                {"@type": "ListItem", "position": 2, "name": "Ships", "item": f"{SITE}/"},
+                {"@type": "ListItem", "position": 3, "name": name},
+            ],
+        })
 
         new_head = (
             f'    <meta name="description" content="{description}">\n'
@@ -172,6 +189,7 @@ def main() -> None:
             '    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9641573711172527"\n'
             '     crossorigin="anonymous"></script>\n'
             f"    <title>{title}</title>\n"
+            f'    <script type="application/ld+json">{breadcrumb}</script>\n'
         )
 
         new_js = (
