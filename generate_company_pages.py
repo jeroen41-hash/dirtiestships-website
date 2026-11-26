@@ -146,7 +146,7 @@ def main() -> None:
     old_head = (
         '    <meta name="description" content="View CO2 emissions data for this shipping company. '
         'See all ships and total emissions from EU MRV data.">\n'
-        '    <meta name="robots" content="index, follow">\n'
+        '    <meta name="robots" content="noindex, follow">\n'
         '    <link rel="canonical" href="https://dirtiestships.com/company.html">\n'
         "\n"
         "    <!-- Open Graph / Facebook -->\n"

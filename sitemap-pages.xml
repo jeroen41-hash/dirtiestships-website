@@ -42,16 +42,6 @@
 
   <!-- Supporting pages -->
   <url>
-    <loc>https://dirtiestships.com/ship.html</loc>
-    <priority>0.6</priority>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://dirtiestships.com/company.html</loc>
-    <priority>0.6</priority>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
     <loc>https://dirtiestships.com/countries.html</loc>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
