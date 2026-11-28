@@ -10,21 +10,36 @@ Usage:
 
 import json
 import openpyxl
+import re
 import sys
 import glob
 from collections import defaultdict
 
 YEAR = int(sys.argv[1]) if len(sys.argv) > 1 else 2024
 
-if len(sys.argv) > 2:
-    EXCEL_FILE = sys.argv[2]
-else:
-    pattern = f'data/{YEAR}-v*.xlsx'
-    matches = sorted(glob.glob(pattern))
+
+def latest_version_file(year):
+    """Pick the highest-numbered data/{year}-v<N>-*.xlsx file. Plain
+    alphabetical sort breaks once a version number crosses a digit
+    boundary (e.g. 'v100' sorts before 'v67'), so sort by the parsed
+    integer instead."""
+    pattern = f'data/{year}-v*.xlsx'
+    matches = glob.glob(pattern)
     if not matches:
         print(f"ERROR: No Excel file found matching {pattern}")
         sys.exit(1)
-    EXCEL_FILE = matches[-1]  # use latest version
+
+    def version(path):
+        m = re.search(r'-v(\d+)-', path)
+        return int(m.group(1)) if m else -1
+
+    return max(matches, key=version)
+
+
+if len(sys.argv) > 2:
+    EXCEL_FILE = sys.argv[2]
+else:
+    EXCEL_FILE = latest_version_file(YEAR)
 
 SHEET_FULL   = f'{YEAR} Full ERs'
 SHEET_PARTIAL = f'{YEAR} Partial ERs'

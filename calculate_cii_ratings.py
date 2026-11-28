@@ -11,7 +11,9 @@ This script:
 
 import json
 import os
+import re
 import sys
+import glob
 import base64
 from pathlib import Path
 import pandas as pd
@@ -29,7 +31,26 @@ warnings.filterwarnings('ignore')
 
 # Constants
 BASE_DIR = Path(__file__).parent
-EXCEL_FILE = BASE_DIR / "data" / "2024-v252-15102026-EU MRV Publication of information.xlsx"
+
+
+def latest_version_file(year):
+    """Pick the highest-numbered data/{year}-v<N>-*.xlsx file. Plain
+    alphabetical sort breaks once a version number crosses a digit
+    boundary (e.g. 'v100' sorts before 'v67'), so sort by the parsed
+    integer instead."""
+    pattern = str(BASE_DIR / "data" / f"{year}-v*.xlsx")
+    matches = glob.glob(pattern)
+    if not matches:
+        sys.exit(f"ERROR: No Excel file found matching {pattern}")
+
+    def version(path):
+        m = re.search(r'-v(\d+)-', path)
+        return int(m.group(1)) if m else -1
+
+    return Path(max(matches, key=version))
+
+
+EXCEL_FILE = latest_version_file(2024)
 SHIPS_DATA_FILE = BASE_DIR / "json" / "2024_ships_data.json"
 SHIP_JSON_DIR = BASE_DIR / "json" / "ship"
 
