@@ -1,0 +1,34 @@
+The global shipping industry is at a pivotal moment, with existing regulations like the IMO's Carbon Intensity Indicator (CII) under intense scrutiny. As the industry grapples with increasingly stringent decarbonization targets, the effectiveness of these foundational measures is paramount. New discussions emerging ahead of MEPC 85 highlight critical flaws in the current CII framework, proposing a data-driven overhaul that could profoundly impact how emissions are measured, managed, and ultimately reduced across the fleet – a key focus for our analysis at DirtiestShips.com.
+
+## The Flaws in the Current CII Framework
+
+Since its implementation in January 2023, the CII has been a cornerstone of the IMO's Energy Efficiency Framework, designed to rate ships (A-E) based on their CO2 emissions per unit of transport work. However, as noted in recent industry discussions, a clearer picture is emerging of its inherent shortcomings. The current metric calculates a ship’s total annual CO2 emissions and divides it by a proxy for transport work (capacity × distance sailed). The critical issue lies in the numerator: it encompasses *all* fuel consumption, including emissions from auxiliary engines, cargo heating/cooling, maneuvering, waiting at anchor, and in-port operations.
+
+This "total emissions" approach means a ship's CII rating can be skewed by factors unrelated to its propulsion efficiency. For instance, a vessel experiencing long waiting times at berth consumes fuel without adding to its distance sailed, thereby worsening its CII despite potentially efficient propulsion. Similarly, ships on short voyages with frequent port calls are penalized compared to those on longer routes, as a larger share of their fuel is used for non-propulsion activities. This distortion means that two ships with identical propulsion performance can achieve vastly different CII ratings, making it difficult to genuinely distinguish an energy-efficient operation from an inefficient one. This ambiguity hinders accurate performance assessment, impacting understanding of true vessel efficiency in our [CII ratings](/cii.html) analysis.
+
+## MEPC 85: A Call for a Targeted Approach
+
+The upcoming MEPC 85, scheduled for November-December 2026, presents a crucial opportunity for the IMO to address these limitations. Out of 21 energy efficiency submissions, a significant 19 concern the CII, with proposals ranging from minor correction factors to a complete redesign. This widespread acknowledgment of the CII's issues underscores the urgency for reform.
+
+The core argument for change centers on the need for a "systems approach" – a CII metric that more consistently correlates with transport work and propulsion efficiency. Instead of a patchwork of fixes and exclusions that can further distort the metric, the industry is seeking a more robust indicator. This is particularly relevant given the increasing focus on verifiable emissions reductions, which directly influence [EU ETS carbon costs](link to ETS explanation on site if available, otherwise just mention).
+
+## The "Propulsion CII": A Data-Driven Solution?
+
+A prominent proposal, jointly developed by the Center and the Royal Institution of Naval Architects (RINA), advocates for a "propulsion CII." This dedicated metric is defined similarly to the current CII (CO2 over capacity-based transport work) but crucially counts *only the fuel consumed by the main engine during the sea passage*.
+
+This refinement offers significant advantages:
+*   **Direct Correlation:** Analysis presented in the news article, using data from approximately 53,000 container ship voyages in 2024, demonstrates that the propulsion CII better correlates with engine load and, therefore, with fuel use. The current total Annual Efficiency Ratio (AER) often shows overlapping curves for different lower speeds, making it difficult to discern if a low CII rating stems from propulsion issues.
+*   **Clearer Diagnostics:** With the propulsion CII (Propulsion AER), the metric consistently rises with engine load across ship sizes. This makes the effect of speed and engine load directly visible in the rating. A worse rating points directly to propulsion-related factors such as operating speed, hull and propeller condition, and engine performance, enabling operators to identify and address specific inefficiencies.
+*   **Simplified Regulation:** By focusing the CII on propulsion, the metric becomes a clearer indicator for propulsion at sea. This allows for a strengthened Ship Energy Efficiency Management Plan (SEEMP) to manage *all* of the ship’s fuel consumption, supported by a framework for planning, logging, and auditing energy efficiency measures more holistically.
+
+This data-driven approach promises a more accurate reflection of operational efficiency, vital for our detailed [emissions data](/charts.html) and analysis.
+
+## Broader Implications for Efficiency and Accountability
+
+A more accurate and reliable CII metric would have far-reaching implications for the shipping industry. For companies, a "propulsion CII" would provide a clearer pathway to improving vessel efficiency, enabling more targeted investments in technologies and operational practices that directly impact propulsion. This could lead to more meaningful improvements in [company rankings](/companies.html), as truly efficient operators are better distinguished from those whose ratings are merely affected by operational context.
+
+Furthermore, while the CII is an IMO regulation, its effectiveness in driving genuine emissions reductions has direct financial consequences under the EU Emissions Trading System (ETS). Ships operating within the EU are now subject to carbon costs, and any measure that improves overall vessel efficiency – particularly propulsion, which accounts for the largest share of emissions – will directly contribute to reducing CO2 output and, consequently, ETS expenditures. The proposed framework, by pairing a focused propulsion CII with a comprehensive SEEMP, promises to create a more robust system for both regulatory compliance and tangible emissions reduction.
+
+## What this means for shipping emissions
+
+The ongoing review of the Carbon Intensity Indicator, particularly the discussions around a propulsion-based CII at MEPC 85, signals a critical evolution in how the shipping industry tackles its environmental footprint. Moving towards a more accurate and diagnostic metric holds the potential to provide clearer incentives for operators to invest in genuine propulsion efficiency improvements. This, in turn, offers a more direct and verifiable pathway to reducing overall CO2 emissions, enhancing accountability, and making informed decisions that will be crucial for the industry to meet its decarbonization targets. DirtiestShips.com will continue to monitor these developments closely, providing the data-driven insights necessary to understand their real-world impact.
